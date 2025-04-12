@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Consultant;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultantController extends Controller
 {
@@ -33,7 +34,12 @@ class ConsultantController extends Controller
     // }
 
     public function profile()
-    {
-        return view('dashboards.consultants.profile');
+    {  // Get the authenticated user
+        $user = Auth::user();
+        
+        // Get the consultant data associated with this user
+        $consultant = Consultant::where('user_id', $user->id)->first();
+        
+        return view('dashboards.consultants.profile', compact('user', 'consultant'));
     }
 }

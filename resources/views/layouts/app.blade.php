@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
+    {{-- token --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     @include('layouts.head-css')
 </head>
@@ -20,10 +22,14 @@
         {{-- main content --}}
         <div class="main-content">
             <div class="page-content">
-                {{-- <div class="container-fluid"> --}}
                 @yield('content')
-                {{-- </div> --}}
-                <!-- container-fluid -->
+
+
+                <!-- login modal -->
+                <x-login-modal />
+
+                <!-- register modal -->
+                <x-register-modal />
             </div>
             <!-- End Page-content -->
             @include('layouts.footer')
@@ -36,7 +42,11 @@
 
     <!-- JAVASCRIPT -->
     @include('layouts.footer-scripts')
+    {{-- <script>    toastr.success('ssssssssssss', 'نجاح');
+</script> --}}
 
+    {{-- success alert --}}
+    @include('alerts.alert')
 
 </body>
 

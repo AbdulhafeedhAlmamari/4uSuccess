@@ -3,36 +3,37 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\FinancingCompany;
+use App\Models\TransportationCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FinanceController extends Controller
+class TransportationController extends Controller
 {
     public function index()
     {
-        return view('dashboards.finances.index');
+        return view('dashboards.transportations.index');
     }
 
     public function show()
     {
-        return view('dashboards.finances.show');
+        return view('dashboards.transportations.show');
     }
 
     public function orders()
     {
-        return view('dashboards.finances.orders');
+        return view('dashboards.transportations.orders');
     }
+
 
     public function profile()
     {
         // Get the authenticated user
         $user = Auth::user();
-        
-        // Get the financing company data
-        $financingCompany = FinancingCompany::where('user_id', $user->id)->first();
-        
-        return view('dashboards.finances.profile', compact('user', 'financingCompany'));
+
+        // Get the transportation company data
+        $transportationCompany = TransportationCompany::where('user_id', $user->id)->first();
+
+        return view('dashboards.transportations.profile', compact('user', 'transportationCompany'));
     }
 
     public function updateProfile(Request $request)
@@ -56,56 +57,56 @@ class FinanceController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
 
-            // Get the financing company data
-            $financingCompany = FinancingCompany::where('user_id', $user->id)->first();
-            
-            if (!$financingCompany) {
-                $financingCompany = new FinancingCompany();
-                $financingCompany->user_id = $user->id;
+            // Get the transportation company data
+            $transportationCompany = TransportationCompany::where('user_id', $user->id)->first();
+
+            if (!$transportationCompany) {
+                $transportationCompany = new TransportationCompany();
+                $transportationCompany->user_id = $user->id;
             }
 
-            // Update financing company information
-            $financingCompany->commercial_register_number = $request->commercial_register_number;
-            $financingCompany->phone_number = $request->phone_number;
+            // Update transportation company information
+            $transportationCompany->commercial_register_number = $request->commercial_register_number;
+            $transportationCompany->phone_number = $request->phone_number;
 
             // Handle identity image upload
             if ($request->hasFile('identity_image')) {
                 // Delete old image if exists
-                if ($financingCompany->identity_image && file_exists(public_path($financingCompany->identity_image))) {
-                    unlink(public_path($financingCompany->identity_image));
+                if ($transportationCompany->identity_image && file_exists(public_path($transportationCompany->identity_image))) {
+                    unlink(public_path($transportationCompany->identity_image));
                 }
-                
+
                 $image = $request->file('identity_image');
                 $imageName = 'identity_' . time() . '.' . $image->getClientOriginalExtension();
-                $imagePath = 'images/finances/' . $imageName;
-                
+                $imagePath = 'images/transportations/' . $imageName;
+
                 // Make sure the directory exists
-                if (!file_exists(public_path('images/finances'))) {
-                    mkdir(public_path('images/finances'), 0755, true);
+                if (!file_exists(public_path('images/transportations'))) {
+                    mkdir(public_path('images/transportations'), 0755, true);
                 }
-                
-                $image->move(public_path('images/finances'), $imageName);
-                $financingCompany->identity_image = $imagePath;
+
+                $image->move(public_path('images/transportations'), $imageName);
+                $transportationCompany->identity_image = $imagePath;
             }
 
             // Handle commercial register image upload
             if ($request->hasFile('commercial_register_image')) {
                 // Delete old image if exists
-                if ($financingCompany->commercial_register_image && file_exists(public_path($financingCompany->commercial_register_image))) {
-                    unlink(public_path($financingCompany->commercial_register_image));
+                if ($transportationCompany->commercial_register_image && file_exists(public_path($transportationCompany->commercial_register_image))) {
+                    unlink(public_path($transportationCompany->commercial_register_image));
                 }
-                
+
                 $image = $request->file('commercial_register_image');
                 $imageName = 'commercial_' . time() . '.' . $image->getClientOriginalExtension();
-                $imagePath = 'images/finances/' . $imageName;
-                
+                $imagePath = 'images/transportations/' . $imageName;
+
                 // Make sure the directory exists
-                if (!file_exists(public_path('images/finances'))) {
-                    mkdir(public_path('images/finances'), 0755, true);
+                if (!file_exists(public_path('images/transportations'))) {
+                    mkdir(public_path('images/transportations'), 0755, true);
                 }
-                
-                $image->move(public_path('images/finances'), $imageName);
-                $financingCompany->commercial_register_image = $imagePath;
+
+                $image->move(public_path('images/transportations'), $imageName);
+                $transportationCompany->commercial_register_image = $imagePath;
             }
 
             // Handle profile image upload
@@ -114,23 +115,23 @@ class FinanceController extends Controller
                 if ($user->profile_image && file_exists(public_path($user->profile_image))) {
                     unlink(public_path($user->profile_image));
                 }
-                
+
                 $image = $request->file('profile_image');
                 $imageName = 'profile_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/profiles/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/profiles'))) {
                     mkdir(public_path('images/profiles'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/profiles'), $imageName);
                 $user->profile_image = $imagePath;
             }
 
             // Save the changes
             $user->save();
-            $financingCompany->save();
+            $transportationCompany->save();
 
             // Return success response for AJAX request
             if ($request->ajax()) {
@@ -145,7 +146,7 @@ class FinanceController extends Controller
         } catch (\Exception $e) {
             // Log the error
             \Log::error('Profile update error: ' . $e->getMessage());
-            
+
             // Return error response for AJAX request
             if ($request->ajax()) {
                 return response()->json([
@@ -153,7 +154,7 @@ class FinanceController extends Controller
                     'message' => 'حدث خطأ أثناء تحديث الملف الشخصي: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             // Redirect with error message for non-AJAX request
             return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الملف الشخصي');
         }

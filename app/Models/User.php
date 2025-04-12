@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_approved',
+        'profile_image',
     ];
 
     /**
@@ -44,5 +47,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function consultant()
+    {
+        return $this->hasOne(Consultant::class);
+    }
+
+    public function financingCompany()
+    {
+        return $this->hasOne(FinancingCompany::class);
+    }
+
+    public function housingCompany()
+    {
+        return $this->hasOne(HousingCompany::class);
+    }
+
+    public function transportationCompany()
+    {
+        return $this->hasOne(TransportationCompany::class);
     }
 }

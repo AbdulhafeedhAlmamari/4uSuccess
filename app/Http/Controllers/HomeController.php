@@ -6,8 +6,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // return view('guest');
         return view('home');
+    }
+    public function guest()
+    {
+        return view('guest');
     }
 
     // countact_us
@@ -20,5 +23,11 @@ class HomeController extends Controller
     public function aboutUs()
     {
         return view('about-us');
+    }
+
+    // join_us
+    public function joinUs()
+    {
+        return view('register-request');
     }
 }

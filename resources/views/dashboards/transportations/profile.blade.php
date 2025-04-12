@@ -7,6 +7,45 @@
     <link href="{{ asset('build/assets/css/consultant.css') }}" rel="stylesheet">
     <link href="{{ asset('build/assets/css/profile.css') }}" rel="stylesheet">
     <style>
+        .card {
+            border-style: dashed;
+            padding: 10px;
+        }
+
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            border-color: #6c757d;
+        }
+
+        .upload-box input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 30px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 120px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+        
         .invalid-feedback {
             display: block;
             color: #dc3545;
@@ -50,7 +89,7 @@
         
         <div class="card p-4">
             <h4 class="mb-4">تفاصيل الملف الشخصي</h4>
-            <form id="profileForm" method="POST" action="{{ route('consultant.profile.update') }}" enctype="multipart/form-data">
+            <form id="profileForm" method="POST" action="{{ route('transportation.profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -73,16 +112,9 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">اسم المستشار</label>
+                        <label class="form-label">اسم الشركة / السائق</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
                         @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">رقم الهوية الوطنية</label>
-                        <input type="text" class="form-control" id="identity_number" name="identity_number" value="{{ $consultant->identity_number ?? '' }}" required>
-                        @error('identity_number')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -94,30 +126,54 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">التخصص العام</label>
-                        <input type="text" class="form-control" id="general_specialization" name="general_specialization" value="{{ $consultant->specialization ?? '' }}" required>
-                        @error('general_specialization')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">التخصص الدقيق</label>
-                        <textarea class="form-control" id="specific_specialization" name="specific_specialization" rows="1" required>{{ $consultant->specific_specialization ?? '' }}</textarea>
-                        @error('specific_specialization')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
                         <label class="form-label">رقم الهاتف</label>
-                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $consultant->phone_number ?? '' }}" required>
+                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $transportationCompany->phone_number ?? '' }}" required>
                         @error('phone_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">السجل التجاري</label>
+                        <input type="text" class="form-control" id="commercial_register_number" name="commercial_register_number" value="{{ $transportationCompany->commercial_register_number ?? '' }}" required>
+                        @error('commercial_register_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="upload-box d-flex flex-column align-items-center justify-content-center">
+                            @if($transportationCompany && $transportationCompany->identity_image)
+                                <img src="{{ asset($transportationCompany->identity_image) }}" alt="{{ $transportationCompany->identity_image }}" id="identityImagePreview" class="preview-img mb-2" width="100px" height="100px">
+                            @else
+                                <img src="{{ asset('build/assets/images/upload.png') }}" id="identityImagePreview" class="preview-img mb-2" width="100px" height="100px">
+                            @endif
+                            <span class="fw-bold">الهوية الوطنية</span>
+                            <small class="text-muted">تحميل الملفات المحددة.</small>
+                            <input type="file" id="identityImageUpload" name="identity_image" accept="image/*">
+                        </label>
+                        @error('identity_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="upload-box d-flex flex-column align-items-center justify-content-center">
+                            @if($transportationCompany && $transportationCompany->commercial_register_image)
+                                <img src="{{ asset($transportationCompany->commercial_register_image) }}"  id="commercialImagePreview" class="preview-img mb-2" width="100px" height="100px">
+                            @else
+                                <img src="{{ asset('build/assets/images/upload.png') }}" id="commercialImagePreview" class="preview-img mb-2" width="100px" height="100px">
+                            @endif
+                            <span class="fw-bold">صورة لوحة المركبة ورخصة السائق</span>
+                            <small class="text-muted">تحميل الملفات المحددة.</small>
+                            <input type="file" id="commercialImageUpload" name="commercial_register_image" accept="image/*">
+                        </label>
+                        @error('commercial_register_image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary" id="submitBtn">حفظ التغييرات</button>
-                    <a href="{{ route('dashboard.consultant') }}" class="btn btn-secondary ms-2">إلغاء</a>
+                    <a href="{{ route('dashboard.transportations') }}" class="btn btn-secondary ms-2">إلغاء</a>
                 </div>
             </form>
         </div>
@@ -143,6 +199,16 @@
             // Profile image upload preview
             $('#profileImageUpload').change(function(event) {
                 previewImage(event, 'profileImagePreview');
+            });
+            
+            // Identity image upload preview
+            $('#identityImageUpload').change(function(event) {
+                previewImage(event, 'identityImagePreview');
+            });
+            
+            // Commercial register image upload preview
+            $('#commercialImageUpload').change(function(event) {
+                previewImage(event, 'commercialImagePreview');
             });
             
             // Reset button functionality

@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('consultants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('consultant_specialization');
+            $table->string('phone_number');
+            $table->string('specialization');
+            $table->string('consultation_duration');
+            $table->string('activity_type');
+            $table->string('identity_image');
+            $table->string('certificate_image');
             $table->timestamps();
         });
     }

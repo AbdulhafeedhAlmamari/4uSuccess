@@ -36,7 +36,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4">6</h4>
-                                <a href="{{ route('dashboard.company_orders') }}" class="btn btn-outline-warning">عرض جميع
+                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-warning">عرض جميع
                                     الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -63,7 +63,7 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
                                         data-target="36894">5</span></h4>
-                                <a href="{{ route('dashboard.company_orders') }}" class="btn btn-outline-info hover:text-whit">عرض جميع الطلبات</a>
+                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-info hover:text-whit">عرض جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-info-subtle rounded fs-3  px-2 py-1">
@@ -87,7 +87,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4">9</h4>
-                                <a href="{{ route('dashboard.company_orders') }}" class="btn btn-outline-success">عرض جميع الطلبات</a>
+                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-success">عرض جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-success-subtle rounded fs-3   px-2 py-1">

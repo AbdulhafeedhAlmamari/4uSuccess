@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('housing_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('housing_company_name');
-            $table->string('housing_company_phone_number');
+            $table->string('commercial_register_number');
+            $table->string('phone_number');
+            $table->string('identity_image');
+            $table->string('commercial_register_image');
             $table->timestamps();
         });
     }

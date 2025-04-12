@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('transportation_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('transportation_company_name');
-            $table->string('transportation_company_address');
-            $table->string('transportation_company_phone_number');
+            $table->string('commercial_register_number');
+            $table->string('phone_number');
+            $table->string('identity_image');
+            $table->string('commercial_register_image');
             $table->timestamps();
         });
     }
