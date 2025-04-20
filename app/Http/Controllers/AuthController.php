@@ -253,6 +253,8 @@ class AuthController extends Controller
             'companyPhone' => 'required|string|max:20',
             'companyIdUpload' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'commercialRegUpload' => 'required|image|mimes:jpeg,png,jpg,pdf|max:2048',
+            'companyAddress' => 'required|string|max:255',
+            'companyDescription' => 'required|string|max:255',
         ], [
             'required' => 'حقل :attribute مطلوب.',
             'string' => 'حقل :attribute يجب أن يكون نصًا.',
@@ -262,6 +264,8 @@ class AuthController extends Controller
             'mimes' => 'حقل :attribute يجب أن يكون من نوع: :values.',
             'unique' => 'هذا :attribute مستخدم بالفعل.',
             'confirmed' => 'تأكيد كلمة المرور غير متطابق.',
+            'string' => 'حقل :attribute يجب أن يكون نصًا.',
+            'max' => 'حقل :attribute يجب ألا يتجاوز :max حرفًا.',
         ], [
             'companyName' => 'اسم الشركة',
             'commercialReg' => 'السجل التجاري',
@@ -269,6 +273,8 @@ class AuthController extends Controller
             'companyPhone' => 'رقم الهاتف',
             'companyIdUpload' => 'صورة الهوية الوطنية',
             'commercialRegUpload' => 'صورة السجل التجاري',
+            'companyAddress' => 'العنوان',
+            'companyDescription' => 'الوصف',
         ]);
 
         // بدء المعاملة
@@ -305,6 +311,8 @@ class AuthController extends Controller
                 'phone_number' => $request->companyPhone,
                 'identity_image' => $identityImagePath,
                 'commercial_register_image' => $commercialRegImagePath,
+                'address' => $request->companyAddress,
+                'description' => $request->companyDescription,
             ]);
 
             // إذا نجح كل شيء، نؤكد المعاملة

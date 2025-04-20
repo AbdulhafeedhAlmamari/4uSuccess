@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                margin: -20px -25px 10px; */
+                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -209,8 +209,8 @@
                                 <td><span class="badge bg-success">تمت الموافقة</span></td>
                                 <td class="actions">
                                     <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                            </a> -->
+                                                                                                                                                                                                                            <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                        </a> -->
                                     <a href="#">
                                         <i class="fa-brands fa-paypal"></i>
                                     </a>
@@ -221,7 +221,7 @@
                 </div>
             </div>
         </div>
-
+        {{-- transport orders --}}
         <div id="transport" class="content-section">
             <!-- <h2 class="text-center mb-4">طلبات النقل</h2> -->
             <div class="table-responsive">
@@ -274,8 +274,8 @@
                                     <td><span class="badge bg-success">مكتمله</span></td>
                                     <td class="actions">
                                         <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                    <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                </a> -->
+                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                            </a> -->
                                         <a href="#">
                                             <i class="fa-brands fa-paypal"></i>
                                         </a>
@@ -288,7 +288,7 @@
                 </div>
             </div>
         </div>
-
+        {{-- finance --}}
         <div id="finance" class="content-section">
             <!-- <h2 class="text-center mb-4">طلبات التمويل</h2> -->
             <div class="table-responsive">
@@ -343,8 +343,8 @@
                                     <td><span class="badge bg-success">مكتمله</span></td>
                                     <td class="actions">
                                         <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                    <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                </a> -->
+                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                            </a> -->
                                         <a href="#">
                                             <i class="fa-brands fa-paypal"></i>
                                         </a>
@@ -357,67 +357,172 @@
                 </div>
             </div>
         </div>
+        {{-- filepath: resources/views/dashboards/students/orders.blade.php --}}
 
+        {{-- Consult Section --}}
         <div id="consult" class="content-section">
-            <!-- <h2 class="text-center mb-4">طلبات الاستشارة</h2> -->
             <div class="table-responsive">
                 <div class="container financing-container global-table">
-                    <div class="table-wrapper ">
+                    <div class="table-wrapper">
                         <div class="table-title d-flex justify-content-between align-items-center">
                             <h2 class="m-0">طلبات الاستشارة</h2>
                         </div>
-                        <table class="table table-striped table-hover">
+                        <table id="consultationTable" class="table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>أسم الشركة</th>
-                                    <th>تاريخ الطلب</th>
+                                    <th>اسم المستشار</th>
                                     <th>التخصص</th>
-                                    <th>الطالب</th>
+                                    <th>موضوع الإستشارة</th>
+                                    <th>نوع الاستشارة</th>
                                     <th>حالة الطلب</th>
                                     <th>الاجرائات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar-sm ms-2 bg-light rounded p-1">
-                                                    <img src="../img/consultant-01.png" alt="Product Image"
-                                                        class="img-fluid d-block " style="width: 50px; height: 50px;">
-
+                                @forelse($consultationRequests as $index => $request)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar-sm ms-2 bg-light rounded p-1">
+                                                        <img src="{{ asset('img/consultant-01.png') }}"
+                                                            alt="Product Image" class="img-fluid d-block"
+                                                            style="width: 50px; height: 50px;">
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-1">
+                                                        <a href="#"
+                                                            class="text-body">{{ $request->consultant->name }}</a>
+                                                    </h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $request->consultant->consultant->specialization ?? 'غير متوفر' }}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-14 mb-1">
-                                                    <a href="#" class="text-body">صالح العمري</a>
-                                                </h5>
-                                                <p class="text-muted mb-0">
-                                                    جامعة الملك عبدالعزيز
-                                                </p>
+                                        </td>
+                                        <td>{{ $request->specialization }}</td>
+                                        <td>{{ $request->subject }}</td>
+                                        <td>{{ $request->type }}</td>
+                                        <td>
+                                            @php
+                                                $statusColors = [
+                                                    'completed' => 'success',
+                                                    'rejected' => 'danger',
+                                                    'pending' => 'warning',
+                                                ];
+
+                                                $statusLabels = [
+                                                    'completed' => 'مكتملة',
+                                                    'rejected' => 'مرفوضة',
+                                                    'pending' => 'قيد الانتظار',
+                                                ];
+                                            @endphp
+
+                                            <span class="badge bg-{{ $statusColors[$request->status] ?? 'secondary' }}">
+                                                {{ $statusLabels[$request->status] ?? $request->status }}
+                                            </span>
+                                        </td>
+                                        <td class="actions">
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $request->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+
+                                    <!-- Modal for each request -->
+                                    <div class="modal fade orders-section-modal" id="orderModal{{ $request->id }}"
+                                        tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="info-section d-flex justify-content-between">
+                                                        <div class="text-start">
+                                                            <div class="image-container d-flex align-items-center">
+                                                                <img src="{{ asset('storage/' . $request->profile_image) }}"
+                                                                    alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
+                                                                    class="me-3"
+                                                                    style="width: 80px; height: 80px; border-radius: 8px;">
+                                                                <h5 class="ms-3">
+                                                                    {{ $request->student->name ?? 'لا يوجد' }}</h5>
+                                                            </div>
+                                                            {{-- <p class="text-muted mt-3"><strong>التخصص:</strong> {{ $request->specialization }}</p> --}}
+                                                            <p class="text-muted"> <strong>التخصص:</strong>
+                                                                {{ $request->consultant->consultant->specialization ?? 'لا يوجد' }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>مدة الاستشارة:</strong>
+                                                                {{ $request->consultant->consultant->consultation_duration ?? 'لا يوجد' }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>نوع النشاط:</strong>
+                                                                {{ $request->consultant->consultant->activity_type ?? 'لا يوجد' }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="mt-4">
+                                                            <h5>طلب رقم {{ $request->id }}</h5>
+                                                            <p class="text-muted">تاريخ الطلب:
+                                                                {{ $request->request_date }}
+                                                            </p>
+                                                            <p class="status-box">حالة الطلب:
+                                                                @if ($request->status == 'pending')
+                                                                    <span class="badge bg-warning">قيد الانتظار</span>
+                                                                @elseif($request->status == 'completed')
+                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @elseif($request->status == 'rejected')
+                                                                    <span class="badge bg-danger">مرفوضة</span>
+                                                                @endif
+                                                                {{-- class="badge badge-{{ $request->status_color }}">{{ $request->status }}</span> --}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider my-4"></div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="col-md-4">
+                                                            <h6 class="fw-bold">معلومات الطلب</h6>
+                                                            <p><strong>التخصص:</strong> {{ $request->specialization }}</p>
+                                                            <p><strong>نوع الاستشارة:</strong> {{ $request->type }}</p>
+                                                            <p><strong>موضوع الاستشارة:</strong> {{ $request->subject }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>الجنس:</strong>
+                                                                {{ $request->gender ? 'ذكر' : 'أنثى' ?? 'لا يوجد' }}
+                                                            </p>
+                                                        </div>
+                                                        @if ($request->status == 'rejected')
+                                                            <div class="col-md-4">
+                                                                <h6 class="fw-bold">سبب الرفض</h6>
+                                                                <p>
+                                                                    {{ $request->reply }}
+                                                                </p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn bg-danger text-white"
+                                                        data-bs-dismiss="modal">إغلاق</button>
+                                                    @if ($request->status == 'pending')
+                                                        <a href="{{ route('consultation.request.accept', $request->id) }}"
+                                                            class="btn custom-success">قبول</a>
+                                                        <a href="{{ route('consultation.request.reject', $request->id) }}"
+                                                            class="btn custom-danger">رفض</a>
+                                                    @elseif($request->status == 'accepted')
+                                                        <a href="{{ route('consultation.request.complete', $request->id) }}"
+                                                            class="btn btn-info">إكمال</a>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>10 مارس 2024</td>
-                                    <td>علوم الحاسب</td>
-                                    <td><a href="#" class="" title="التفاصيل" data-toggle="tooltip">
-                                            أفنان الذيابي </a>
-                                    </td>
-                                    <td><span class="badge bg-success">مكتمله</span></td>
-                                    <td class="actions">
-                                        <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                    <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                </a> -->
-                                        <a href="#">
-                                            <i class="fa-brands fa-paypal"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">لا توجد طلبات استشارة حالية</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -503,6 +608,34 @@
                     }
                 }
             });
+            $('#consultationTable').DataTable({
+                // pageLength: 1,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "لا توجد بيانات متاحة في الجدول",
+                    "info": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                    "infoEmpty": "عرض 0 إلى 0 من أصل 0 مدخل",
+                    "infoFiltered": "(تمت تصفيته من إجمالي _MAX_ مدخل)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "عرض _MENU_ مدخلات",
+                    "loadingRecords": "جارٍ التحميل...",
+                    "processing": "جارٍ المعالجة...",
+                    "search": "البحث: ",
+                    "zeroRecords": "لم يتم العثور على نتائج مطابقة",
+                    "paginate": {
+                        "first": "الأول",
+                        "last": "الأخير",
+                        "next": "التالي",
+                        "previous": "السابق"
+                    },
+                    "aria": {
+                        "sortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                }
+            });
+
         });
     </script>
 

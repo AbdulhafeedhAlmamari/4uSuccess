@@ -15,6 +15,8 @@ class FinancingCompany extends Model
         'phone_number',
         'identity_image',
         'commercial_register_image',
+        'description',
+        'address',
     ];
 
     public function user()

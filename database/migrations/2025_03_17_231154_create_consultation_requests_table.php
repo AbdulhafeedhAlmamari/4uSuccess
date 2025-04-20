@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('consultant_id')->constrained('users')->onDelete('cascade');
+            $table->string('specialization');
             $table->string('subject');
+            $table->string('type');
+            $table->integer('gender'); // 1 for male, 0 for female
             $table->text('description');
+            $table->text('reply')->nullable();
             $table->string('status');
             $table->dateTime('request_date');
             $table->timestamps();

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('financing_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('address');
+            $table->string('description');
             $table->string('commercial_register_number');
             $table->string('phone_number');
             $table->string('identity_image');

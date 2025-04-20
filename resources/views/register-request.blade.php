@@ -194,6 +194,17 @@
                             <input type="text" class="form-control" id="companyName" name="companyName">
                             <div class="invalid-feedback" id="companyName-error"></div>
                         </div>
+                        <div class="mb-3 financing-field" style="display: none;">
+                            <label for="companyAddress" class="form-label">العنوان</label>
+                            <input type="text" class="form-control" id="companyAddress" name="companyAddress">
+                            <div class="invalid-feedback" id="companyAddress-error"></div>
+                        </div>
+
+                        <div class="mb-3 financing-field" style="display: none;">
+                            <label for="companyDescription" class="form-label">الوصف</label>
+                            <textarea class="form-control" id="companyDescription" name="companyDescription" rows="3"></textarea>
+                            <div class="invalid-feedback" id="companyDescription-error"></div>
+                        </div>
 
                         <div class="mb-3">
                             <label for="commercialReg" class="form-label">السجــــل التجاري</label>
@@ -422,6 +433,24 @@
                 }
             });
         });
+        // Show/hide financing fields based on company type selection
+        $('#companyType').change(function() {
+            const selectedType = $(this).val();
+            if (selectedType === 'financing') {
+                $('.financing-field').slideDown(); // Show address and description fields
+            } else {
+                $('.financing-field').slideUp(); // Hide address and description fields
+                // Optionally clear the fields when hidden
+                $('#companyAddress').val('');
+                $('#companyDescription').val('');
+                // Remove potential validation errors if they were shown
+                $('#companyAddress').removeClass('is-invalid');
+                $('#companyAddress-error').text('').hide();
+                $('#companyDescription').removeClass('is-invalid');
+                $('#companyDescription-error').text('').hide();
+            }
+        });
+
 
         // Company Registration Form Submission
         $('#companyRegisterForm').submit(function(e) {
@@ -461,7 +490,6 @@
                     $('#companyType-error').text('نوع الشركة غير صالح').show();
                     return;
             }
-
             // Submit form via AJAX
             $.ajax({
                 url: route,

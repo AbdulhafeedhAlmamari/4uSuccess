@@ -66,9 +66,38 @@
             background: linear-gradient(90deg, #54b5b7db 0%, #61528bde 100%);
             color: #fff;
         }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .badge-info {
+            background-color: #17a2b8;
+            color: #fff;
+        }
     </style>
 @endsection
 @section('content')
+
+
     <!-- company orders section -->
     <!-- main  -->
     <div class="container mt-5 orders-section">
@@ -77,12 +106,18 @@
             <div class="table-responsive">
                 <div class="container financing-container global-table">
                     <div class="table-wrapper ">
-                        <div class="table-title d-flex justify-content-between align-items-center">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addTripModal"><i class="fa fa-add"></i> <span>اضافة
-                                    رحلة</span></button>
+                        <div class="table-title d-flex justify-content-lg-end align-items-center">
                             <div class="">
-                                <h2 class="m-0">طلبات استشارة حالية</h2>
+                                <h2 class="m-0">طلبات استشارة
+
+                                    @if ($status == 'pending')
+                                        <span>قيد الانتظار</span>
+                                    @elseif($status == 'completed')
+                                        <span>مكتملة</span>
+                                    @elseif($status == 'rejected')
+                                        <span>مرفوضة</span>
+                                    @endif
+                                </h2>
                             </div>
                         </div>
                         <table class="table table-striped table-hover">
@@ -90,104 +125,219 @@
                                 <tr>
                                     <th>#</th>
                                     <th>اسم الطالب</th>
-                                    <th>الرقم الجامعي</th>
+                                    <th>التخصص</th>
                                     <th>موضوع الإستشارة</th>
-                                    <th>نص الطلب</th>
+                                    <th>نوع الاستشارة</th>
                                     <th>حالة الطلب</th>
                                     <th>الاجرائات</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($consultationRequests as $index => $request)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $request->student->name }}</td>
+                                        <td>{{ $request->specialization }}</td>
+                                        <td>{{ $request->subject }}</td>
+                                        <td>{{ $request->type }}</td>
+                                        <td>
+                                            @if ($request->status == 'pending')
+                                                <div class="d-flex justify-content-start gap-1">
+                                                    <!-- قبول -->
+                                                    <a href="{{ route('consultation.request.accept', $request->id) }}"
+                                                        class="btn custom-success">قبول</a>
+                                                    <!-- رفض -->
+                                                    {{-- <a href="{{ route('consultation.request.reject', $request->id) }}"
+                                                        class="btn custom-danger">رفض</a> --}}
+                                                    <button type="button" class="btn custom-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#rejectModal{{ $request->id }}">رفض</button>
 
-                                <tr>
-                                    <td>1</td>
-                                    <td>بشرى العتيبي</td>
-                                    <td>44104047</td>
-                                    <td>إختيار التخصص</td>
-                                    <td>السلام عليكم أرغب في معرفة التخصصات المختلفة داخل كليا العلوم</td>
-                                    <td>
-                                        <div class="d-flex justify-content-start gap-1">
-                                            <!-- قبول -->
-                                            <a href="#" class="btn custom-success">قبول</a>
-                                            <!-- رفض -->
-                                            <a href="#" class="btn custom-danger">رفض</a>
+                                                </div>
+                                            @else
+                                                <span
+                                                    class="badge badge-{{ $request->status_color }}">{{ $request->status_name }}</span>
+                                                @if ($request->status == 'accepted')
+                                                    <a href="{{ route('consultation.request.complete', $request->id) }}"
+                                                        class="btn btn-sm btn-info mt-1">إكمال</a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td class="actions">
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $request->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+
+                                    <!-- Modal for Accept -->
+                                    <div class="modal fade" id="acceptModal{{ $request->id }}" tabindex="-1"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('consultation.request.accept', $request->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">قبول الطلب</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="response">الرد على الطلب:</label>
+                                                            <textarea name="response" id="response" class="form-control" rows="4" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"
+                                                            class="btn btn-secondary bg-danger text-white"
+                                                            data-bs-dismiss="modal">إغلاق</button>
+                                                        <button type="submit" class="btn custom-success">إرسال</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td class="actions">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
-                                        <!-- <a href="#">
-                                                <i class="fa-brands fa-paypal"></i>
-                                            </a> -->
-                                    </td>
-                                </tr>
+                                    </div>
+
+                                    <!-- Modal for Reject -->
+                                    <div class="modal fade" id="rejectModal{{ $request->id }}" tabindex="-1"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('consultation.request.reject', $request->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">رفض الطلب</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="reply">سبب الرفض:</label>
+                                                            <textarea name="reply" id="reply" class="form-control" rows="4" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"
+                                                            class="btn btn btn-secondary bg-danger text-white"
+                                                            data-bs-dismiss="modal">إغلاق</button>
+                                                        <button type="submit" class="btn custom-success">إرسال</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Modal for each request -->
+                                    <div class="modal fade orders-section-modal" id="orderModal{{ $request->id }}"
+                                        tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="info-section d-flex justify-content-between">
+                                                        <div class="text-start">
+                                                            <div class="image-container d-flex align-items-center">
+                                                                <img src="{{ asset('storage/' . $request->profile_image) }}"
+                                                                    alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
+                                                                    class="me-3"
+                                                                    style="width: 80px; height: 80px; border-radius: 8px;">
+                                                                <h5 class="ms-3">
+                                                                    {{ $request->student->name ?? 'لا يوجد' }}</h5>
+                                                            </div>
+                                                            {{-- <p class="text-muted mt-3"><strong>التخصص:</strong> {{ $request->specialization }}</p> --}}
+                                                            <p class="text-muted"> <strong>الجامعة:</strong>
+                                                                {{ $request->student->student->university_name ?? 'لا يوجد' }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>رقم الجوال:</strong>
+                                                                {{ $request->student->student->student_phone_number ?? 'لا يوجد' }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>الرقم الجامعي:</strong>
+                                                                {{ $request->student->student->university_number ?? 'لا يوجد' }}
+                                                            </p>
+                                                            <p class="text-muted"> <strong>الجنس:</strong>
+                                                                {{ $request->gender ? 'ذكر' : 'أنثى' ?? 'لا يوجد' }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="mt-4">
+                                                            <h5>طلب رقم {{ $request->id }}</h5>
+                                                            <p class="text-muted">تاريخ الطلب:
+                                                                {{ $request->request_date }}
+                                                            </p>
+                                                            <p class="status-box">حالة الطلب:
+                                                                @if ($request->status == 'pending')
+                                                                    <span class="badge bg-warning">قيد الانتظار</span>
+                                                                @elseif($request->status == 'completed')
+                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @elseif($request->status == 'rejected')
+                                                                    <span class="badge bg-danger">مرفوضة</span>
+                                                                @endif
+                                                                {{-- class="badge badge-{{ $request->status_color }}">{{ $request->status }}</span> --}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider my-4"></div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="col-md-4">
+                                                            <h6 class="fw-bold">معلومات الطلب</h6>
+                                                            <p><strong>التخصص:</strong> {{ $request->specialization }}</p>
+                                                            <p><strong>نوع الاستشارة:</strong> {{ $request->type }}</p>
+                                                            <p><strong>موضوع الاستشارة:</strong> {{ $request->subject }}
+                                                            </p>
+                                                        </div>
+                                                        @if ($request->status == 'rejected')
+                                                            <div class="col-md-4">
+                                                                <h6 class="fw-bold">سبب الرفض</h6>
+                                                                <p>
+                                                                    {{ $request->reply }}
+                                                                </p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn bg-danger text-white"
+                                                        data-bs-dismiss="modal">إغلاق</button>
+                                                    @if ($request->status == 'pending')
+                                                        <a href="{{ route('consultation.request.accept', $request->id) }}"
+                                                            class="btn custom-success">قبول</a>
+                                                        <a href="{{ route('consultation.request.reject', $request->id) }}"
+                                                            class="btn custom-danger">رفض</a>
+                                                    @elseif($request->status == 'accepted')
+                                                        <a href="{{ route('consultation.request.complete', $request->id) }}"
+                                                            class="btn btn-info">إكمال</a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">لا توجد طلبات استشارة حالية</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="addTripModal" tabindex="-1" aria-labelledby="addTripModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button " class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5 class="modal-title ms-2" id="addTripModalLabel">إضافة رحلة جديدة</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="driverName" class="form-label">اسم السائق</label>
-                            <input type="text" class="form-control" id="driverName" placeholder="أكتب اسم السائق">
-                        </div>
-                        <div class="mb-3">
-                            <label for="destination" class="form-label">الوجهه</label>
-                            <input type="text" class="form-control" id="destination" placeholder="أكتب اسم المنطقة">
-                        </div>
-                        <div class="mb-3">
-                            <label for="seats" class="form-label">عدد المقاعد</label>
-                            <input type="number" class="form-control" id="seats" placeholder="أدخل عدد المقاعد">
-                        </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">الموعد</label>
-                            <input type="date" class="form-control" id="date" placeholder="حدد تاريخ الرحلة">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-custom">إضافة</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <br><br>
-    <br><br>
-    <br><br><br>
 @endsection
 
 @section('script')
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let rows = document.querySelectorAll("table tbody tr");
-
-            rows.forEach(row => {
-                row.addEventListener("mouseenter", function() {
-                    this.style.transform = "scale(1.02)"; // تكبير بسيط عند التمرير
-                    this.style.transition = "transform 0.3s ease-in-out";
-                    this.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.1)"; // ظل خفيف
-                });
-
-                row.addEventListener("mouseleave", function() {
-                    this.style.transform = "scale(1)"; // يرجع للحجم الطبيعي عند خروج الماوس
-                    this.style.boxShadow = "none";
-                });
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"
+                },
+                "order": [
+                    [0, "desc"]
+                ]
             });
         });
     </script>

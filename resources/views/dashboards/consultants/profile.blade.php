@@ -117,7 +117,7 @@
                 </div>
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary" id="submitBtn">حفظ التغييرات</button>
-                    <a href="{{ route('dashboard.consultant') }}" class="btn btn-secondary ms-2">إلغاء</a>
+                    <a href="{{ route('dashboard.consultants') }}" class="btn btn-secondary ms-2">إلغاء</a>
                 </div>
             </form>
         </div>
