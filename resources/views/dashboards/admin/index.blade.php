@@ -101,7 +101,7 @@
 
                 <div class="table-responsive shadow mt-3 p-3">
                     <!-- make select list -->
-                    <select class="form-select w-25 me-auto mb-2" id="requestFilter" aria-label="Default select example">
+                    <select class="form-select w-25 ms-auto mb-2" id="requestFilter" aria-label="Default select example">
                         <option value="all" selected>الكل</option>
                         <option value="0">قيد الانتظار</option>
                         <option value="1">طلب مقبول</option>
@@ -291,7 +291,7 @@
 
                     <div class="table-responsive shadow mt-3 p-3">
                         <!-- select list -->
-                        <select class="form-select w-25 me-auto mb-2" id="userFilter"
+                        <select class="form-select w-25 ms-auto mb-2" id="userFilter"
                             aria-label="Default select example">
                             <option value="all" selected>الكل</option>
                             <option value="student">الطلاب</option>

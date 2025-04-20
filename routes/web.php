@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConsultantController;
+use App\Http\Controllers\ConsultationRequestController;
 use App\Http\Controllers\dashboard\TransportationController as DashboardTransportationController;
 use App\Http\Controllers\dashboard\AdminController as DashboardAdminController;
+use App\Http\Controllers\dashboard\ContactController as DashboardContactController;
 use App\Http\Controllers\dashboard\ConsultantController as DashboardConsultantController;
 use App\Http\Controllers\dashboard\FinanceController as DashboardFinanceController;
 use App\Http\Controllers\dashboard\HouseController as DashboardHouseController;
 use App\Http\Controllers\dashboard\StudentController as DashboardStudentController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\HousingController;
@@ -39,8 +42,14 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // consultants routes
 Route::get('/consultants', [ConsultantController::class, 'index'])->name('home.consultants');
 Route::get('/consultant-show', [ConsultantController::class, 'show'])->name('home.consultants.show');
-Route::get('/consultation-request', [ConsultantController::class, 'consultationRequest'])->name('home.consultants.consultation_request');
+// Route::get('/consultation-request', [ConsultantController::class, 'consultationRequest'])->name('home.consultants.consultation_request');
 Route::get('/consultation-requests', [ConsultantController::class, 'consultationRequests'])->name('home.consultants.consultation_requests');
+
+// finance routes
+Route::get('/finances', [FinanceController::class, 'index'])->name('home.finances');
+Route::get('/finance-show/{id}', [FinanceController::class, 'show'])->name('home.finances.show');
+Route::get('/finance/order/create', [FinanceController::class, 'createOrder'])->name('home.finances.order.create');
+
 
 // houses routes
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
@@ -62,6 +71,12 @@ Route::get('/payment', [PaymentController::class, 'index'])->name('home.payment'
 Route::prefix('/dashboard')->group(function () {
     // Admin routes
     Route::get('/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
+    // Route::get('/admin/contact', [DashboardAdminController::class, 'contact'])->name('admin.contact');
+    Route::get('/admin/contacts', [DashboardContactController::class, 'index'])->name('admin.contacts');
+    Route::post('/admin/contacts/{id}/reply', [DashboardContactController::class, 'reply'])->name('contacts.reply');
+    Route::delete('/admin/contacts/{id}', [DashboardContactController::class, 'destroy'])->name('contacts.destroy');
+    // Route::post('/admin/contacts/filter', [DashboardContactController::class, 'filter'])->name('contacts.filter');
+    Route::post('/contact', [DashboardContactController::class, 'store'])->name('contact.store');
 
     // User management
     Route::get('/users', [DashboardAdminController::class, 'getUsers'])->name('admin.users');
@@ -76,6 +91,7 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/student-orders', [DashboardStudentController::class, 'orders'])->name('dashboard.student_orders');
     Route::get('/student-profile', [DashboardStudentController::class, 'profile'])->name('dashboard.student_profile');
     Route::put('/student/profile/update', [DashboardStudentController::class, 'updateProfile'])->name('student.profile.update');
+    // Route::get('/student/consultations/orders', [DashboardStudentController::class, 'index'])->name('student.consultations.orders');
 
     // transportations routes
     Route::get('/transportations', [DashboardTransportationController::class, 'index'])->name('dashboard.transportations');
@@ -84,10 +100,28 @@ Route::prefix('/dashboard')->group(function () {
     Route::put('/dashboard/transportation/profile/update', [DashboardTransportationController::class, 'updateProfile'])->name('transportation.profile.update');
 
     // consultants routes
+    //  route('dashboard.consultant_orders', ['status' => 'current'])
+    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+
     Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
-    Route::get('/consultant-orders', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
     Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
     Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
+
+    // Consultation request routes dashboard
+    Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
+    Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
+    Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
+
+    // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
+
+
+    // Consultation request routes
+    Route::get('/consultation-request', [ConsultationRequestController::class, 'create'])->name('home.consultants.consultation_request');
+    Route::post('/consultation-request', [ConsultationRequestController::class, 'store'])->name('consultation.request.store');
+    Route::get('/filter-consultants', [ConsultationRequestController::class, 'filterConsultants'])->name('filter.consultants');
 
     // finances routes
     Route::get('/finances', [DashboardFinanceController::class, 'index'])->name('dashboard.finances');

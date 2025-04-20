@@ -49,6 +49,10 @@ class AdminController extends Controller
             'users'
         ));
     }
+    public function contact()
+    {
+        return view('dashboards.admin.contact');
+    }
 
     /**
      * Update consultant is_approved 

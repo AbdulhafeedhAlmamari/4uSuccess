@@ -3,42 +3,110 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition(): array
+    public function definition()
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'role' => $this->faker->randomElement(['student', 'financing', 'housing', 'transportation', 'consultant']),
+            'is_approved' => $this->faker->randomElement(['0', '1', '2']),
+            'profile_image' => $this->faker->optional()->imageUrl(200, 200, 'people'),
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
      * Indicate that the model's email address should be unverified.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    public function unverified(): static
+    public function unverified()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is a student.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function student()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'student',
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is a teacher.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function teacher()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'teacher',
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is an admin.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function admin()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'admin',
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is approved.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function approved()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_approved' => '1',
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is not approved.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unapproved()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_approved' => '0',
+            ];
+        });
     }
 }

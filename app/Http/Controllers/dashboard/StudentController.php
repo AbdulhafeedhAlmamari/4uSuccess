@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\ConsultationRequest;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -21,7 +22,12 @@ class StudentController extends Controller
 
     public function orders()
     {
-        return view('dashboards.students.orders');
+        $consultationRequests = ConsultationRequest::with('student', 'consultant')->latest()
+            ->where('student_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboards.students.orders', compact('consultationRequests'));
     }
 
     public function profile()
@@ -34,7 +40,7 @@ class StudentController extends Controller
 
         return view('dashboards.students.profile', compact('user', 'student'));
     }
-    
+
     public function updateProfile(Request $request)
     {
         // Validate the request data

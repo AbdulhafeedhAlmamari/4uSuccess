@@ -37,7 +37,7 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
                                         data-target="36894">5</span></h4>
-                                <a href="{{ route('dashboard.consultant_orders') }}" class="btn btn-outline-info">عرض جميع
+                                <a href="{{ route('dashboard.consultant_orders', ['status' => 'pending']) }}" class="btn btn-outline-info">عرض جميع
                                     الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -62,7 +62,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4">9</h4>
-                                <a href="{{ route('dashboard.consultant_orders') }}" class="btn btn-outline-success">عرض
+                                <a href="{{ route('dashboard.consultant_orders', ['status' => 'completed']) }}" class="btn btn-outline-success">عرض
                                     جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -89,7 +89,7 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
                                         data-target="36894">5</span></h4>
-                                <a href="{{ route('dashboard.consultant_orders') }}" class="btn btn-outline-danger">عرض جميع
+                                <a href="{{ route('dashboard.consultant_orders', ['status' => 'rejected']) }}" class="btn btn-outline-danger">عرض جميع
                                     الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
