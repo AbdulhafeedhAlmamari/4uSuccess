@@ -10,6 +10,7 @@ use App\Http\Controllers\dashboard\HouseController as DashboardHouseController;
 use App\Http\Controllers\dashboard\StudentController as DashboardStudentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\HousingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
@@ -96,7 +97,19 @@ Route::prefix('/dashboard')->group(function () {
 
     // houses routes
     Route::get('/houses', [DashboardHouseController::class, 'index'])->name('dashboard.houses');
+    Route::get('/all-houses', [DashboardHouseController::class, 'getAllHouses'])->name('dashboard.all_houses');
     Route::get('/house-orders', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
     Route::get('/house-profile', [DashboardHouseController::class, 'profile'])->name('dashboard.house_profile');
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
 });
+
+// Housing routes
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/housing', [HousingController::class, 'index'])->name('housing.index');
+    Route::post('/housing', [HousingController::class, 'store'])->name('housing.store');
+    Route::get('/housing/{housing}', [HousingController::class, 'show'])->name('housing.show');
+    Route::get('/housing/{housing}/edit', [HousingController::class, 'edit'])->name('housing.edit');
+    Route::put('/housing/{housing}', [HousingController::class, 'update'])->name('housing.update');
+    Route::delete('/housing/{housing}', [HousingController::class, 'destroy'])->name('housing.destroy');
+    Route::post('/housing/upload-temp', [HousingController::class, 'uploadTemp'])->name('housing.upload.temp');
+// });

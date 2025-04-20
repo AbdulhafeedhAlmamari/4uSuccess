@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Housing;
 use App\Models\HousingCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,12 @@ class HouseController extends Controller
     {
         return view('dashboards.houses.index');
     }
-
+    public function getAllHouses()
+    {
+        //     $houses = Housing::all();
+        //     return view('dashboards.houses.houses', compact('houses'));
+        return view('dashboards.houses.houses');
+    }
     public function show()
     {
         return view('dashboards.houses.show');
@@ -28,10 +34,10 @@ class HouseController extends Controller
     {
         // Get the authenticated user
         $user = Auth::user();
-        
+
         // Get the housing company data
         $housingCompany = HousingCompany::where('user_id', $user->id)->first();
-        
+
         return view('dashboards.houses.profile', compact('user', 'housingCompany'));
     }
 
@@ -59,7 +65,7 @@ class HouseController extends Controller
 
             // Get the housing company data
             $housingCompany = HousingCompany::where('user_id', $user->id)->first();
-            
+
             if (!$housingCompany) {
                 $housingCompany = new HousingCompany();
                 $housingCompany->user_id = $user->id;
@@ -76,16 +82,16 @@ class HouseController extends Controller
                 if ($housingCompany->identity_image && file_exists(public_path($housingCompany->identity_image))) {
                     unlink(public_path($housingCompany->identity_image));
                 }
-                
+
                 $image = $request->file('identity_image');
                 $imageName = 'identity_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/houses/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/houses'))) {
                     mkdir(public_path('images/houses'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/houses'), $imageName);
                 $housingCompany->identity_image = $imagePath;
             }
@@ -96,16 +102,16 @@ class HouseController extends Controller
                 if ($housingCompany->commercial_register_image && file_exists(public_path($housingCompany->commercial_register_image))) {
                     unlink(public_path($housingCompany->commercial_register_image));
                 }
-                
+
                 $image = $request->file('commercial_register_image');
                 $imageName = 'commercial_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/houses/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/houses'))) {
                     mkdir(public_path('images/houses'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/houses'), $imageName);
                 $housingCompany->commercial_register_image = $imagePath;
             }
@@ -116,16 +122,16 @@ class HouseController extends Controller
                 if ($user->profile_image && file_exists(public_path($user->profile_image))) {
                     unlink(public_path($user->profile_image));
                 }
-                
+
                 $image = $request->file('profile_image');
                 $imageName = 'profile_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/profiles/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/profiles'))) {
                     mkdir(public_path('images/profiles'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/profiles'), $imageName);
                 $user->profile_image = $imagePath;
             }
@@ -145,7 +151,7 @@ class HouseController extends Controller
             // Redirect with success message for non-AJAX request
             return redirect()->back()->with('success', 'تم تحديث الملف الشخصي بنجاح');
         } catch (\Exception $e) {
-            
+
             // Return error response for AJAX request
             if ($request->ajax()) {
                 return response()->json([
@@ -153,7 +159,7 @@ class HouseController extends Controller
                     'message' => 'حدث خطأ أثناء تحديث الملف الشخصي: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             // Redirect with error message for non-AJAX request
             return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الملف الشخصي');
         }

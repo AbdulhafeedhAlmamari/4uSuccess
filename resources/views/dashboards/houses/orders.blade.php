@@ -81,8 +81,8 @@
                                     <i class="fa-regular fa-eye"></i>
                                 </a>
                                 <!-- <a href="#">
-                                                            <i class="fa-brands fa-paypal"></i>
-                                                        </a> -->
+                                                                    <i class="fa-brands fa-paypal"></i>
+                                                                </a> -->
                             </td>
                         </tr>
                     </tbody>
