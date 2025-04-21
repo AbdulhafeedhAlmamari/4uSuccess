@@ -6,8 +6,10 @@ use App\Models\Consultant;
 use App\Models\ConsultationRequest;
 use App\Models\Contact;
 use App\Models\FinancingCompany;
+use App\Models\HousingCompany;
 use App\Models\Student;
 use App\Models\User;
+use Database\Factories\HousingCompanyFactory;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +27,7 @@ class DatabaseSeeder extends Seeder
         ConsultationRequest::factory(7)->create();
         Student::factory(7)->create();
         FinancingCompany::factory(7)->create();
+        HousingCompany::factory(7)->create();
         // admin user
         User::Create([
             'name' => 'admin',

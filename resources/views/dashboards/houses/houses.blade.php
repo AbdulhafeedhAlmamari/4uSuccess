@@ -125,42 +125,206 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHouseModal"><i
                         class="fa fa-add"></i> <span>اضافة
                         سكن</span></button>
-                <h2 class="m-0">طلبات السكن القادمة</h2>
+                <h2 class="m-0">عروض السكن</h2>
             </div>
             <div class="table-responsive py-3">
                 <table id="tableID" class="display nowrap consultant-container">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>رقم السكن</th>
-                            <th>أسم الطالب</th>
+                            <th>العنوان</th>
+                            <th>نوع الغرفة</th>
                             <th>السعر</th>
-                            <th>مدة الايجار</th>
-                            <th>الحالة</th>
+                            <th>المسافة</th>
+                            <th>المميزات</th>
                             <th>الاجرائات</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                50060
-                            </td>
-                            <td>بشرى العتيبي</td>
-                            <td>100</td>
-                            <td>اربع اشهر</td>
-                            <td>
-                                متاحه
-                            </td>
-                            <td class="actions">
-                                <a href="#" class="ms-2" data-bs-toggle="modal" data-bs-target="#addTripModal">
-                                    <i class="fa fa-edit text-info"></i>
-                                </a>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @foreach ($housings as $index => $housing)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $housing->address }}</td>
+                                <td>{{ $housing->housing_type }}</td>
+                                <td>{{ $housing->price }} ريال</td>
+                                <td>{{ $housing->distance_from_university }}</td>
+                                <td>{{ Str::limit($housing->features, 30) }}</td>
+                                <td class="actions d-flex gap-4">
+                                    <a href="#" class="ms-2" data-bs-toggle="modal"
+                                        data-bs-target="#editHouseModal{{ $housing->id }}">
+                                        <i class="fa fa-edit text-info"></i>
+                                    </a>
+                                    <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#deleteHouseModal{{ $housing->id }}">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal for each housing -->
+                            <div class="modal fade" id="editHouseModal{{ $housing->id }}" tabindex="-1"
+                                aria-labelledby="editHouseModalLabel{{ $housing->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                            <h5 class="modal-title ms-auto" id="editHouseModal{{ $housing->id }}">تعديل
+                                                السكن</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editHousingForm{{ $housing->id }}"
+                                                action="{{ route('dashboard.houses.update', $housing->id) }}"
+                                                method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="mb-3">
+                                                    <label for="address{{ $housing->id }}"
+                                                        class="form-label">العنوان</label>
+                                                    <input type="text" class="form-control"
+                                                        id="address{{ $housing->id }}" name="address"
+                                                        value="{{ $housing->address }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="distance_from_university{{ $housing->id }}"
+                                                        class="form-label">المسافة</label>
+                                                    <input type="text" class="form-control"
+                                                        id="distance_from_university{{ $housing->id }}"
+                                                        name="distance_from_university"
+                                                        value="{{ $housing->distance_from_university }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="price{{ $housing->id }}" class="form-label">السعر</label>
+                                                    <input type="number" class="form-control"
+                                                        id="price{{ $housing->id }}" name="price"
+                                                        value="{{ $housing->price }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="housing_type{{ $housing->id }}" class="form-label">نوع
+                                                        الغرفة</label>
+                                                    <input type="text" class="form-control"
+                                                        id="housing_type{{ $housing->id }}" name="housing_type"
+                                                        value="{{ $housing->housing_type }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="features{{ $housing->id }}"
+                                                        class="form-label">المميزات</label>
+                                                    <input type="text" class="form-control"
+                                                        id="features{{ $housing->id }}" name="features"
+                                                        value="{{ $housing->features }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="description{{ $housing->id }}"
+                                                        class="form-label">الوصف</label>
+                                                    <textarea class="form-control" id="description{{ $housing->id }}" name="description" rows="3">{{ $housing->description }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="rules{{ $housing->id }}"
+                                                        class="form-label">القواعد</label>
+                                                    <textarea class="form-control" id="rules{{ $housing->id }}" name="rules" rows="3">{{ $housing->rules }}</textarea>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">الصور</label>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                class="upload-box d-flex flex-column align-items-center justify-content-center">
+                                                                @if ($housing->primaryPhoto)
+                                                                    <img src="{{ asset($housing->primaryPhoto->path) }}"
+                                                                        id="preview1_{{ $housing->id }}"
+                                                                        class="preview-img mb-2" width="100px"
+                                                                        height="100px">
+                                                                @else
+                                                                    <img src="{{ asset('img/upload.png') }}"
+                                                                        id="preview1_{{ $housing->id }}"
+                                                                        class="preview-img mb-2" width="100px"
+                                                                        height="100px">
+                                                                @endif
+                                                                <span class="fw-bold">الصورة الرئيسية</span>
+                                                                <small class="text-muted">قم برفع الصورة الرئيسية
+                                                                    للسكن</small>
+                                                                <input type="file" name="primary_image"
+                                                                    accept="image/*"
+                                                                    onchange="previewImage(event, 'preview1_{{ $housing->id }}')">
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                class="upload-box d-flex flex-column align-items-center justify-content-center">
+                                                                <img src="{{ asset('img/upload.png') }}"
+                                                                    id="preview2_{{ $housing->id }}"
+                                                                    class="preview-img mb-2" width="100px"
+                                                                    height="100px">
+                                                                <span class="fw-bold">صور إضافية</span>
+                                                                <small class="text-muted">قم برفع صور إضافية للسكن (يمكن
+                                                                    اختيار عدة صور)</small>
+                                                                <input type="file" name="additional_images[]"
+                                                                    accept="image/*" multiple
+                                                                    onchange="previewMultipleImages(event, 'additional-images-preview_{{ $housing->id }}')">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div id="additional-images-preview_{{ $housing->id }}"
+                                                        class="row mt-3">
+                                                        @foreach ($housing->photos->where('is_primary', false) as $photo)
+                                                            <div class="col-md-3 mb-2">
+                                                                <img src="{{ asset($photo->path) }}"
+                                                                    class="img-fluid rounded"
+                                                                    style="height: 100px; object-fit: cover;">
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-custom">تحديث</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Modal for each housing -->
+                            <div class="modal fade zoomIn" id="deleteHouseModal{{ $housing->id }}" tabindex="-1"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mt-2 text-center">
+                                                <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                                    <h4>هل أنت متأكد؟</h4>
+                                                    <p class="text-muted mx-4 mb-0">
+                                                        هل أنت متأكد أنك تريد إزالة هذا السكن؟
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                                                <button type="button" class="btn w-sm btn-light"
+                                                    data-bs-dismiss="modal">اغلاق</button>
+                                                <form action="{{ route('dashboard.houses.destroy', $housing->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger">إزالة</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach($housings as $index => $housing)
+
+                        {{-- @empty 
+                           <tr>
+                                <td colspan="7" class="text-center">لا توجد بيانات متاحة</td>
+                            </tr> 
+                        @endforelse --}}
                     </tbody>
                 </table>
             </div>
@@ -170,110 +334,83 @@
 
     <!-- Modal add -->
     <div class="modal fade" id="addHouseModal" tabindex="-1" aria-labelledby="addHouseModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h5 class="modal-title ms-auto" id="addHouseModalLabel">أضافة سكن</h5>
                 </div>
-                <div class="modal-body">
-                    <form id="addHousingForm" action="{{ route('housing.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+                <form action="{{ route('dashboard.houses.request') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+
                         <div class="mb-3">
-                            <label for="address" class="form-label">العنوان</label>
-                            <input type="text" class="form-control" id="address" name="address"
-                                placeholder="شارع الملك عبدالعزيز، حي الجامعة، الرياض 11451">
+                            <label for="driverName" class="form-label">العنوان</label>
+                            <input type="text" class="form-control" id="driverName"
+                                placeholder="شارع الملك عبدالعزيز، حي الجامعة، الرياض 11451" name="address">
                         </div>
                         <div class="mb-3">
-                            <label for="distance_from_university" class="form-label">المسافة</label>
-                            <input type="text" class="form-control" id="distance_from_university" name="distance_from_university"
-                                placeholder="يبعد عن الجامعة 5 كيلومتر">
+                            <label for="destination" class="form-label">المسافة</label>
+                            <input type="text" class="form-control" id="destination"
+                                placeholder="يبعد عن الجامعة 5 كيلومتر" name="distance_from_university">
                         </div>
                         <div class="mb-3">
-                            <label for="price" class="form-label">السعر</label>
-                            <input type="number" class="form-control" id="price" name="price" placeholder="500 ريال شهريا">
+                            <label for="seats" class="form-label">السعر</label>
+                            <input type="number" class="form-control" id="seats" placeholder="500 ريال شهريا"
+                                name="price">
                         </div>
                         <div class="mb-3">
-                            <label for="housing_type" class="form-label">نوع الغرفة</label>
-                            <input type="text" class="form-control" id="housing_type" name="housing_type" placeholder="غرفة مشتركة">
+                            <label for="date" class="form-label">نوع الغرفة</label>
+                            <input type="text" class="form-control" id="date" placeholder="غرفة مشتركة"
+                                name="housing_type">
                         </div>
                         <div class="mb-3">
-                            <label for="features" class="form-label">المميزات</label>
-                            <input type="text" class="form-control" id="features" name="features"
-                                placeholder="مثل واي فاي - موقف سيارات - غسيل ملابس - صالة العاب">
+                            <label for="date" class="form-label">المميزات</label>
+                            <input type="text" class="form-control" id="date"
+                                placeholder="مثل واي فاي - موقف سيارات - غسيل ملابس - صالة العاب" name="features">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">الوصف</label>
-                            <textarea class="form-control" id="description" name="description" rows="3"
-                                placeholder="وصف السكن جامعي حديث مع غرفة مفروشة بالكامل ومرافق متكاملة"></textarea>
+                            <textarea class="form-control" id="description" rows="3"
+                                placeholder="وصف السكن جامعي حديث مع غرفة مفروشة بالكامل ومرافق متكاملة" name="description"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="rules" class="form-label">القواعد</label>
-                            <textarea class="form-control" id="rules" name="rules" rows="3"
-                                placeholder="مسموح بالزوار حتى الساعة 10 مساء، الالتزام بالهدوء بعد منتصف الليل"></textarea>
+                            <textarea class="form-control" id="rules" rows="3"
+                                placeholder="مسموح بالزوار حتى الساعة 10 مساء، الالتزام بالهدوء بعد منتصف الليل" name="rules"></textarea>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">الصور</label>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="upload-box d-flex flex-column align-items-center justify-content-center">
-                                        <img src="{{ asset('img/upload.png') }}" id="preview1" class="preview-img mb-2" width="100px"
-                                            height="100px">
-                                        <span class="fw-bold">الصورة الرئيسية</span>
-                                        <small class="text-muted">قم برفع الصورة الرئيسية للسكن</small>
-                                        <input type="file" name="primary_image" accept="image/*" onchange="previewImage(event, 'preview1')">
-                                    </label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="upload-box d-flex flex-column align-items-center justify-content-center">
-                                        <img src="{{ asset('img/upload.png') }}" id="preview2" class="preview-img mb-2" width="100px"
-                                            height="100px">
-                                        <span class="fw-bold">صور إضافية</span>
-                                        <small class="text-muted">قم برفع صور إضافية للسكن (يمكن اختيار عدة صور)</small>
-                                        <input type="file" name="additional_images[]" accept="image/*" multiple onchange="previewMultipleImages(event)">
-                                    </label>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="upload-box d-flex flex-column align-items-center justify-content-center">
+                                    <img src="../img/upload.png" id="preview1" class="preview-img mb-2" width="100px"
+                                        height="100px">
+                                    <span class="fw-bold">صورة السكن</span>
+                                    <small class="text-muted">قم برفع صورة للسكن الجامعي </small>
+                                    <input type="file" accept="image/*" onchange="previewImage(event, 'preview1')"
+                                        name="primary_image">
+                                </label>
                             </div>
-                            <div id="additional-images-preview" class="row mt-3"></div>
+                            <div class="col-md-6">
+                                <label class="upload-box d-flex flex-column align-items-center justify-content-center">
+                                    <img src="../img/upload.png" id="preview2" class="preview-img mb-2" width="100px"
+                                        height="100px">
+                                    <span class="fw-bold">صورة السكن</span>
+                                    <small class="text-muted">قم برفع صورة للسكن الجامعي</small>
+                                    <input type="file" accept="image/*" onchange="previewImage(event, 'preview2')"
+                                        name="additional_images[]">
+                                </label>
+                            </div>
                         </div>
 
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-custom">إضافة</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-custom">إضافة</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal delete -->
-    <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        id="btn-close deleteRecord-close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mt-2 text-center">
-                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                            <h4>هل أنت متأكد؟</h4>
-                            <p class="text-muted mx-4 mb-0">
-                                هل أنت متأكد أنك تريد إزالة هذا السجل؟
-                            </p>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">اغلاق</button>
-                        <form action="" method="POST" id="delete-form">
-                            <button type="submit" class="btn w-sm btn-danger " id="delete-record">إزالة</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <br><br>
@@ -334,6 +471,18 @@
         });
     </script>
     <script>
+        // function previewImage(event, previewId) {
+        //     const file = event.target.files[0];
+        //     if (file) {
+        //         const reader = new FileReader();
+        //         reader.onload = function(e) {
+        //             const preview = document.getElementById(previewId);
+        //             preview.src = e.target.result;
+        //             preview.style.display = "block";
+        //         }
+        //         reader.readAsDataURL(file);
+        //     }
+        // }
         function previewImage(event, previewId) {
             const file = event.target.files[0];
             if (file) {
@@ -347,9 +496,9 @@
             }
         }
 
-        function previewMultipleImages(event) {
+        function previewMultipleImages(event, containerId) {
             const files = event.target.files;
-            const previewContainer = document.getElementById('additional-images-preview');
+            const previewContainer = document.getElementById(containerId);
             previewContainer.innerHTML = '';
 
             if (files) {

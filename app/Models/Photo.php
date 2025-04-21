@@ -12,8 +12,6 @@ class Photo extends Model
     protected $fillable = [
         'housing_id',
         'path',
-        'title',
-        'description',
         'is_primary',
     ];
 

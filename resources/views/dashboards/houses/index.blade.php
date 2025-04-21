@@ -66,7 +66,8 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4">9</h4>
-                                <a href="dashboard.house_orders" class="btn btn-outline-success">عرض جميع الطلبات</a>
+                                <a href="{{ route('dashboard.house_orders') }}" class="btn btn-outline-success">عرض جميع
+                                    الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-success-subtle rounded fs-3   px-2 py-1">

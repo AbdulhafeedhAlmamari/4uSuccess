@@ -53,7 +53,7 @@ Route::get('/finance/order/create', [FinanceController::class, 'createOrder'])->
 
 // houses routes
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
-Route::get('/house-show', [HouseController::class, 'show'])->name('home.houses.show');
+Route::get('/house-show/{id}', [HouseController::class, 'show'])->name('home.houses.show');
 
 // transports routes
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');
@@ -103,17 +103,6 @@ Route::prefix('/dashboard')->group(function () {
     //  route('dashboard.consultant_orders', ['status' => 'current'])
     // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
 
-    Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
-    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
-    Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
-    Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
-
-    // Consultation request routes dashboard
-    Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
-    Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
-    // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
-    Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
-
     // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
     Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
 
@@ -132,18 +121,12 @@ Route::prefix('/dashboard')->group(function () {
     // houses routes
     Route::get('/houses', [DashboardHouseController::class, 'index'])->name('dashboard.houses');
     Route::get('/all-houses', [DashboardHouseController::class, 'getAllHouses'])->name('dashboard.all_houses');
+    Route::post('/houses-request', [DashboardHouseController::class, 'store'])->name('dashboard.houses.request');
+    Route::put('/houses/{id}', [DashboardHouseController::class, 'update'])->name('dashboard.houses.update');
+    Route::delete('/houses/{id}', [DashboardHouseController::class, 'destroy'])->name('dashboard.houses.destroy');
     Route::get('/house-orders', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
     Route::get('/house-profile', [DashboardHouseController::class, 'profile'])->name('dashboard.house_profile');
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
 });
 
-// Housing routes
-// Route::middleware(['auth'])->group(function () {
-    Route::get('/housing', [HousingController::class, 'index'])->name('housing.index');
-    Route::post('/housing', [HousingController::class, 'store'])->name('housing.store');
-    Route::get('/housing/{housing}', [HousingController::class, 'show'])->name('housing.show');
-    Route::get('/housing/{housing}/edit', [HousingController::class, 'edit'])->name('housing.edit');
-    Route::put('/housing/{housing}', [HousingController::class, 'update'])->name('housing.update');
-    Route::delete('/housing/{housing}', [HousingController::class, 'destroy'])->name('housing.destroy');
-    Route::post('/housing/upload-temp', [HousingController::class, 'uploadTemp'])->name('housing.upload.temp');
-// });
+
