@@ -9,8 +9,10 @@ use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
 use App\Models\HousingCompany;
 use App\Models\Student;
+use App\Models\Trip;
 use App\Models\User;
 use Database\Factories\HousingCompanyFactory;
+use Database\Factories\TripFactory;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +32,7 @@ class DatabaseSeeder extends Seeder
         FinancingCompany::factory(7)->create();
         FinanceRequest::factory(7)->create();
         HousingCompany::factory(7)->create();
+        Trip::factory(7)->create();
         // admin user
         User::Create([
             'name' => 'admin',
