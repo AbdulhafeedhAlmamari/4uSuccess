@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('departure_place')->nullable();
             $table->string('destination_place')->nullable();
             $table->string('status');
+            $table->text('reply')->nullable();
             $table->dateTime('request_date');
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Housing;
 use App\Models\HousingCompany;
 use App\Models\Photo;
+use App\Models\ReservationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,18 +17,21 @@ class HouseController extends Controller
 {
     public function index()
     {
-        return view('dashboards.houses.index');
+        // Get counts of pending and confirmed orders
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->count();
+
+        return view('dashboards.houses.index', compact('pendingOrdersCount', 'confirmedOrdersCount'));
     }
     public function getAllHouses()
     {
         // Get the authenticated user's housing company
-        $housingCompany = Auth::user()->housingCompany;
-        if (!$housingCompany) {
+        $user = Auth::user();
+        if (!$user->housingCompany) {
             return redirect()->route('home')->with('error', 'You do not have a housing company profile.');
         }
-
         // Get all housing listings for this company
-        $housings = Housing::where('housing_company_id', $housingCompany->user_id)->get();
+        $housings = Housing::where('housing_company_id', $user->housingCompany->id)->get();
 
         return view('dashboards.houses.houses', compact('housings'));
     }
@@ -52,15 +56,15 @@ class HouseController extends Controller
 
         try {
             // Get the authenticated user's housing company
-            $housingCompany = Auth::user()->housingCompany;
+            $user = Auth::user();
 
-            if (!$housingCompany) {
+            if (!$user->housingCompany) {
                 return redirect()->back()->with('error', 'You do not have a housing company profile.');
             }
 
             // Create the housing record
             $housing = Housing::create([
-                'housing_company_id' => 1,
+                'housing_company_id' =>  $user->housingCompany->id,
                 'address' => $validated['address'],
                 'description' => $validated['description'],
                 'price' => $validated['price'],
@@ -230,9 +234,32 @@ class HouseController extends Controller
         return redirect()->route('dashboard.all_houses')->with('success', 'Housing deleted successfully.');
     }
 
-    public function orders()
+    public function orders($status)
     {
-        return view('dashboards.houses.orders');
+        $housingCompanyId = auth()->user()->id;
+
+        $reservations = ReservationRequest::with(['student', 'housing'])
+            ->whereNotNull('housing_id')
+            ->where('status', $status)
+            ->whereHas('housing', function ($query) use ($housingCompanyId) {
+                $query->where('housing_company_id', $housingCompanyId);
+            })
+            ->latest()
+            ->get();
+        return view('dashboards.houses.orders', compact('reservations', 'status'));
+    }
+    public function updateStatus(Request $request, ReservationRequest $reservation)
+    {
+        $request->validate([
+            'status' => 'required|in:confirmed,rejected',
+            'reply' => 'nullable|string',
+
+        ]);
+
+        $reservation->status = $request->status;
+        $reservation->save();
+
+        return back()->with('success', 'تم تحديث حالة الطلب بنجاح');
     }
 
     public function profile()

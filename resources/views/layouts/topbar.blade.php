@@ -25,7 +25,6 @@
                             <a class="nav-link {{ request()->routeIs('dashboard.finances*') ? 'active' : '' }}"
                                 href="{{ route('dashboard.finances') }}">لوحة التحكم</a>
                         </li>
-                        
                     @elseif (Auth::user()->role == 'consultant')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
@@ -45,6 +44,15 @@
                                 </li>
                             </ul>
                         </li>
+                    @elseif (Auth::user()->role == 'housing')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.houses*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.houses') }}">لوحة التحكم</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.all_houses*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.all_houses') }}">ادارة السكن</a>
+                        </li>
                     @elseif (Auth::user()->role == 'student')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -53,8 +61,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{{ route('home.houses') }}">السكن</a></li>
-                                <li><a class="dropdown-item"
-                                        href="{{ route('home.finances') }}">التمويل</a></li>
+                                <li><a class="dropdown-item" href="{{ route('home.finances') }}">التمويل</a></li>
                                 <li><a class="dropdown-item" href="{{ route('home.transports') }}">النقل</a></li>
                             </ul>
                         </li>
@@ -119,11 +126,13 @@
                             <li><a class="dropdown-item" href="{{ route('dashboard.student_profile') }}">الملف
                                     الشخصي</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.student_orders') }}">طلباتي</a></li>
+                            <li><a class="dropdown-item" href="{{ route('dashboard.student_orders') }}">طلباتي</a>
+                            </li>
                         @elseif (Auth::user()->role == 'financing')
                             <li><a class="dropdown-item" href="{{ route('dashboard.finance_profile') }}">الملف
                                     الشخصي</a></li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.finances') }}">لوحة تحكم التمويل</a>
+                            <li><a class="dropdown-item" href="{{ route('dashboard.finances') }}">لوحة تحكم
+                                    التمويل</a>
                             </li>
                         @elseif (Auth::user()->role == 'consultant')
                             <li><a class="dropdown-item" href="{{ route('dashboard.consultant_profile') }}">الملف

@@ -53,7 +53,8 @@ Route::get('/finance/order/create', [FinanceController::class, 'createOrder'])->
 
 // houses routes
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
-Route::get('/house-show/{id}', [HouseController::class, 'show'])->name('home.houses.show');
+Route::get('/house-show/{id}', [HouseController::class, 'show'])->name('houses.show');
+Route::post('/house-reservation-store', [HouseController::class, 'reservationStore'])->name('houses.reservation.store');
 
 // transports routes
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');
@@ -124,9 +125,8 @@ Route::prefix('/dashboard')->group(function () {
     Route::post('/houses-request', [DashboardHouseController::class, 'store'])->name('dashboard.houses.request');
     Route::put('/houses/{id}', [DashboardHouseController::class, 'update'])->name('dashboard.houses.update');
     Route::delete('/houses/{id}', [DashboardHouseController::class, 'destroy'])->name('dashboard.houses.destroy');
-    Route::get('/house-orders', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
+    Route::get('/house-orders/{status}', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
     Route::get('/house-profile', [DashboardHouseController::class, 'profile'])->name('dashboard.house_profile');
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
+    Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
 });
-
-

@@ -68,7 +68,7 @@
                                                     <small class="text-muted">{{ $house->price ?? 'غير محدد' }} ريال
                                                         شهريًا</small>
                                                 </p>
-                                                <a href="{{ route('home.houses.show', $house->id) }}"
+                                                <a href="{{ route('houses.show', $house->id) }}"
                                                     class="btn btn-primary form-control w-50">تفاصيل أكثر</a>
                                             </div>
                                         </div>
