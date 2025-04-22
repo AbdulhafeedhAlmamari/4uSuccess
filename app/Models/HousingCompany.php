@@ -24,6 +24,6 @@ class HousingCompany extends Model
 
     public function housing()
     {
-        return $this->hasMany(Housing::class, 'housing_company_id', 'user_id');
+        return $this->hasMany(Housing::class);
     }
 }

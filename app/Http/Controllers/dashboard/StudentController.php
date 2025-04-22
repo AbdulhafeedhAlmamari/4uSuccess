@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ConsultationRequest;
+use App\Models\ReservationRequest;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -27,7 +28,15 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('dashboards.students.orders', compact('consultationRequests'));
+        // $housingRequests = ReservationRequest::with('student', 'housing')->latest()
+        // ->where('student_id', Auth::id())
+        // ->orderBy('created_at', 'desc')
+        // ->get();
+        $housingRequests = ReservationRequest::with([
+            'housing.housingCompany', // Load housing company and user
+        ])->where('reservation_type', 'housing')->get();
+        // dd($housingRequests);
+        return view('dashboards.students.orders', compact('consultationRequests', 'housingRequests'));
     }
 
     public function profile()

@@ -69,8 +69,13 @@
                                             </span>
                                         </li>
                                         <li>
-                                            <button class="btn form-control w-50">تأكيد الحجز</button>
+                                            <form action="{{ route('houses.reservation.store') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="housing_id" value="{{ $house->id }}">
+                                                <button type="submit" class="btn form-control w-50">تأكيد الحجز</button>
+                                            </form>
                                         </li>
+
                                     </ul>
                                 </div>
                             </div>
