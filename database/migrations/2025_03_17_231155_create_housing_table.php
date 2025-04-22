@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('distance_from_university', 8, 2);
             $table->decimal('price', 10, 2);
             $table->text('description');
+            $table->text('features')->nullable();
             $table->string('housing_type');
-            $table->string('image_url');
             $table->text('rules');
             $table->timestamps();
         });

@@ -17,45 +17,30 @@
                     <div class="card housing-card">
                         <div class="row g-0">
                             <div class="col-md-6">
-                                <div class="col-12 ">
+                                <div class="col-12">
                                     <div class="image-container">
-                                        <img src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                            class=" main-image" id="mainImage">
+                                        <img src="{{ asset($house->primaryPhoto?->path) }}" alt="صورة السكن"
+                                            class="main-image" id="mainImage">
                                     </div>
                                 </div>
+
                                 <!-- Carousel Sub Images -->
                                 <div id="subImageCarousel" class="carousel slide mt-3" data-bs-ride="carousel">
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <div class="d-flex justify-content-center">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                                    class="mx-2">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                                    class="mx-2">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/hf1.png') }}" alt="صورة السكن"
-                                                    class="mx-2">
+                                        @foreach ($house->photos->chunk(3) as $chunkIndex => $chunk)
+                                            <div class="carousel-item {{ $chunkIndex === 0 ? 'active' : '' }}">
+                                                <div class="d-flex justify-content-center">
+                                                    @foreach ($chunk as $photo)
+                                                        <img onclick="changeMainImage(this)" src="{{ asset($photo->path) }}"
+                                                            alt="صورة السكن" class="mx-2">
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="carousel-item">
-                                            <div class="d-flex justify-content-center">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                                    class="mx-2">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                                    class="mx-2">
-                                                <img onclick="changeMainImage(this)"
-                                                    src="{{ asset('build/assets/images/ho1.jpg') }}" alt="صورة السكن"
-                                                    class="mx-2">
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
-                                    <button class="carousel-control-prev  " type="button"
-                                        data-bs-target="#subImageCarousel" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon  arrow" aria-hidden="true"></span>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#subImageCarousel"
+                                        data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon arrow" aria-hidden="true"></span>
                                         <span class="visually-hidden">السابق</span>
                                     </button>
                                     <button class="carousel-control-next" type="button" data-bs-target="#subImageCarousel"
@@ -64,22 +49,19 @@
                                         <span class="visually-hidden">التالي</span>
                                     </button>
                                 </div>
-
-
                             </div>
+
                             <div class="col-md-6">
                                 <div class="card-body">
                                     <ul class="list-unstyled">
-                                        <li><strong>العنوان:</strong> شارع الملك عبد العزيز، الرياض، الجامعة 11451</li>
-                                        <li><strong>المسافة:</strong> يبعد عنك 5 كيلو</li>
-                                        <li><strong>السعر:</strong> 500 ريال شهرياً</li>
-                                        <li><strong>نوع الغرف:</strong> غرفة فردية، غرفة مزدوجة</li>
-                                        <li><strong>المميزات:</strong> مثالي، واي فاي، موقف سيارات، غسيل ملابس، صالة
-                                            ألعاب</li>
-                                        <li><strong>وصف:</strong> سكن جامعي حديث مع غرف مفروشة بالكامل ومرافق متكاملة.
+                                        <li><strong>العنوان:</strong> {{ $house->address }}</li>
+                                        <li><strong>المسافة:</strong> يبعد عنك {{ $house->distance_from_university }} كيلو
                                         </li>
-                                        <li><strong>القواعد:</strong> مسموح بالزوار حتى الساعة 10 مساءً، الالتزام
-                                            بالهدوء بعد منتصف الليل.</li>
+                                        <li><strong>السعر:</strong> {{ $house->price }} ريال شهرياً</li>
+                                        <li><strong>نوع الغرف:</strong> {{ $house->housing_type }}</li>
+                                        <li><strong>المميزات:</strong> {{ $house->features }}</li>
+                                        <li><strong>وصف:</strong> {{ $house->description }}</li>
+                                        <li><strong>القواعد:</strong> {{ $house->rules }}</li>
                                         <li>
                                             <span><strong>التقييمات:</strong>
                                                 <span class="" style="color: #54B6B7;">&#9733; &#9733; &#9733; &#9733;
@@ -87,31 +69,38 @@
                                             </span>
                                         </li>
                                         <li>
-                                            <button class="btn form-control w-50">تأكيد الحجز</button>
+                                            <form action="{{ route('houses.reservation.store') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="housing_id" value="{{ $house->id }}">
+                                                <button type="submit" class="btn form-control w-50">تأكيد الحجز</button>
+                                            </form>
                                         </li>
+
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+
                     <!-- Image Gallery -->
                     <div class="mt-4">
                         <h5 class="mb-3">ذات صلة</h5>
                         <div class="row gallery g-3">
-                            <div class="col-3">
-                                <img src="{{ asset('build/assets/images/ho1.png') }}" class="img-fluid" alt="صورة إضافية">
-                            </div>
-                            <div class="col-3">
-                                <img src="{{ asset('build/assets/images/ho1.png') }}" class="img-fluid" alt="صورة إضافية">
-                            </div>
-                            <div class="col-3">
-                                <img src="{{ asset('build/assets/images/ho1.png') }}" class="img-fluid" alt="صورة إضافية">
-                            </div>
-                            <div class="col-3">
-                                <img src="{{ asset('build/assets/images/ho1.png') }}" class="img-fluid" alt="صورة إضافية">
-                            </div>
+                            @forelse($relatedHouses as $related)
+                                <div class="col-3">
+                                    <a href="{{ route('home.houses.show', $related->id) }}">
+                                        <img src="{{ asset($related->primaryPhoto?->path ?? 'build/assets/images/default.png') }}"
+                                            class="img-fluid rounded shadow-sm" alt="سكن ذات صلة">
+                                    </a>
+                                </div>
+                            @empty
+                                <div class="col-12">
+                                    <p>لا توجد سكنات مشابهة حالياً.</p>
+                                </div>
+                            @endforelse
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -119,7 +108,6 @@
 
 
     </section>
-
 @endsection
 
 @section('script')

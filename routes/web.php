@@ -13,6 +13,7 @@ use App\Http\Controllers\dashboard\StudentController as DashboardStudentControll
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\HousingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
@@ -53,7 +54,8 @@ Route::post('/finance/store', [FinanceController::class, 'store'])->name('home.f
 
 // houses routes
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
-Route::get('/house-show', [HouseController::class, 'show'])->name('home.houses.show');
+Route::get('/house-show/{id}', [HouseController::class, 'show'])->name('houses.show');
+Route::post('/house-reservation-store', [HouseController::class, 'reservationStore'])->name('houses.reservation.store');
 
 // transports routes
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');
@@ -103,17 +105,6 @@ Route::prefix('/dashboard')->group(function () {
     //  route('dashboard.consultant_orders', ['status' => 'current'])
     // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
 
-    Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
-    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
-    Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
-    Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
-
-    // Consultation request routes dashboard
-    Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
-    Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
-    // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
-    Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
-
     // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
     Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
 
@@ -135,7 +126,12 @@ Route::prefix('/dashboard')->group(function () {
     
     // houses routes
     Route::get('/houses', [DashboardHouseController::class, 'index'])->name('dashboard.houses');
-    Route::get('/house-orders', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
+    Route::get('/all-houses', [DashboardHouseController::class, 'getAllHouses'])->name('dashboard.all_houses');
+    Route::post('/houses-request', [DashboardHouseController::class, 'store'])->name('dashboard.houses.request');
+    Route::put('/houses/{id}', [DashboardHouseController::class, 'update'])->name('dashboard.houses.update');
+    Route::delete('/houses/{id}', [DashboardHouseController::class, 'destroy'])->name('dashboard.houses.destroy');
+    Route::get('/house-orders/{status}', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');
     Route::get('/house-profile', [DashboardHouseController::class, 'profile'])->name('dashboard.house_profile');
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
+    Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
 });

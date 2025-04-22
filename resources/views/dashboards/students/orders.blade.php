@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                margin: -20px -25px 10px; */
+                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -171,6 +171,8 @@
                 <br> طلبات الاستشارة</a>
         </nav>
 
+        {{-- filepath: e:\myProjects\laravel\laravel_project\4uSuccess\resources\views\dashboards\students\orders.blade.php --}}
+
         <div id="housing" class="content-section active shadow">
             <div class="table-title d-flex justify-content-between align-items-center">
                 <h2 class="p-3">طلبات السكن حالية</h2>
@@ -182,40 +184,119 @@
                             <tr>
                                 <th>#</th>
                                 <th>أسم السكن</th>
-                                <th>تاريخ الطلب</th>
-                                <th>الرقم الجامعــي</th>
-                                <th>رقم السكن</th>
+
+                                {{-- <th>الرقم الجامعــي</th> --}}
+                                <th>نوع السكن</th>
                                 <th>المبلغ</th>
                                 <th>حالة الطلب</th>
+                                <th>تاريخ الطلب</th>
                                 <th>الاجرائات</th>
                             </tr>
                         </thead>
+                        {{-- filepath: e:\myProjects\laravel\laravel_project\4uSuccess\resources\views\dashboards\students\orders.blade.php --}}
+
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <a href="#">جامعة الملك عبدالعزيز</a>
-                                    <br>
-                                    <span class="text-muted">غرفة سكن جامعي</span>
-                                </td>
-                                <td>02 مارس 2023</td>
-                                <td>44104047</td>
-                                <td>3222</td>
-                                <td><a href="#" class="" title="التفاصيل" data-toggle="tooltip">
-                                        0 ريال</a>
-                                    <br>
-                                    <span class="text-muted">منحة تعليم عالي</span>
-                                </td>
-                                <td><span class="badge bg-success">تمت الموافقة</span></td>
-                                <td class="actions">
-                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                                                                            </a> -->
-                                    <a href="#">
-                                        <i class="fa-brands fa-paypal"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            @forelse($housingRequests as $index => $order)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>
+                                        {{ $order->housing->housingCompany->user->name ?? 'غير متوفر' }}
+                                    </td>
+                                    <td>{{ $order->housing->housing_type ?? 'غير متوفر' }}</td>
+                                    <td>
+                                        <div>
+                                            {{ $order->housing->price ?? 'غير متوفر' }} ريال</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $order->status == 'confirmed' ? 'success' : 'warning' }}">
+                                            {{ $order->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $order->request_date }}</td>
+                                    <td class="actions">
+                                        @if ($order->status == 'confirmed')
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $order->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        @else
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#">
+                                                <i class="fa-brands fa-paypal"></i>
+                                            </a>
+                                        @endif
+
+                                    </td>
+                                </tr>
+
+                                <!-- Modal for each order -->
+                                <div class="modal fade orders-section-modal" id="orderModal{{ $order->id }}"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="info-section">
+                                                    <div class="text-start">
+                                                        <div class="image-container">
+                                                            <img src="{{ asset($order->housing->primaryPhoto->path) ?? asset('img/default-housing.jpg') }}"
+                                                                alt="السكن الجامعي">
+                                                            <h5 class="ms-3">
+                                                                {{ $order->housing->housingCompany->user->name ?? 'غير متوفر' }}
+                                                            </h5>
+                                                        </div>
+                                                        <p class="text-muted">
+                                                            {{ $order->housing->address ?? 'العنوان غير متوفر' }}<br>
+                                                            {{ $order->housing->housingCompany->phone_number ?? 'رقم الهاتف غير متوفر' }}
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <h5>طلب رقم {{ $order->id }}</h5>
+                                                        <p class="text-muted">تاريخ الطلب:
+                                                            {{ \Carbon\Carbon::parse($order->request_date)->format('Y-m-d') }}
+                                                        </p>
+                                                        <p class="status-boxx">حالة الطلب:
+                                                            <span
+                                                                class="badge bg-{{ $order->status == 'confirmed' ? 'success' : 'warning' }}">
+                                                                {{ $order->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="divider"></div>
+                                                <div class="row text-start">
+                                                    <div class="col-md-4">
+                                                        <h6 class="text-muted">طلب سكن</h6>
+                                                        <p><strong>الوسيط:</strong> 4SUCCESS</p>
+                                                        <p><strong>اسم الطالب:</strong>
+                                                            {{ $order->student->name ?? 'غير متوفر' }}</p>
+                                                        <p><strong>الرقم الجامعي:</strong>
+                                                            {{ $order->student->student_id ?? 'غير متوفر' }}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h6 class="text-muted">معلومات السكن</h6>
+                                                        <p><strong>رقم السكن:</strong>
+                                                            {{ $order->housing->id ?? 'غير متوفر' }}</p>
+                                                        <p><strong>السعر:</strong>
+                                                            {{ $order->housing->price ?? 'غير متوفر' }} ريال</p>
+                                                        <p><strong>الموقع:</strong>
+                                                            {{ $order->housing->address ?? 'غير متوفر' }}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h6 class="text-muted">الدفع</h6>
+                                                        <p><strong>طريقة الدفع:</strong>
+                                                            {{ $order->payment_method ?? 'paypal' }}</p>
+                                                        <p><strong>إجمالي المبلغ:</strong>
+                                                            {{ $order->housing->price ?? 'غير متوفر' }} ريال</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center">لا توجد طلبات سكن حالية</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -274,8 +355,10 @@
                                     <td><span class="badge bg-success">مكتمله</span></td>
                                     <td class="actions">
                                         <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                                                                                    <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                                                                                </a> -->
+                                                                                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                                                                                            </a> -->
+                                        <i class="fa-regular fa-eye"></i>
+                                        </a> -->
                                         <a href="#">
                                             <i class="fa-brands fa-paypal"></i>
                                         </a>
@@ -334,8 +417,8 @@
                                     </tr>
 
                                     <!-- Modal for Finance Order -->
-                                    <div class="modal fade orders-section-modal" id="financeOrderModal{{ $request->id }}"
-                                        tabindex="-1" aria-hidden="true">
+                                    <div class="modal fade orders-section-modal"
+                                        id="financeOrderModal{{ $request->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-body">

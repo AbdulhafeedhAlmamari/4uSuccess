@@ -44,6 +44,15 @@
                                 </li>
                             </ul>
                         </li>
+                    @elseif (Auth::user()->role == 'housing')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.houses*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.houses') }}">لوحة التحكم</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.all_houses*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.all_houses') }}">ادارة السكن</a>
+                        </li>
                     @elseif (Auth::user()->role == 'student')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -117,7 +126,8 @@
                             <li><a class="dropdown-item" href="{{ route('dashboard.student_profile') }}">الملف
                                     الشخصي</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.student_orders') }}">طلباتي</a></li>
+                            <li><a class="dropdown-item" href="{{ route('dashboard.student_orders') }}">طلباتي</a>
+                            </li>
                         @elseif (Auth::user()->role == 'financing')
                             <li><a class="dropdown-item" href="{{ route('dashboard.finance_profile') }}">الملف
                                     الشخصي</a></li>

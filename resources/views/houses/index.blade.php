@@ -48,78 +48,43 @@
             </div>
 
             <div class="row  g-2">
-                <div class="col-6">
-                    <div class="row justify-content-center align-items-center g-2">
-                        <div class="col-12">
-                            <div class="card mb-3" style="max-width: 540px;">
-                                <div class="row g-0">
-                                    <div class="col-md-5">
-                                        <img src="{{ asset('build/assets/images/ho1.jpg') }}"
-                                            class="card-img-top h-100 w-100 rounded-start " alt="...">
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title">شارع الملك عبد العزيز، حي الجامعة، الرياض 11451</h5>
-                                            <p class="card-text">يبعد عنك 5 كيلو</p>
-                                            <p class="card-text"><small class="text-muted">500 ريال شهريًا</small></p>
-                                            <a href="{{ route('home.houses.show') }}"
-                                                class="btn btn-primary form-control w-50">تفاصيل
-                                                أكثر</a>
+
+                @forelse ($houses as $house)
+                    <div class="col-6">
+                        <div class="row justify-content-center align-items-center g-2">
+                            <div class="col-12">
+                                <div class="card mb-3" style="max-width: 540px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-5">
+                                            <img src="{{ asset($house->primaryPhoto?->path) }}"
+                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $house->address ?? 'عنوان غير متوفر' }}</h5>
+                                                <p class="card-text">يبعد عنك {{ $house->distance_from_university ?? '؟' }}
+                                                    كيلو</p>
+                                                <p class="card-text">
+                                                    <small class="text-muted">{{ $house->price ?? 'غير محدد' }} ريال
+                                                        شهريًا</small>
+                                                </p>
+                                                <a href="{{ route('houses.show', $house->id) }}"
+                                                    class="btn btn-primary form-control w-50">تفاصيل أكثر</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="row justify-content-center align-items-center g-2">
-                        <div class="col-12">
-                            <div class="card mb-3" style="max-width: 540px;">
-                                <div class="row g-0">
-                                    <div class="col-md-5">
-                                        <img src="{{ asset('build/assets/images/ho1.jpg') }}"
-                                            class="card-img-top h-100 w-100 rounded-start " alt="...">
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title">شارع الملك عبد العزيز، حي الجامعة، الرياض 11451</h5>
-                                            <p class="card-text">يبعد عنك 5 كيلو</p>
-                                            <p class="card-text"><small class="text-muted">500 ريال شهريًا</small></p>
-                                            <a href="{{ route('home.houses.show') }}"
-                                                class="btn btn-primary form-control w-50">تفاصيل
-                                                أكثر</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                @empty
+                    <div class="col-12 ">
+                        <div class="alert alert-danger text-center" role="alert">
+                            لا توجد مساكن متاحة حاليًا.
                         </div>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="row justify-content-center align-items-center g-2">
-                        <div class="col-12">
-                            <div class="card mb-3" style="max-width: 540px;">
-                                <div class="row g-0">
-                                    <div class="col-md-5">
-                                        <img src="{{ asset('build/assets/images/ho1.jpg') }}"
-                                            class="card-img-top h-100 w-100 rounded-start " alt="...">
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title">شارع الملك عبد العزيز، حي الجامعة، الرياض 11451</h5>
-                                            <p class="card-text">يبعد عنك 5 كيلو</p>
-                                            <p class="card-text"><small class="text-muted">500 ريال شهريًا</small></p>
-                                            <a href="{{ route('home.houses.show') }}"
-                                                class="btn btn-primary form-control w-50">تفاصيل
-                                                أكثر</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
+
             </div>
 
 
