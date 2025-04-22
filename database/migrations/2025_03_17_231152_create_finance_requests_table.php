@@ -17,8 +17,16 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->text('description');
             $table->decimal('amount', 10, 2);
-            $table->integer('installment_period');
+            $table->string('installment_period');
             $table->string('finance_type');
+            // أوافق على جميع البيانات المدخلة صحيحة وأتحمل مسؤوليتها.
+            $table->boolean('is_agreed')->default(false);
+            // أوافق على الشروط والأحكام الخاصة بطلب التمويل.
+            $table->string('terms_and_conditions')->default('0');
+            // حالة الطلب (قيد المراجعة، مكتمل، مرفوض، مقبول)
+            $table->string('status')->default('under_review');
+            // رد الشركة على الطلب
+            $table->longText('reply')->nullable();
             $table->timestamps();
         });
     }

@@ -165,28 +165,26 @@
     <div class="container mt-5">
         <div class="card p-4">
             <h3 class="text-center mb-4 title">لتقديم طلب تمويل ابدأ بتعبئة البيانات التالية</h3>
-            <form>
-                <div class="mb-3">
-                    <label for="firstName" class="form-label">الاسم الأول <span
-                            class="wpforms-required-label">*</span></label>
-                    <input type="text" class="form-control" id="firstName" required>
-                </div>
-                <div class="mb-3">
-                    <label for="lastName" class="form-label">الاسم الأخير <span
-                            class="wpforms-required-label">*</span></label>
-                    <input type="text" class="form-control" id="lastName" required>
-                </div>
+            {{-- filepath: resources/views/finances/order.blade.php --}}
+            <form action="{{ route('home.finances.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="financing_company_id" value="{{ $financingCompany->id }}">
                 <div class="mb-3">
                     <label for="loanType" class="form-label">نوع التمويل <span
                             class="wpforms-required-label">*</span></label>
-                    <select class="form-select " id="loanType" required>
-                        <option value="تمويل تعليمي">تمويل تعليمي</option>
+                    <select class="form-select" id="loanType" name="loanType" required>
+                        <option value="education">تمويل تعليمي</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="amountRequested" class="form-label">المبلغ المطلوب <span
                             class="wpforms-required-label">*</span></label>
-                    <input type="number" class="form-control" id="amountRequested" required>
+                    <input type="number" class="form-control" id="amountRequested" name="amountRequested" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">وصف التمويل<span
+                            class="wpforms-required-label">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">مدة السداد (بالأشهر) <span class="wpforms-required-label">*</span></label>
@@ -209,13 +207,13 @@
                     </div>
                 </div>
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                    <input class="form-check-input" type="checkbox" id="termsCheck" name="termsCheck" required>
                     <label class="form-check-label" for="termsCheck">
                         أوافق على جميع البيانات المدخلة صحيحة وأتحمل مسؤوليتها.
                     </label>
                 </div>
                 <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" id="termsAgreement" required>
+                    <input class="form-check-input" type="checkbox" id="termsAgreement" name="termsAgreement" required>
                     <label class="form-check-label" for="termsAgreement">
                         أوافق على الشروط والأحكام الخاصة بطلب التمويل.
                     </label>

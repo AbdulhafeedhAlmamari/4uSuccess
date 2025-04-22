@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Consultant;
 use App\Models\ConsultationRequest;
 use App\Models\Contact;
+use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
 use App\Models\Student;
 use App\Models\User;
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
         ConsultationRequest::factory(7)->create();
         Student::factory(7)->create();
         FinancingCompany::factory(7)->create();
+        FinanceRequest::factory(7)->create();
         // admin user
         User::Create([
             'name' => 'admin',

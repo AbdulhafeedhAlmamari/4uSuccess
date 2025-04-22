@@ -47,8 +47,9 @@ Route::get('/consultation-requests', [ConsultantController::class, 'consultation
 // finance routes
 Route::get('/finances', [FinanceController::class, 'index'])->name('home.finances');
 Route::get('/finance-show/{id}', [FinanceController::class, 'show'])->name('home.finances.show');
-Route::get('/finance/order/create', [FinanceController::class, 'createOrder'])->name('home.finances.order.create');
-
+Route::get('/finance/order/create/{id}', [FinanceController::class, 'createOrder'])->name('home.finances.order.create');
+// store finance    
+Route::post('/finance/store', [FinanceController::class, 'store'])->name('home.finances.store');
 
 // houses routes
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
@@ -124,10 +125,14 @@ Route::prefix('/dashboard')->group(function () {
 
     // finances routes
     Route::get('/finances', [DashboardFinanceController::class, 'index'])->name('dashboard.finances');
-    Route::get('/finance-orders', [DashboardFinanceController::class, 'orders'])->name('dashboard.finance_orders');
+    Route::get('/finance-orders/{status}', [DashboardFinanceController::class, 'orders'])->name('dashboard.finance_orders');
     Route::get('/finance-profile', [DashboardFinanceController::class, 'profile'])->name('dashboard.finance_profile');
     Route::put('/dashboard/finance/profile/update', [DashboardFinanceController::class, 'updateProfile'])->name('finance.profile.update');
-
+    Route::post('/finance-orders/reject/{id}', [DashboardFinanceController::class, 'reject'])->name('consultation.request.reject');
+    Route::post('/dashboard/finance-orders/update-status', [DashboardFinanceController::class, 'updateStatus'])->name('dashboard.finance_orders.update_status');
+    Route::get('/finances/details', [DashboardFinanceController::class, 'showDetails'])->name('dashboard.finances.details');
+    
+    
     // houses routes
     Route::get('/houses', [DashboardHouseController::class, 'index'])->name('dashboard.houses');
     Route::get('/house-orders', [DashboardHouseController::class, 'orders'])->name('dashboard.house_orders');

@@ -170,10 +170,9 @@
             <div class="col-md-5 text-start">
                 <h4>{{ $financingCompany->user->name }}</h4>
                 <p>{{ $financingCompany->phone_number }}</p>
-                <p>شارع محمد إبراهيم مسعود</p>
+                <p>{{ $financingCompany->address }}</p>
                 <p>
-                    إمكان العربية شركة مساهمة سعودية مغلقة - رأس مال 10,000,000 ريال سعودي، مرخصة من هيئة السوق المالية
-                    برقم 10-22250، وتمارس نشاطها وفق الأنظمة واللوائح.
+                    {{ $financingCompany->description }}
                 </p>
             </div>
             <div class="col-md-3 text-center">

@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                            margin: -20px -25px 10px; */
+                                                                                                                margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -209,8 +209,8 @@
                                 <td><span class="badge bg-success">تمت الموافقة</span></td>
                                 <td class="actions">
                                     <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                            <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                        </a> -->
+                                                                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                                                                            </a> -->
                                     <a href="#">
                                         <i class="fa-brands fa-paypal"></i>
                                     </a>
@@ -274,8 +274,8 @@
                                     <td><span class="badge bg-success">مكتمله</span></td>
                                     <td class="actions">
                                         <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                            </a> -->
+                                                                                                                                                                                                                                                                                    <i class="fa-regular fa-eye"></i>
+                                                                                                                                                                                                                                                                                </a> -->
                                         <a href="#">
                                             <i class="fa-brands fa-paypal"></i>
                                         </a>
@@ -289,11 +289,11 @@
             </div>
         </div>
         {{-- finance --}}
+        <!-- Finance Orders Section -->
         <div id="finance" class="content-section">
-            <!-- <h2 class="text-center mb-4">طلبات التمويل</h2> -->
             <div class="table-responsive">
                 <div class="container financing-container global-table">
-                    <div class="table-wrapper ">
+                    <div class="table-wrapper">
                         <div class="table-title d-flex justify-content-between align-items-center">
                             <h2 class="m-0">طلبات التمويل</h2>
                         </div>
@@ -302,57 +302,113 @@
                                 <tr>
                                     <th>#</th>
                                     <th>أسم الشركة</th>
-                                    <th>تاريخ الطلب</th>
                                     <th>الرقم الجامعي</th>
                                     <th>الغرض</th>
                                     <th>المبلغ</th>
+                                    <th>تاريخ الطلب</th>
                                     <th>حالة الطلب</th>
-                                    <th>الاجرائات</th>
+                                    <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar-sm ms-2 bg-light rounded p-1">
-                                                    <img src="../img/bus.png" alt="Product Image" class="img-fluid d-block "
-                                                        style="width: 50px; height: 50px;">
+                                @forelse($financeRequests as $index => $request)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $request->financingCompany->user->name ?? 'غير متوفر' }}</td>
+                                        <td>{{ $request->student->student->university_number ?? 'غير متوفر' }}</td>
+                                        <td>{{ $request->finance_type }}</td>
+                                        <td>{{ $request->amount }} ريال</td>
+                                        <td>{{ $request->created_at->format('Y-m-d') }}</td>
+                                        <td>
+                                            <span
+                                                class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'rejected' ? 'danger' : 'warning') }}">
+                                                {{ $request->status == 'completed' ? 'مكتملة' : ($request->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
+                                            </span>
+                                        </td>
+                                        <td class="actions">
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#financeOrderModal{{ $request->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
+                                    <!-- Modal for Finance Order -->
+                                    <div class="modal fade orders-section-modal" id="financeOrderModal{{ $request->id }}"
+                                        tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div
+                                                        class="info-section d-flex justify-content-between align-items-start">
+                                                        <div class="text-start" style="width: 50%;">
+                                                            <h5>جامعة {{ $request->financingCompany->name ?? 'غير متوفر' }}
+                                                            </h5>
+                                                            <p class="text-muted">مكتب
+                                                                {{ $request->financingCompany->financingCompany->address ?? 'غير متوفر' }}
+                                                            </p>
+                                                            <p class="text-muted">
+                                                                {{ $request->financingCompany->financingCompany->description ?? 'غير متوفر' }},
+                                                            <p class="text-muted">
+                                                                {{ $request->financingCompany->financingCompany->phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <h5>طلب رقم {{ $request->id }}</h5>
+                                                            <p class="text-muted">تاريخ الإصدار:
+                                                                {{ $request->created_at->format('d/m/Y') }}</p>
+                                                            <p class="text-muted">حالة الطلب:
+                                                                @if ($request->status == 'completed')
+                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @elseif($request->status == 'rejected')
+                                                                    <span class="badge bg-danger">مرفوضة</span>
+                                                                @else
+                                                                    <span class="badge bg-warning">قيد الانتظار</span>
+                                                                @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider my-4"></div>
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <div class="col-md-4">
+                                                            <h6 class="fw-bold">طلب تمويل إلى:</h6>
+                                                            <p><strong>الوسيط:</strong>
+                                                                {{ '4USUCCESS' }}</p>
+                                                            <p><strong>الطالب:</strong>
+                                                                {{ $request->student->name ?? 'غير متوفر' }}</p>
+                                                            <p><strong>الرقم الجامعي:</strong>
+                                                                {{ $request->student->student->university_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                            <p><strong>رقم الهاتف:</strong>
+                                                                {{ $request->student->student->student_phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                            <p><strong>الغرض:</strong>
+                                                                {{ $request->description ?? 'غير متوفر' }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <h6 class="fw-bold">الدفع عبر:</h6>
+                                                            <p><strong>المبلغ:</strong> {{ $request->amount }} ريال سعودي
+                                                            </p>
+                                                            <p><strong>اسم البنك:</strong>
+                                                                {{ $request->bank_name ?? 'غير متوفر' }}</p>
+                                                            <p><strong>الدولة:</strong>
+                                                                {{ $request->country ?? 'غير متوفر' }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn bg-danger text-white"
+                                                        data-bs-dismiss="modal">إغلاق</button>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-14 mb-1">
-                                                    <a href="#" class="text-body">جامعة المستقبل</a>
-                                                </h5>
-                                                <p class="text-muted mb-0">
-                                                    شركة تمويل
-                                                </p>
-                                            </div>
                                         </div>
-                                    </td>
-                                    <td>02 مارس 2023</td>
-                                    <td>125487988</td>
-                                    <td>تمويل مشروع التخرج</td>
-                                    <td><a href="#" class="" title="التفاصيل" data-toggle="tooltip">
-                                            5000 ريال</a>
-                                        <br>
-                                        <span class="text-muted">بنك الراجحي</span>
-                                    </td>
-                                    <td><span class="badge bg-success">مكتمله</span></td>
-                                    <td class="actions">
-                                        <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                            </a> -->
-                                        <a href="#">
-                                            <i class="fa-brands fa-paypal"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">لا توجد طلبات تمويل حالية</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -503,7 +559,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn bg-danger text-white"
                                                         data-bs-dismiss="modal">إغلاق</button>
-                                                    @if ($request->status == 'pending')
+                                                    {{-- @if ($request->status == 'pending')
                                                         <a href="{{ route('consultation.request.accept', $request->id) }}"
                                                             class="btn custom-success">قبول</a>
                                                         <a href="{{ route('consultation.request.reject', $request->id) }}"
@@ -511,7 +567,7 @@
                                                     @elseif($request->status == 'accepted')
                                                         <a href="{{ route('consultation.request.complete', $request->id) }}"
                                                             class="btn btn-info">إكمال</a>
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
                                             </div>
                                         </div>

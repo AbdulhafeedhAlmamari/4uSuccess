@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,22 @@ class FinanceController extends Controller
 {
     public function index()
     {
-        return view('dashboards.finances.index');
+        // count all finance requests
+        $financeRequests = FinanceRequest::where('financing_company_id', Auth::user()->id)->count();
+        // count all finance requests with status 'under_review'
+        $underReviewCount = FinanceRequest::where('financing_company_id', Auth::user()->id)
+            ->where('status', 'under_review')->count();
+        // count all finance requests with status 'accepted'
+        $acceptedCount = FinanceRequest::where('financing_company_id', Auth::user()->id)
+            ->where('status', 'accepted')->count();
+        // count all finance requests with status 'rejected'
+        $rejectedCount = FinanceRequest::where('financing_company_id', Auth::user()->id)
+            ->where('status', 'rejected')->count();
+        // count all finance requests with status 'completed'
+        $completedCount = FinanceRequest::where('financing_company_id', Auth::user()->id)
+            ->where('status', 'completed')->count();
+
+        return view('dashboards.finances.index', compact('financeRequests', 'underReviewCount', 'acceptedCount', 'rejectedCount', 'completedCount'));
     }
 
     public function show()
@@ -19,19 +35,27 @@ class FinanceController extends Controller
         return view('dashboards.finances.show');
     }
 
-    public function orders()
+    public function showDetails()
     {
-        return view('dashboards.finances.orders');
+        return view('dashboards.finances.details');
+    }
+
+    public function orders($status)
+    {
+        $financeRequests = FinanceRequest::where('financing_company_id', Auth::user()->id)
+            ->where('status', $status)
+            ->get();
+        return view('dashboards.finances.orders', compact('financeRequests', 'status'));
     }
 
     public function profile()
     {
         // Get the authenticated user
         $user = Auth::user();
-        
+
         // Get the financing company data
         $financingCompany = FinancingCompany::where('user_id', $user->id)->first();
-        
+
         return view('dashboards.finances.profile', compact('user', 'financingCompany'));
     }
 
@@ -58,7 +82,7 @@ class FinanceController extends Controller
 
             // Get the financing company data
             $financingCompany = FinancingCompany::where('user_id', $user->id)->first();
-            
+
             if (!$financingCompany) {
                 $financingCompany = new FinancingCompany();
                 $financingCompany->user_id = $user->id;
@@ -74,16 +98,16 @@ class FinanceController extends Controller
                 if ($financingCompany->identity_image && file_exists(public_path($financingCompany->identity_image))) {
                     unlink(public_path($financingCompany->identity_image));
                 }
-                
+
                 $image = $request->file('identity_image');
                 $imageName = 'identity_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/finances/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/finances'))) {
                     mkdir(public_path('images/finances'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/finances'), $imageName);
                 $financingCompany->identity_image = $imagePath;
             }
@@ -94,16 +118,16 @@ class FinanceController extends Controller
                 if ($financingCompany->commercial_register_image && file_exists(public_path($financingCompany->commercial_register_image))) {
                     unlink(public_path($financingCompany->commercial_register_image));
                 }
-                
+
                 $image = $request->file('commercial_register_image');
                 $imageName = 'commercial_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/finances/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/finances'))) {
                     mkdir(public_path('images/finances'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/finances'), $imageName);
                 $financingCompany->commercial_register_image = $imagePath;
             }
@@ -114,16 +138,16 @@ class FinanceController extends Controller
                 if ($user->profile_image && file_exists(public_path($user->profile_image))) {
                     unlink(public_path($user->profile_image));
                 }
-                
+
                 $image = $request->file('profile_image');
                 $imageName = 'profile_' . time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/profiles/' . $imageName;
-                
+
                 // Make sure the directory exists
                 if (!file_exists(public_path('images/profiles'))) {
                     mkdir(public_path('images/profiles'), 0755, true);
                 }
-                
+
                 $image->move(public_path('images/profiles'), $imageName);
                 $user->profile_image = $imagePath;
             }
@@ -145,7 +169,7 @@ class FinanceController extends Controller
         } catch (\Exception $e) {
             // Log the error
             \Log::error('Profile update error: ' . $e->getMessage());
-            
+
             // Return error response for AJAX request
             if ($request->ajax()) {
                 return response()->json([
@@ -153,9 +177,36 @@ class FinanceController extends Controller
                     'message' => 'حدث خطأ أثناء تحديث الملف الشخصي: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             // Redirect with error message for non-AJAX request
             return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الملف الشخصي');
         }
+    }
+
+    // Reject a finance request
+    public function reject(Request $request, $id)
+    {
+        $financeRequest = FinanceRequest::findOrFail($id);
+
+        // Update the status to 'rejected' and save the rejection reason
+        $financeRequest->status = 'rejected';
+        $financeRequest->reply = $request->input('reply');
+        $financeRequest->save();
+
+        return redirect()->back()->with('success', 'تم رفض الطلب بنجاح.');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:finance_requests,id',
+            'status' => 'required|in:under_review,accepted,rejected,completed',
+        ]);
+
+        $financeRequest = FinanceRequest::findOrFail($request->id);
+        $financeRequest->status = $request->status;
+        $financeRequest->save();
+
+        return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
     }
 }

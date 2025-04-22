@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ConsultationRequest;
+use App\Models\FinanceRequest;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -27,7 +28,12 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('dashboards.students.orders', compact('consultationRequests'));
+        $financeRequests = FinanceRequest::where('student_id', Auth::id())
+            ->with('student', 'financingCompany')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests'));
     }
 
     public function profile()
