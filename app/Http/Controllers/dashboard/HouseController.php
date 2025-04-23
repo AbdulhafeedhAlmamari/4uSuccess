@@ -18,8 +18,8 @@ class HouseController extends Controller
     public function index()
     {
         // Get counts of pending and confirmed orders
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->count();
-        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->count();
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('transport_type', 'housing')->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('transport_type', 'housing')->count();
 
         return view('dashboards.houses.index', compact('pendingOrdersCount', 'confirmedOrdersCount'));
     }
@@ -172,23 +172,56 @@ class HouseController extends Controller
             // Delete existing primary image if exists
             $existingPrimary = $housing->primaryPhoto;
             if ($existingPrimary) {
-                Storage::delete(str_replace('storage/', 'public/', $existingPrimary->path));
+                if ($request->hasFile('image')) {
+                    // Delete old image if exists
+                    if ($existingPrimary->path && file_exists(public_path($existingPrimary->path))) {
+                        unlink(public_path($existingPrimary->path));
+                    }
+
+                    $image = $request->file('image');
+                    $imageName = 'primary_' . time() . '.' . $image->getClientOriginalExtension();
+                    $imagePath = 'images/houses/' . $imageName;
+
+                    // Make sure the directory exists
+                    if (!file_exists(public_path('images/houses'))) {
+                        mkdir(public_path('images/transportations'), 0755, true);
+                    }
+
+                    $image->move(public_path('images/houses'), $imageName);
+                    $existingPrimary->path = $imagePath;
+                }
                 $existingPrimary->delete();
             }
-
-            // Upload new primary image
-            $primaryImage = $request->file('primary_image');
-            $primaryImageName = 'housing_' . $housing->id . '_primary_' . time() . '.' . $primaryImage->getClientOriginalExtension();
-            $primaryImage->storeAs('public/housing_images', $primaryImageName);
-
-            // Create primary photo record
             Photo::create([
                 'housing_id' => $housing->id,
-                'path' => 'storage/housing_images/' . $primaryImageName,
+                'path' => 'storage/housing_images/' . $imageName,
                 'is_primary' => true,
             ]);
         }
+        if ($request->hasFile('additional_images')) {
+            // حذف الصور القديمة من قاعدة البيانات والملفات
+            $oldAdditionalImages = $housing->photos()->where('is_primary', false)->get();
 
+            foreach ($oldAdditionalImages as $oldImage) {
+                if ($oldImage->path && file_exists(public_path($oldImage->path))) {
+                    unlink(public_path($oldImage->path));
+                }
+                $oldImage->delete();
+            }
+
+            // رفع الصور الجديدة وتخزينها
+            foreach ($request->file('additional_images') as $image) {
+                $imageName = 'housing_' . $housing->id . '_' . Str::random(10) . '_' . time() . '.' . $image->getClientOriginalExtension();
+                $storagePath = 'housing_images/' . $imageName;
+                $image->move(public_path('storage/housing_images'), $imageName);
+
+                Photo::create([
+                    'housing_id' => $housing->id,
+                    'path' => 'storage/housing_images/' . $imageName,
+                    'is_primary' => false,
+                ]);
+            }
+        }
         // Handle additional images upload if provided
         if ($request->hasFile('additional_images')) {
             foreach ($request->file('additional_images') as $image) {
@@ -223,9 +256,11 @@ class HouseController extends Controller
         }
 
         // Delete all associated photos and their files
-        foreach ($housing->photos as $photo) {
-            Storage::delete(str_replace('storage/', 'public/', $photo->path));
-            $photo->delete();
+        if ($housing->photos->count() > 0) {
+            foreach ($housing->photos as $photo) {
+                unlink(public_path($photo->path));
+                $photo->delete();
+            }
         }
 
         // Delete the housing record

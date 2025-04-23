@@ -53,6 +53,15 @@
                             <a class="nav-link {{ request()->routeIs('dashboard.all_houses*') ? 'active' : '' }}"
                                 href="{{ route('dashboard.all_houses') }}">ادارة السكن</a>
                         </li>
+                    @elseif (Auth::user()->role == 'transportation')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.transportations*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.transportations') }}">لوحة التحكم</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.all_transportations*') ? 'active' : '' }}"
+                                href="{{ route('dashboard.all_transportations') }}">ادارة النقل</a>
+                        </li>
                     @elseif (Auth::user()->role == 'student')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
