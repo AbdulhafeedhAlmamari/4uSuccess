@@ -10,6 +10,7 @@ use App\Models\FinancingCompany;
 use App\Models\Housing;
 use App\Models\HousingCompany;
 use App\Models\Photo;
+use App\Models\ReservationRequest;
 use App\Models\Student;
 use App\Models\TransportationCompany;
 use App\Models\Trip;
@@ -37,8 +38,10 @@ class DatabaseSeeder extends Seeder
         FinancingCompany::factory(7)->create();
         FinanceRequest::factory(7)->create();
         HousingCompany::factory(7)->create();
+        TransportationCompany::factory(3)->create();
         Trip::factory(7)->create();
         Photo::factory(7)->create();
+        ReservationRequest::factory(3)->create();
         // admin user
         User::Create([
             'name' => 'admin',
@@ -48,6 +51,5 @@ class DatabaseSeeder extends Seeder
             'is_approved' => '1',
             'profile_image' => 'https://ui-avatars.com/api/?name=admin&background=random',
         ]);
-
     }
 }

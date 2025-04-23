@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\ReservationRequest;
 use App\Models\TransportationCompany;
+use App\Models\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +13,10 @@ class TransportationController extends Controller
 {
     public function index()
     {
-        return view('dashboards.transportations.index');
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportations')->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'transportations')->count();
+        $rejectedOrdersCount = ReservationRequest::where('status', 'rejected')->where('reservation_type', 'transportations')->count();
+        return view('dashboards.transportations.index', compact('pendingOrdersCount', 'confirmedOrdersCount', 'rejectedOrdersCount'));
     }
 
     public function show()
@@ -19,9 +24,110 @@ class TransportationController extends Controller
         return view('dashboards.transportations.show');
     }
 
-    public function orders()
+    public function getAllTransportations()
     {
-        return view('dashboards.transportations.orders');
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('home')->with('error', 'You do not have a housing company profile.');
+        }
+        // Get all housing listings for this company
+        $trips = Trip::where('transportation_company_id', $user->id)->get();
+
+        return view('dashboards.transportations.transportations', compact('trips'));
+    }
+    public function orders($status)
+    {
+        $transportationCompanyId = auth()->user()->id;
+
+        $reservations = ReservationRequest::with(['student', 'trip'])
+            ->whereNotNull('trip_id')
+            ->where('status', $status)
+            ->whereHas('trip', function ($query) use ($transportationCompanyId) {
+                $query->where('transportation_company_id', $transportationCompanyId);
+            })
+            ->latest()
+            ->get();
+        return view('dashboards.transportations.orders', compact('reservations', 'status'));
+    }
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'driver_name' => 'required|string',
+            'plate_number' => 'required|string',
+            'destination' => 'required|string',
+            'transport_type' => 'required|string',
+            'start' => 'required|string',
+            'end' => 'required|string',
+            'go_date' => 'required|date',
+            'back_date' => 'nullable|date',
+            'trip_type' => 'required|string',
+            'number_of_seats' => 'required|integer',
+            'distance' => 'nullable|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        $data['transportation_company_id'] = Auth::id();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName =  'trip_' .  time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/transportations'), $imageName);
+            $data['image'] = 'images/transportations/' . $imageName;
+        }
+        Trip::create($data);
+
+        return redirect()->back()->with('success', 'تمت إضافة الرحلة بنجاح!');
+    }
+    public function update(Request $request,  $id)
+    {
+        $request->validate([
+            'driver_name' => 'required|string|max:255',
+            'plate_number' => 'required|string|max:255',
+            'destination' => 'required|string|max:255',
+            'transport_type' => 'required|string',
+            'start' => 'required|string',
+            'end' => 'required|string',
+            'go_date' => 'required|date',
+            'back_date' => 'nullable|date',
+            'trip_type' => 'required|string',
+            'number_of_seats' => 'required|integer',
+            'distance' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|max:2048',
+        ]);
+        $trip = Trip::findOrFail($id);
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($trip->image && file_exists(public_path($trip->image))) {
+                unlink(public_path($trip->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = 'trip_' . time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'images/transportations/' . $imageName;
+
+            // Make sure the directory exists
+            if (!file_exists(public_path('images/transportations'))) {
+                mkdir(public_path('images/transportations'), 0755, true);
+            }
+
+            $image->move(public_path('images/transportations'), $imageName);
+            $trip->image = $imagePath;
+        }
+        $trip->update($request->all());
+        return redirect()->route('dashboard.all_transportations')->with('success', 'تم تعديل بيانات الرحلة');
+    }
+
+    public function destroy($id)
+    {
+        $trip = Trip::findOrFail($id);
+        if ($trip->image && file_exists(public_path($trip->image))) {
+            unlink(public_path($trip->image));
+        }
+
+        $trip->delete();
+        return redirect()->route('dashboard.all_transportations')->with('success', 'تم حذف الرحلة');
     }
 
 
