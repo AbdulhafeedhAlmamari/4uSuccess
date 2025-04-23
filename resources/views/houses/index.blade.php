@@ -56,8 +56,13 @@
                                 <div class="card mb-3" style="max-width: 540px;">
                                     <div class="row g-0">
                                         <div class="col-md-5">
-                                            <img src="{{ asset($house->primaryPhoto?->path) }}"
-                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                            @if (isset($house->primaryPhoto))
+                                                <img src="{{ asset($house->primaryPhoto->path) }}"
+                                                    class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                            @else
+                                                <img src="{{ asset('images/default.jpg') }}"
+                                                    class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                            @endif
                                         </div>
                                         <div class="col-md-7">
                                             <div class="card-body">
@@ -83,6 +88,10 @@
                             لا توجد مساكن متاحة حاليًا.
                         </div>
                     </div>
+                    <br> <br> <br> <br>
+                    <br> <br> <br> <br>
+                    <br> <br> <br> <br>
+                    <br> <br> <br> <br>
                 @endforelse
 
             </div>

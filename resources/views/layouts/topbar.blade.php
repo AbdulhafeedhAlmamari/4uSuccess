@@ -117,7 +117,7 @@
                     <a class="user-logo" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="mx-3">{{ Auth::user()->name }}</span>
-                        <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : asset('build/assets/images/cons-1.jpg') }}"
+                        <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : asset('images/user-logo.svg') }}"
                             alt="" class="">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

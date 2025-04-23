@@ -38,4 +38,5 @@ class Trip extends Model
     {
         return $this->belongsTo(User::class, 'transportation_company_id');
     }
+    
 }

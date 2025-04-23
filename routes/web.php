@@ -61,7 +61,11 @@ Route::post('/house-reservation-store', [HouseController::class, 'reservationSto
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');
 Route::get('/transport-show', [TransportController::class, 'show'])->name('home.transport.show');
 Route::get('/transport-search', [TransportController::class, 'search'])->name('home.transport.search');
-Route::get('/transport-search-result', [TransportController::class, 'searchResult'])->name('home.transport.search_result');
+// Route::get('/transport-search-result', [TransportController::class, 'searchResult'])->name('home.transport.search_result');
+Route::post('/transport/store', [TransportController::class, 'store'])->name('home.transport.store');
+Route::post('/transport/search/trip', [TransportController::class, 'searchForTrip'])->name('home.transport.search.for_trip');
+
+
 
 // payment routes
 Route::get('/payment', [PaymentController::class, 'index'])->name('home.payment');
@@ -122,8 +126,8 @@ Route::prefix('/dashboard')->group(function () {
     Route::post('/finance-orders/reject/{id}', [DashboardFinanceController::class, 'reject'])->name('consultation.request.reject');
     Route::post('/dashboard/finance-orders/update-status', [DashboardFinanceController::class, 'updateStatus'])->name('dashboard.finance_orders.update_status');
     Route::get('/finances/details', [DashboardFinanceController::class, 'showDetails'])->name('dashboard.finances.details');
-    
-    
+
+
     // houses routes
     Route::get('/houses', [DashboardHouseController::class, 'index'])->name('dashboard.houses');
     Route::get('/all-houses', [DashboardHouseController::class, 'getAllHouses'])->name('dashboard.all_houses');

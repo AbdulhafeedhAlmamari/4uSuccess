@@ -26,7 +26,7 @@ class TripFactory extends Factory
     public function definition(): array
     {
         return [
-            'transportation_company_id' => User::factory(), // Assumes 'users' table contains transportation companies
+            'transportation_company_id' => User::all()->random()->id, // Assumes 'users' table contains transportation companies
             'driver_name' => $this->faker->name(),
             'plate_number' => strtoupper($this->faker->bothify('??###')),
             'destination' => $this->faker->city(),
@@ -35,7 +35,7 @@ class TripFactory extends Factory
             'end' => $this->faker->address(),
             'go_date' => $this->faker->dateTimeBetween('now', '+1 month'),
             'back_date' => $this->faker->dateTimeBetween('+1 month', '+2 months'),
-            'trip_type' => $this->faker->randomElement(['one way', 'round trip']),
+            'trip_type' => $this->faker->randomElement(['one_way', 'round_trip']),
             'number_of_seats' => $this->faker->numberBetween(10, 50),
             'distance' => $this->faker->randomFloat(2, 10, 500) . ' km', // Random distance in kilometers
             'price' => $this->faker->randomFloat(2, 50, 1000), // Random price between 50 and 1000

@@ -7,8 +7,11 @@ use App\Models\ConsultationRequest;
 use App\Models\Contact;
 use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
+use App\Models\Housing;
 use App\Models\HousingCompany;
+use App\Models\Photo;
 use App\Models\Student;
+use App\Models\TransportationCompany;
 use App\Models\Trip;
 use App\Models\User;
 use Database\Factories\HousingCompanyFactory;
@@ -26,6 +29,8 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(7)->create();
         Contact::factory(7)->create();
+        Housing::factory(7)->create();
+        TransportationCompany::factory(7)->create();
         Consultant::factory(7)->create();
         ConsultationRequest::factory(7)->create();
         Student::factory(7)->create();
@@ -33,6 +38,7 @@ class DatabaseSeeder extends Seeder
         FinanceRequest::factory(7)->create();
         HousingCompany::factory(7)->create();
         Trip::factory(7)->create();
+        Photo::factory(7)->create();
         // admin user
         User::Create([
             'name' => 'admin',

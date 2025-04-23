@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -15,7 +16,7 @@ class ConsultantFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::where('role', 'consultant')->inRandomOrder()->first()->id,
             'phone_number' => $this->faker->phoneNumber,
             'activity_type' => $this->faker->randomElement(['full-time', 'part-time', 'freelance']),
             'consultation_duration' => $this->faker->randomElement([30, 45, 60, 90]),

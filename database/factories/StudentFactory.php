@@ -18,7 +18,7 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::where('role', 'student')->inRandomOrder()->first()->id,
             'university_number' => $this->faker->unique()->numerify('STU#####'),
             'university_name' => $this->faker->randomElement([
                 'University of Example',

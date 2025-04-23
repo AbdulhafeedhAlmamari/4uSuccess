@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
@@ -22,7 +23,7 @@ class FinancingCompanyFactory extends Factory
         Storage::fake('public');
 
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::where('role', 'financing')->inRandomOrder()->first()->id,
             'commercial_register_number' => $this->faker->unique()->numerify('##########'),
             'phone_number' => $this->faker->numerify('9665########'),
             'identity_image' => UploadedFile::fake()
