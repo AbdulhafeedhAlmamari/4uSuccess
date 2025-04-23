@@ -34,16 +34,16 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests'));
-        // $housingRequests = ReservationRequest::with('student', 'housing')->latest()
-        // ->where('student_id', Auth::id())
-        // ->orderBy('created_at', 'desc')
-        // ->get();
         $housingRequests = ReservationRequest::with([
             'housing.housingCompany', // Load housing company and user
         ])->where('reservation_type', 'housing')->get();
-        // dd($housingRequests);
-        return view('dashboards.students.orders', compact('consultationRequests', 'housingRequests'));
+
+        $transportationRequests = ReservationRequest::with([
+            'trip.transportationCompany', // Load housing company and user
+        ])->where('reservation_type', 'transportations')->get();
+
+
+        return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
     }
 
     public function profile()

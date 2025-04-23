@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                            margin: -20px -25px 10px; */
+                                                                        margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -321,49 +321,113 @@
                                     <th>نقطة الوصول</th>
                                     <th>المبلغ</th>
                                     <th>حالة الطلب</th>
-                                    <th>الاجرائات</th>
+                                    <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar-sm ms-2 bg-light rounded p-1">
-                                                    <img src="../img/bus.png" alt="Product Image" class="img-fluid d-block "
-                                                        style="width: 50px; height: 50px;">
-
+                                @forelse ($transportationRequests as $index => $transportationRequest)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar-sm ms-2 bg-light rounded p-1">
+                                                        <img src="{{ asset($transportationRequest->trip->image ?? 'images/default.jpeg') }}"
+                                                             alt="Product Image" class="img-fluid d-block" style="width: 50px; height: 50px;">
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-1">
+                                                        <a href="#" class="text-body">
+                                                            {{ $transportationRequest->trip->transportationCompany->name ?? 'غير متوفر' }}
+                                                        </a>
+                                                    </h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $transportationRequest->trip->transport_type == 'group' ? 'خدمة نقل جماعي' : 'خدمة نقل فردي' }}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-14 mb-1">
-                                                    <a href="#" class="text-body">شركة سابتكو</a>
-                                                </h5>
-                                                <p class="text-muted mb-0">
-                                                    خدمة نقل الجماعي
-                                                </p>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($transportationRequest->request_date)->format('d M Y') }}</td>
+                                        <td>{{ $transportationRequest->trip->start ?? 'غير متوفر' }}</td>
+                                        <td>{{ $transportationRequest->trip->end ?? 'غير متوفر' }}</td>
+                                        <td>{{ $transportationRequest->trip->price ?? 'غير متوفر' }} ريال</td>
+                                        <td>
+                                            <span class="badge bg-{{ $transportationRequest->status == 'completed' ? 'success' : ($transportationRequest->status == 'rejected' ? 'danger' : 'warning') }}">
+                                                {{ $transportationRequest->status == 'completed' ? 'مكتملة' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
+                                            </span>
+                                        </td>
+                                        <td class="actions">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal{{ $transportationRequest->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal for Transportation Details -->
+                                    <div class="modal fade orders-section-modal" id="orderModal{{ $transportationRequest->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="info-section">
+                                                        <div>
+                                                            <h5>رقم الرحلة:
+                                                                <span>{{ $transportationRequest->trip->id ?? '-' }}</span>
+                                                                <img src="{{ asset($transportationRequest->trip->image ?? 'img/default-transport.jpg') }}"
+                                                                     alt="صورة الرحلة" class="img-fluid rounded ms-2" style="width: 50px; height: 50px;">
+                                                            </h5>
+                                                            <p class="text-muted">اسم السائق:
+                                                                <span>{{ $transportationRequest->trip->driver_name ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">رقم اللوحة:
+                                                                <span>{{ $transportationRequest->trip->plate_number ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">الوجهة:
+                                                                <span>{{ $transportationRequest->trip->destination ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="status-box">نوع النقل:
+                                                                <span>{{ $transportationRequest->trip->transport_type == 'group' ? 'جماعي' : 'فردي' }}</span>
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <h5>رقم الطلب: <span>{{ $transportationRequest->id }}</span></h5>
+                                                            <p class="text-muted">تاريخ الطلب:
+                                                                {{ \Carbon\Carbon::parse($transportationRequest->request_date)->format('Y-m-d') }}
+                                                            </p>
+                                                            <p class="text-muted">حالة الطلب:
+                                                                <span class="badge bg-{{ $transportationRequest->status == 'completed' ? 'success' : ($transportationRequest->status == 'rejected' ? 'danger' : 'warning') }}">
+                                                                    {{ $transportationRequest->status == 'completed' ? 'مكتملة' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider"></div>
+                                                    <div class="row text-start">
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">تفاصيل الرحلة</h6>
+                                                            <p><strong>البداية:</strong> {{ $transportationRequest->trip->start ?? '-' }}</p>
+                                                            <p><strong>النهاية:</strong> {{ $transportationRequest->trip->end ?? '-' }}</p>
+                                                            <p><strong>المسافة:</strong> {{ $transportationRequest->trip->distance ?? '-' }} كم</p>
+                                                            <p><strong>عدد المقاعد:</strong> {{ $transportationRequest->trip->number_of_seats ?? '-' }}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">تفاصيل إضافية</h6>
+                                                            <p><strong>نوع الرحلة:</strong> {{ $transportationRequest->trip->trip_type ?? '-' }}</p>
+                                                            <p><strong>السعر:</strong> {{ $transportationRequest->trip->price ?? '-' }} ريال</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn bg-danger text-white" data-bs-dismiss="modal">إغلاق</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>02 مارس 2023</td>
-                                    <td>الرياض</td>
-                                    <td>جامعة الاميرة نوره</td>
-                                    <td><a href="#" class="" title="التفاصيل" data-toggle="tooltip">
-                                            50 ريال</a>
-                                    </td>
-                                    <td><span class="badge bg-success">مكتمله</span></td>
-                                    <td class="actions">
-                                        <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                                                                                                                                                                                                                                                                                <i class="fa-regular fa-eye"></i>
-                                                                                                                                                                                                                                                                                            </a> -->
-                                        <i class="fa-regular fa-eye"></i>
-                                        </a> -->
-                                        <a href="#">
-                                            <i class="fa-brands fa-paypal"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">لا توجد طلبات نقل حالية</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
 
@@ -496,6 +560,7 @@
                 </div>
             </div>
         </div>
+
         {{-- filepath: resources/views/dashboards/students/orders.blade.php --}}
 
         {{-- Consult Section --}}

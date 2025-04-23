@@ -3,8 +3,12 @@
     {{ __('الطلبات') }}
 @endsection
 @section('css')
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"> <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <link href="{{ asset('build/assets/css/welcome.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('build/assets/css/home.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('build/assets/css/table.css') }}" rel="stylesheet">
@@ -33,19 +37,69 @@
             color: #fff;
         }
 
-        /* modal */
-        .modal-content {
-            border-radius: 15px;
+
+        /* modal style */
+
+        .orders-section-modal .modal-content {
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .orders-section-modal .modal-header,
+        .orders-section-modal .modal-footer {
+            border: none;
+            background: none;
+        }
+
+        .orders-section-modal .modal-body {
             padding: 20px;
         }
 
-        .modal-header {
-            border-bottom: none;
+        .orders-section-modal .info-section {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
-        .modal-footer {
-            border-top: none;
-            justify-content: center;
+        .orders-section-modal .info-box {
+            padding: 10px;
+        }
+
+        .orders-section-modal .divider {
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .orders-section-modal .status-box {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .orders-section-modal .icon-box {
+            width: 15px;
+            height: 15px;
+            background: #bbb;
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .orders-section-modal .image-container {
+            display: flex;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .orders-section-modal .image-container img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 15px;
         }
 
         .form-control {
@@ -77,39 +131,22 @@
             <div class="table-responsive">
                 <div class="container financing-container global-table">
                     <div class="table-wrapper ">
-                        <div class="table-title d-flex justify-content-between align-items-center">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addTripModal"><i class="fa fa-add"></i> <span>اضافة
-                                    رحلة</span></button>
+                        <div class="table-title d-flex justify-content-end align-items-center">
                             <div class="">
-                                <h2 class="m-0">طلبات النقل القادمة</h2>
+                                <h2 class="m-0">
+                                    طلبات النقل
+                                    @if (request('status') == 'pending')
+                                        الحالية
+                                    @elseif(request('status') == 'confirmed')
+                                        السابقة
+                                    @else
+                                        المرفوضه
+                                    @endif
+                                </h2>
                             </div>
                         </div>
-                        {{-- @include('dashboards.Companies.table-data', [
-                            'headers' => ['اسم المستشار', 'التاريخ', 'التخصص', 'الطالب', 'حالة الطلب', 'التفاصيل'],
-                            'data' => [
-                                [
-                                    'consultant_image' => '{{ asset('build/assets/images/consultant-02.png') }}',
-                                    'consultant_name' => 'صالح العمري',
-                                    'consultant_job' => 'جامعة الملك عبدالعزيز',
-                                    'date' => '10 مارس 2025',
-                                    'specialization' => 'علوم الحاسب',
-                                    'student_name' => 'أحمد محمد',
-                                    'status' => 'تم الرد',
-                                ],
-                                [
-                                    'consultant_image' => '{{ asset('build/assets/images/consultant-02.png') }}',
-                                    'consultant_name' => 'علي أحمد',
-                                    'consultant_job' => 'جامعة الملك سعود',
-                                    'date' => '15 مارس 2025',
-                                    'specialization' => 'الهندسة الكهربائية',
-                                    'student_name' => 'محمد خالد',
-                                    'status' => 'قيد المراجعة',
-                                ],
-                                // Add more rows as needed
-                            ],
-                        ]) --}}
-                        <table class="table table-striped table-hover">
+
+                        <table id="tableID" class="table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -123,33 +160,170 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        50060
-                                    </td>
-                                    <td>محمد الذيابي</td>
-                                    <td>جامعة الاميرة نوره </td>
-                                    <td>3</td>
-                                    <td>23 نوفمبر</td>
-                                    <td>
-                                        <div class="d-flex justify-content-start gap-1">
-                                            <!-- مؤكده -->
-                                            <a href="#" class="btn custom-success">مؤكده</a>
-                                            <!-- مرفوض -->
-                                            <a href="#" class="btn custom-danger">مرفوض</a>
+                                @forelse ($reservations as $index => $reservation)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $reservation->trip->plate_number ?? '-' }}</td>
+                                        <td>{{ $reservation->trip->driver_name ?? '-' }}</td>
+                                        <td>{{ $reservation->trip->destination ?? '-' }}</td>
+                                        <td>{{ $reservation->trip->number_of_seats ?? '-' }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($reservation->trip->go_date ?? '')->format('d M Y') }}
+                                        </td>
+                                        <td>
+                                            @if ($reservation->status == 'confirmed')
+                                                <span class="badge bg-success">تمت الموافقة</span>
+                                            @elseif($reservation->status == 'rejected')
+                                                <span class="badge bg-danger">مرفوض</span>
+                                            @else
+                                                <div class="d-flex justify-content-start gap-1">
+                                                    <form
+                                                        action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        {{-- @method('PATCH') --}}
+                                                        <input type="hidden" name="status" value="confirmed">
+                                                        <button type="submit" class="btn custom-success">مؤكده</button>
+                                                    </form>
+                                                    <form
+                                                        action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        {{-- @method('PATCH') --}}
+                                                        <input type="hidden" name="status" value="rejected">
+                                                        <button type="button" class="btn custom-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#rejectModal{{ $reservation->id }}">مرفوض</button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="actions">
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $reservation->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    {{-- Modal for Transportation Details --}}
+                                    {{-- Modal for Transportation Details --}}
+                                    <div class="modal fade orders-section-modal" id="orderModal{{ $reservation->id }}"
+                                        tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="info-section">
+                                                        <div>
+                                                            <h5>رقم الرحلة:
+                                                                <span>{{ $reservation->trip->id ?? '-' }}</span>
+                                                                {{-- Display the trip image next to the trip ID --}}
+                                                                <img src="{{ asset($reservation->trip->image ?? 'images/identity_1744485552.png') }}"
+                                                                    alt="صورة الرحلة" class="img-fluid rounded ms-2"
+                                                                    style="width: 50px; height: 50px;">
+                                                            </h5>
+                                                            <p class="text-muted">اسم السائق:
+                                                                <span>{{ $reservation->trip->driver_name ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">رقم اللوحة:
+                                                                <span>{{ $reservation->trip->plate_number ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">الوجهة:
+                                                                <span>{{ $reservation->trip->destination ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="status-box">نوع النقل:
+                                                                <span>{{ $reservation->trip->transport_type == 'group' ? 'جماعي' : 'فردي' ?? '-' }}</span>
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <h5>رقم الطلب: <span>{{ $reservation->id }}</span></h5>
+                                                            <p class="text-muted">تاريخ الذهاب:
+                                                                <span>{{ \Carbon\Carbon::parse($reservation->trip->go_date)->format('Y-m-d H:i') ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">تاريخ العودة:
+                                                                <span>{{ \Carbon\Carbon::parse($reservation->trip->back_date)->format('Y-m-d H:i') ?? '-' }}</span>
+                                                            </p>
+                                                            <p class="text-muted">
+                                                                حالة الطلب:
+                                                                <span
+                                                                    class="badge bg-{{ $reservation->status == 'confirmed' ? 'p' : 'warning' }}">
+                                                                    {{ $reservation->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider"></div>
+                                                    <div class="d-flex justify-between align-content-center">
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">تفاصيل الرحلة</h6>
+                                                            <p><strong>البداية:</strong>
+                                                                <span>{{ $reservation->trip->start ?? '-' }}</span>
+                                                            </p>
+                                                            <p><strong>النهاية:</strong>
+                                                                <span>{{ $reservation->trip->end ?? '-' }}</span>
+                                                            </p>
+                                                            <p><strong>المسافة:</strong>
+                                                                <span>{{ $reservation->trip->distance ?? '-' }}</span> كم
+                                                            </p>
+                                                            <p><strong>عدد المقاعد:</strong>
+                                                                <span>{{ $reservation->trip->number_of_seats ?? '-' }}</span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="text-muted">تفاصيل إضافية</h6>
+                                                            <p><strong>نوع الرحلة:</strong>
+                                                                <span>{{ $reservation->trip->trip_type ?? '-' }}</span>
+                                                            </p>
+                                                            <p><strong>السعر:</strong>
+                                                                <span>{{ $reservation->trip->price ?? '-' }}</span> ريال
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td class="actions">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
-                                        <!-- <a href="#">
-                                                                                                    <i class="fa-brands fa-paypal"></i>
-                                                                                                </a> -->
-                                    </td>
-                                </tr>
+                                    </div>
+
+                                    <!-- Modal for Reject -->
+                                    <div class="modal fade" id="rejectModal{{ $reservation->id }}" tabindex="-1"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form
+                                                    action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="rejected">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">رفض الطلب</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="reply">سبب الرفض:</label>
+                                                            <textarea name="reply" id="reply" class="form-control" rows="4" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"
+                                                            class="btn btn btn-secondary bg-danger text-white"
+                                                            data-bs-dismiss="modal">إغلاق</button>
+                                                        <button type="submit" class="btn custom-success">إرسال</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">لا توجد طلبات نقل </td>
+                                    </tr>
+                                @endforelse
+
                             </tbody>
+
                         </table>
 
                     </div>
@@ -159,40 +333,6 @@
     </div>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="addTripModal" tabindex="-1" aria-labelledby="addTripModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button " class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5 class="modal-title ms-2" id="addTripModalLabel">إضافة رحلة جديدة</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="driverName" class="form-label">اسم السائق</label>
-                            <input type="text" class="form-control" id="driverName" placeholder="أكتب اسم السائق">
-                        </div>
-                        <div class="mb-3">
-                            <label for="destination" class="form-label">الوجهه</label>
-                            <input type="text" class="form-control" id="destination" placeholder="أكتب اسم المنطقة">
-                        </div>
-                        <div class="mb-3">
-                            <label for="seats" class="form-label">عدد المقاعد</label>
-                            <input type="number" class="form-control" id="seats" placeholder="أدخل عدد المقاعد">
-                        </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">الموعد</label>
-                            <input type="date" class="form-control" id="date" placeholder="حدد تاريخ الرحلة">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-custom">إضافة</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <br><br>
     <br><br>

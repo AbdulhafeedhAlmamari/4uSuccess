@@ -29,14 +29,15 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
-                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> الطلبات القادمة
+                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> الطلبات المرفوضة
                                 </p>
                             </div>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
-                                <h4 class="fs-22 fw-semibold ff-secondary mb-4">6</h4>
-                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-warning">عرض جميع
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4" data-target="{{ $rejectedOrdersCount }}">{{ $rejectedOrdersCount }}</h4>
+                                <a href="{{ route('dashboard.transportation_orders', ['status' => 'rejected']) }}"
+                                    class="btn btn-outline-warning">عرض جميع
                                     الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -62,8 +63,10 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                        data-target="36894">5</span></h4>
-                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-info hover:text-whit">عرض جميع الطلبات</a>
+                                        data-target="36894"
+                                        data-target="{{ $pendingOrdersCount }}">{{ $pendingOrdersCount }}</span></h4>
+                                <a href="{{ route('dashboard.transportation_orders', ['status' => 'pending']) }}"
+                                    class="btn btn-outline-info hover:text-whit">عرض جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-info-subtle rounded fs-3  px-2 py-1">
@@ -86,8 +89,10 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
-                                <h4 class="fs-22 fw-semibold ff-secondary mb-4">9</h4>
-                                <a href="{{ route('dashboard.transportation_orders') }}" class="btn btn-outline-success">عرض جميع الطلبات</a>
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4" data-target="{{ $confirmedOrdersCount }}">
+                                    {{ $confirmedOrdersCount }}</h4>
+                                <a href="{{ route('dashboard.transportation_orders', ['status' => 'confirmed']) }}"
+                                    class="btn btn-outline-success">عرض جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-success-subtle rounded fs-3   px-2 py-1">
@@ -109,6 +114,38 @@
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function() {
+            $('#tableID').DataTable({
+                // pageLength: 1,
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "لا توجد بيانات متاحة في الجدول",
+                    "info": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                    "infoEmpty": "عرض 0 إلى 0 من أصل 0 مدخل",
+                    "infoFiltered": "(تمت تصفيته من إجمالي _MAX_ مدخل)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "عرض _MENU_ مدخلات",
+                    "loadingRecords": "جارٍ التحميل...",
+                    "processing": "جارٍ المعالجة...",
+                    "search": "البحث: ",
+                    "zeroRecords": "لم يتم العثور على نتائج مطابقة",
+                    "paginate": {
+                        "first": "الأول",
+                        "last": "الأخير",
+                        "next": "التالي",
+                        "previous": "السابق"
+                    },
+                    "aria": {
+                        "sortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                }
+            });
+        });
+    </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let rows = document.querySelectorAll("table tbody tr");
