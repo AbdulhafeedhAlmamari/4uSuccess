@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         Photo::factory(7)->create();
         ReservationRequest::factory(3)->create();
         // admin user
-        User::Create([
+        User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
