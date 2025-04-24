@@ -408,6 +408,95 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addTripModal" tabindex="-1" aria-labelledby="addTripModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{{ route('dashboard.transportations.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title ms-2" id="addTripModalLabel">إضافة رحلة جديدة</h5>
+                    </div>
+                    <div class="modal-body row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">اسم السائق</label>
+                            <input type="text" name="driver_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">رقم اللوحة</label>
+                            <input type="text" name="plate_number" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">الوجهة</label>
+                            <input type="text" name="destination" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">نوع النقل</label>
+                            <select name="transport_type" class="form-select">
+                                <option value="group">جماعي</option>
+                                <option value="single">فردي</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">نقطة البداية</label>
+                            <input type="text" name="start" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">نقطة النهاية</label>
+                            <input type="text" name="end" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">تاريخ الذهاب</label>
+                            <input type="datetime-local" name="go_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">تاريخ العودة</label>
+                            <input type="datetime-local" name="back_date" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">نوع الرحلة</label>
+                            <select name="trip_type" class="form-select">
+                                <option value="one_way">ذهاب فقط</option>
+                                <option value="round_trip">ذهاب وعودة</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">عدد المقاعد</label>
+                            <input type="number" name="number_of_seats" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">المسافة</label>
+                            <input type="text" name="distance" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">السعر</label>
+                            <input type="number" name="price" class="form-control" step="0.01">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">صورة الرحلة</label><br>
+
+                            <!-- معاينة الصورة -->
+                            <img id="imagePreview" src="#" alt="معاينة الصورة" style="display: none; max-width: 100%; max-height: 200px; margin-bottom: 10px;" />
+
+                            <!-- حقل الصورة (مخفي) -->
+                            <input type="file" name="image" id="tripImageInput" class="form-control d-none" accept="image/*">
+
+                            <!-- زر مخصص لاختيار صورة -->
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="document.getElementById('tripImageInput').click();">
+                                اختر صورة
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-custom">إضافة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <br><br>
     <br><br>
     <br><br><br>
