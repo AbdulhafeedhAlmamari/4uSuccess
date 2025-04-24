@@ -45,15 +45,15 @@
                         @forelse($financingCompanies as $index => $financingCompany)
                             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
                                 <div class="portfolio-content h-100">
-                                    <img src="{{ asset($financingCompany->user->profile_image ?? 'build/assets/images/cons-1.jpg') }}"
+                                    <img src="{{ $financingCompany->user->profile_image ? asset($financingCompany->user->profile_image) : asset('images/default.jpeg') }}"
                                         class="img-fluid" alt="">
                                     <div class="portfolio-info">
 
                                         <p>{{ $financingCompany->user->name }} </p>
-                                        <a href="{{ route('home.finances.show', $financingCompany->id) }}" title="university" 
-                                            class="glightbox preview-link"></a>
-                                        <a href="{{ route('home.finances.show', $financingCompany->id) }}" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
+                                        <a href="{{ route('home.finances.show', $financingCompany->id) }}"
+                                            title="university" class="glightbox preview-link"></a>
+                                        <a href="{{ route('home.finances.show', $financingCompany->id) }}"
+                                            title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
                                     </div>
                                 </div>
                             </div>

@@ -30,7 +30,7 @@
                             <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
                                 href="{{ route('dashboard.consultants') }}">لوحة التحكم</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        {{-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 طلبات الاستشارة
@@ -43,7 +43,7 @@
                                 <li><a class="dropdown-item" href="{{ route('home.transports') }}">الطلبات المرفوضة</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                     @elseif (Auth::user()->role == 'housing')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('dashboard.houses*') ? 'active' : '' }}"
@@ -140,20 +140,20 @@
                         @elseif (Auth::user()->role == 'financing')
                             <li><a class="dropdown-item" href="{{ route('dashboard.finance_profile') }}">الملف
                                     الشخصي</a></li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.finances') }}">لوحة تحكم
+                            {{-- <li><a class="dropdown-item" href="{{ route('dashboard.finances') }}">لوحة تحكم
                                     التمويل</a>
-                            </li>
+                            </li> --}}
                         @elseif (Auth::user()->role == 'consultant')
                             <li><a class="dropdown-item" href="{{ route('dashboard.consultant_profile') }}">الملف
                                     الشخصي</a></li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.consultants') }}">لوحة تحكم
+                            {{-- <li><a class="dropdown-item" href="{{ route('dashboard.consultants') }}">لوحة تحكم
                                     المشتشار</a>
-                            </li>
+                            </li> --}}
                         @elseif (Auth::user()->role == 'housing')
                             <li><a class="dropdown-item" href="{{ route('dashboard.house_profile') }}">الملف
                                     الشخصي</a></li>
-                            <li><a class="dropdown-item" href="{{ route('dashboard.houses') }}">لوحة تحكم السكن</a>
-                            </li>
+                            {{-- <li><a class="dropdown-item" href="{{ route('dashboard.houses') }}">لوحة تحكم السكن</a>
+                            </li> --}}
                         @elseif (Auth::user()->role == 'transportation')
                             <li><a class="dropdown-item" href="{{ route('dashboard.transportation_profile') }}">الملف
                                     الشخصي</a></li>

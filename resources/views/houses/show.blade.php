@@ -89,7 +89,7 @@
                         <div class="row gallery g-3">
                             @forelse($relatedHouses as $related)
                                 <div class="col-3">
-                                    <a href="{{ route('home.houses.show', $related->id) }}">
+                                    <a href="{{ route('houses.show', $related->id) }}">
                                         <img src="{{ asset($related->primaryPhoto?->path ?? 'build/assets/images/default.png') }}"
                                             class="img-fluid rounded shadow-sm" alt="سكن ذات صلة">
                                     </a>

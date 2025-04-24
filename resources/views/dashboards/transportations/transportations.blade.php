@@ -157,7 +157,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($trips as $index => $trip)
+                                @forelse ($trips as $index => $trip)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $trip->plate_number }}</td>
@@ -399,7 +399,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">لا توجد لديك رحلات   </td>
+                                    </tr>
+                                @endforelse
+
                             </tbody>
                         </table>
                     </div>
@@ -411,10 +416,12 @@
     <div class="modal fade" id="addTripModal" tabindex="-1" aria-labelledby="addTripModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="{{ route('dashboard.transportations.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('dashboard.transportations.store') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
-                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                         <h5 class="modal-title ms-2" id="addTripModalLabel">إضافة رحلة جديدة</h5>
                     </div>
                     <div class="modal-body row g-3">
@@ -476,13 +483,16 @@
                             <label class="form-label">صورة الرحلة</label><br>
 
                             <!-- معاينة الصورة -->
-                            <img id="imagePreview" src="#" alt="معاينة الصورة" style="display: none; max-width: 100%; max-height: 200px; margin-bottom: 10px;" />
+                            <img id="imagePreview" src="#" alt="معاينة الصورة"
+                                style="display: none; max-width: 100%; max-height: 200px; margin-bottom: 10px;" />
 
                             <!-- حقل الصورة (مخفي) -->
-                            <input type="file" name="image" id="tripImageInput" class="form-control d-none" accept="image/*">
+                            <input type="file" name="image" id="tripImageInput" class="form-control d-none"
+                                accept="image/*">
 
                             <!-- زر مخصص لاختيار صورة -->
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="document.getElementById('tripImageInput').click();">
+                            <button type="button" class="btn btn-outline-primary mt-2"
+                                onclick="document.getElementById('tripImageInput').click();">
                                 اختر صورة
                             </button>
                         </div>

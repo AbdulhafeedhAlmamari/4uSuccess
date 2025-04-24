@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultant;
+use App\Models\FinancingCompany;
+use App\Models\Housing;
+
 class HomeController extends Controller
 {
     public function index()
     {
+        $consultant = Consultant::get();
+        $housings = Housing::get();
+        $financing = FinancingCompany::get();
+        // dd($consultant, $housings, $financing);
         return view('home');
     }
     public function guest()
