@@ -206,7 +206,6 @@
                                     </tr>
 
                                     {{-- Modal for Transportation Details --}}
-                                    {{-- Modal for Transportation Details --}}
                                     <div class="modal fade orders-section-modal" id="orderModal{{ $reservation->id }}"
                                         tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
@@ -244,10 +243,20 @@
                                                             </p>
                                                             <p class="text-muted">
                                                                 حالة الطلب:
-                                                                <span
-                                                                    class="badge bg-{{ $reservation->status == 'confirmed' ? 'p' : 'warning' }}">
-                                                                    {{ $reservation->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
-                                                                </span>
+                                                                @if ($reservation->status == 'confirmed')
+
+                                                                    <span class="badge bg-success">تمت الموافقة</span>
+
+                                                                @elseif ($reservation->status == 'pending')
+
+                                                                    <span class="badge bg-warning">قيد الانتظار</span>
+
+                                                                @elseif ($reservation->status == 'rejected')
+
+                                                                    <span class="badge bg-danger">مرفوضة</span>
+
+                                                                @endif
+                                                            
                                                             </p>
                                                         </div>
                                                     </div>

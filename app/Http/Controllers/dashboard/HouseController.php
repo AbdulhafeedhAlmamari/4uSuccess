@@ -18,8 +18,8 @@ class HouseController extends Controller
     public function index()
     {
         // Get counts of pending and confirmed orders
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('transport_type', 'housing')->count();
-        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('transport_type', 'housing')->count();
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'housing')->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'housing')->count();
 
         return view('dashboards.houses.index', compact('pendingOrdersCount', 'confirmedOrdersCount'));
     }
@@ -27,11 +27,11 @@ class HouseController extends Controller
     {
         // Get the authenticated user's housing company
         $user = Auth::user();
-        if (!$user->housingCompany) {
+        if (!$user) {
             return redirect()->route('home')->with('error', 'You do not have a housing company profile.');
         }
         // Get all housing listings for this company
-        $housings = Housing::where('housing_company_id', $user->housingCompany->id)->get();
+        $housings = Housing::where('housing_company_id', $user->id)->get();
 
         return view('dashboards.houses.houses', compact('housings'));
     }
@@ -58,13 +58,13 @@ class HouseController extends Controller
             // Get the authenticated user's housing company
             $user = Auth::user();
 
-            if (!$user->housingCompany) {
+            if (!$user) {
                 return redirect()->back()->with('error', 'You do not have a housing company profile.');
             }
 
             // Create the housing record
             $housing = Housing::create([
-                'housing_company_id' =>  $user->housingCompany->id,
+                'housing_company_id' =>  $user->id,
                 'address' => $validated['address'],
                 'description' => $validated['description'],
                 'price' => $validated['price'],
@@ -132,7 +132,7 @@ class HouseController extends Controller
     public function edit(Housing $housing)
     {
         // Check if the housing belongs to the authenticated user's company
-        if ($housing->housing_company_id !== Auth::user()->housingCompany->user_id) {
+        if ($housing->user_id !== Auth::user()->id) {
             return redirect()->route('dashboard.all_houses')->with('error', 'Unauthorized access.');
         }
 
@@ -150,7 +150,7 @@ class HouseController extends Controller
     {
         $housing = Housing::findOrFail($id);
         // Check if the housing belongs to the authenticated user's company
-        if ($housing->housing_company_id !== Auth::user()->housingCompany->user_id) {
+        if ($housing->user_id !== Auth::user()->user_id) {
             return redirect()->route('dashboard.all_houses')->with('error', 'Unauthorized access.');
         }
 
@@ -189,17 +189,17 @@ class HouseController extends Controller
 
                     $image->move(public_path('images/houses'), $imageName);
                     $existingPrimary->path = $imagePath;
+                    Photo::create([
+                        'housing_id' => $housing->id,
+                        'path' => 'images/houses/' . $imageName,
+                        'is_primary' => true,
+                    ]);
                 }
                 $existingPrimary->delete();
             }
-            Photo::create([
-                'housing_id' => $housing->id,
-                'path' => 'storage/housing_images/' . $imageName,
-                'is_primary' => true,
-            ]);
         }
         if ($request->hasFile('additional_images')) {
-            // حذف الصور القديمة من قاعدة البيانات والملفات
+
             $oldAdditionalImages = $housing->photos()->where('is_primary', false)->get();
 
             foreach ($oldAdditionalImages as $oldImage) {
@@ -214,10 +214,9 @@ class HouseController extends Controller
                 $imageName = 'housing_' . $housing->id . '_' . Str::random(10) . '_' . time() . '.' . $image->getClientOriginalExtension();
                 $storagePath = 'housing_images/' . $imageName;
                 $image->move(public_path('storage/housing_images'), $imageName);
-
                 Photo::create([
                     'housing_id' => $housing->id,
-                    'path' => 'storage/housing_images/' . $imageName,
+                    'path' => 'images/houses/' . $imageName,
                     'is_primary' => false,
                 ]);
             }
@@ -251,17 +250,19 @@ class HouseController extends Controller
         $housing = Housing::findOrFail($id);
 
         // Check if the housing belongs to the authenticated user's company
-        if ($housing->housing_company_id !== Auth::user()->housingCompany->user_id) {
+        if ($housing->user_id !== Auth::user()->user_id) {
             return redirect()->route('dashboard.all_houses')->with('error', 'Unauthorized access.');
         }
 
         // Delete all associated photos and their files
-        if ($housing->photos->count() > 0) {
-            foreach ($housing->photos as $photo) {
-                unlink(public_path($photo->path));
-                $photo->delete();
+        foreach ($housing->photos as $photo) {
+            $filePath = public_path($photo->path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
+            $photo->delete();
         }
+
 
         // Delete the housing record
         $housing->delete();
