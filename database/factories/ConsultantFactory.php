@@ -27,6 +27,7 @@ class ConsultantFactory extends Factory
                 'Relationship Coaching',
                 'Financial Consulting'
             ]),
+            'gender' => $this->faker->randomElement(['ذكر', 'انثى']),
             'identity_image' => 'consultants/identities/'.$this->faker->uuid.'.jpg',
             'certificate_image' => 'consultants/certificates/'.$this->faker->uuid.'.jpg',
         ];

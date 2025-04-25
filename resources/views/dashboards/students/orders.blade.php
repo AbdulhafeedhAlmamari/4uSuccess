@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                            margin: -20px -25px 10px; */
+                                                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -237,8 +237,14 @@
                                                 <div class="info-section">
                                                     <div class="text-start">
                                                         <div class="image-container">
-                                                            <img src="{{ asset($order->housing->primaryPhoto->path) ?? asset('img/default-housing.jpg') }}"
-                                                                alt="السكن الجامعي">
+                                                            @if (isset($order->housing->primaryPhoto))
+                                                                <img src="{{ asset($order->housing->primaryPhoto->path) ?? asset('img/default-housing.jpg') }}"
+                                                                    alt="السكن الجامعي">
+                                                            @else
+                                                                <img src="{{ asset('images/default.jpeg') }}"
+                                                                    alt="السكن الجامعي">
+                                                            @endif
+
                                                             <h5 class="ms-3">
                                                                 {{ $order->housing->housingCompany->user->name ?? 'غير متوفر' }}
                                                             </h5>
@@ -379,9 +385,16 @@
                                                         <div>
                                                             <h5>رقم الرحلة:
                                                                 <span>{{ $transportationRequest->trip->id ?? '-' }}</span>
-                                                                <img src="{{ asset($transportationRequest->trip->image ?? 'img/default-transport.jpg') }}"
-                                                                    alt="صورة الرحلة" class="img-fluid rounded ms-2"
-                                                                    style="width: 50px; height: 50px;">
+                                                                @if (isset($transportationRequest->trip->image))
+                                                                    <img src="{{ asset($transportationRequest->trip->image) }}"
+                                                                        alt="صورة الرحلة" class="img-fluid rounded ms-2"
+                                                                        style="width: 50px; height: 50px;">
+                                                                @else
+                                                                    <img src="{{ asset('images/default.jpeg') }}"
+                                                                        alt="صورة الرحلة" class="img-fluid rounded ms-2"
+                                                                        style="width: 50px; height: 50px;">
+                                                                @endif
+
                                                             </h5>
                                                             <p class="text-muted">اسم السائق:
                                                                 <span>{{ $transportationRequest->trip->driver_name ?? '-' }}</span>

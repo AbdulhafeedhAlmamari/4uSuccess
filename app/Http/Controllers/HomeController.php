@@ -10,11 +10,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $consultant = Consultant::get();
-        $housings = Housing::get();
-        $financing = FinancingCompany::get();
-        // dd($consultant, $housings, $financing);
-        return view('home');
+        $consultants = Consultant::get();
+        $houses = Housing::with('primaryPhoto')->get();
+        $financings = FinancingCompany::get();
+        return view('home', compact('consultants', 'houses', 'financings'));
     }
     public function guest()
     {

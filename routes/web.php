@@ -41,7 +41,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // consultants routes
 Route::get('/consultants', [ConsultantController::class, 'index'])->name('home.consultants');
-Route::get('/consultant-show', [ConsultantController::class, 'show'])->name('home.consultants.show');
+Route::get('/consultant-show/{id}', [ConsultantController::class, 'show'])->name('home.consultants.show');
 // Route::get('/consultation-request', [ConsultantController::class, 'consultationRequest'])->name('home.consultants.consultation_request');
 Route::get('/consultation-requests', [ConsultantController::class, 'consultationRequests'])->name('home.consultants.consultation_requests');
 
@@ -111,8 +111,21 @@ Route::prefix('/dashboard')->group(function () {
     Route::put('/dashboard/transportation/profile/update', [DashboardTransportationController::class, 'updateProfile'])->name('transportation.profile.update');
 
     // consultants routes
+
+    // consultants routes
     //  route('dashboard.consultant_orders', ['status' => 'current'])
     // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+
+    Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
+    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+    Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
+    Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
+
+    // Consultation request routes dashboard
+    Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
+    Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
+    Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
 
     // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
     Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');

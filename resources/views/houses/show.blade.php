@@ -19,8 +19,13 @@
                             <div class="col-md-6">
                                 <div class="col-12">
                                     <div class="image-container">
-                                        <img src="{{ asset($house->primaryPhoto?->path) }}" alt="صورة السكن"
-                                            class="main-image" id="mainImage">
+                                        @if (isset($house->primaryPhoto))
+                                            <img src="{{ asset($house->primaryPhoto->path) }}"
+                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                        @else
+                                            <img src="{{ asset('images/default.jpeg') }}"
+                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                        @endif
                                     </div>
                                 </div>
 
@@ -31,8 +36,17 @@
                                             <div class="carousel-item {{ $chunkIndex === 0 ? 'active' : '' }}">
                                                 <div class="d-flex justify-content-center">
                                                     @foreach ($chunk as $photo)
-                                                        <img onclick="changeMainImage(this)" src="{{ asset($photo->path) }}"
-                                                            alt="صورة السكن" class="mx-2">
+                                                        @if ($photo->path)
+                                                            <img onclick="changeMainImage(this)"
+                                                                src="{{ asset($photo->path) }}" alt="صورة السكن"
+                                                                class="mx-2 active">
+                                                        @else
+                                                            <img src="{{ asset('images/default.jpeg') }}"
+                                                                class="card-img-top h-100 w-100 rounded-start"
+                                                                alt="صورة السكن">
+                                                        @endif
+                                                        {{-- <img onclick="changeMainImage(this)" src="{{ asset($photo->path) }}"
+                                                            alt="صورة السكن" class="mx-2"> --}}
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -90,8 +104,15 @@
                             @forelse($relatedHouses as $related)
                                 <div class="col-3">
                                     <a href="{{ route('houses.show', $related->id) }}">
-                                        <img src="{{ asset($related->primaryPhoto?->path ?? 'build/assets/images/default.png') }}"
-                                            class="img-fluid rounded shadow-sm" alt="سكن ذات صلة">
+                                        @if ($related->primaryPhoto)
+                                            <img src="{{ asset($related->primaryPhoto->path) }}"
+                                                class="img-fluid rounded shadow-sm" alt="سكن ذات صلة">
+                                        @else
+                                            <img src="{{ asset('images/default.jpeg') }}"
+                                                class="img-fluid rounded shadow-sm" alt="سكن ذات صلة">
+                                        @endif
+                                        {{-- <img src="{{ asset($related->primaryPhoto?->path ?? 'build/assets/images/default.jpeg') }}"
+                                            class="img-fluid rounded shadow-sm" alt="سكن ذات صلة"> --}}
                                     </a>
                                 </div>
                             @empty
