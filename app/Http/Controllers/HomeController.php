@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultant;
+use App\Models\FinancingCompany;
+use App\Models\Housing;
+
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('home');
+        $consultants = Consultant::get();
+        $houses = Housing::with('primaryPhoto')->get();
+        $financings = FinancingCompany::get();
+        return view('home', compact('consultants', 'houses', 'financings'));
     }
     public function guest()
     {

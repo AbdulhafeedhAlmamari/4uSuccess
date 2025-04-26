@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('housing_id')->nullable()->constrained('housing')->onDelete('cascade');
-            $table->foreignId('trip_id')->nullable()->constrained('trips');
+            $table->foreignId('trip_id')->nullable()->constrained('trips')->onDelete('cascade');
             $table->string('reservation_type');
             $table->string('departure_place')->nullable();
             $table->string('destination_place')->nullable();

@@ -35,7 +35,7 @@ class StudentController extends Controller
             ->get();
 
         $housingRequests = ReservationRequest::with([
-            'housing.housingCompany', // Load housing company and user
+            'housing.housingCompany.user', // Load housing company and user
         ])->where('reservation_type', 'housing')->get();
 
         $transportationRequests = ReservationRequest::with([

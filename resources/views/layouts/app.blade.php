@@ -1,15 +1,19 @@
-<!doctype html>
-<html lang="ar" dir="rtl" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
-    data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
-
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 <head>
-    <meta charset="utf-8" />
-    <title>@yield('title')</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    {{-- token --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @auth
+    <meta name="user-id" content="{{ Auth::id() }}">
+    @endauth
+
+    <!-- Pusher credentials -->
+    <meta name="pusher-app-key" content="{{ config('broadcasting.connections.pusher.key') }}">
+    <meta name="pusher-app-cluster" content="{{ config('broadcasting.connections.pusher.options.cluster') }}">
+
+    <title>@yield('title', config('app.name'))</title>
 
     @include('layouts.head-css')
 </head>

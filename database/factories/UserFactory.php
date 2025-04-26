@@ -22,7 +22,7 @@ class UserFactory extends Factory
             'password' => Hash::make('12345678'), // 12345678
             'role' => $this->faker->randomElement(['student', 'financing', 'housing', 'transportation', 'consultant']),
             'is_approved' => $this->faker->randomElement(['0', '1', '2']),
-            'profile_image' => $this->faker->optional()->imageUrl(200, 200, 'people'),
+            // 'profile_image' => $this->faker->optional()->imageUrl(200, 200, 'people'),
             'remember_token' => Str::random(10),
         ];
     }

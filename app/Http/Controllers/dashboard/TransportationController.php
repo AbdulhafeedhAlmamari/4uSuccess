@@ -33,7 +33,8 @@ class TransportationController extends Controller
         // Get all housing listings for this company
         $trips = Trip::where('transportation_company_id', $user->id)->get();
 
-        return view('dashboards.transportations.transportations', compact('trips'));
+        return view('dashboards.transportations.transportations
+        ', compact('trips'));
     }
     public function orders($status)
     {

@@ -164,7 +164,7 @@
                             <!-- Edit Modal for each housing -->
                             <div class="modal fade" id="editHouseModal{{ $housing->id }}" tabindex="-1"
                                 aria-labelledby="editHouseModalLabel{{ $housing->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
+                                <div class="modal-dialog ">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
@@ -320,10 +320,10 @@
                             </div>
                         @endforeach($housings as $index => $housing)
 
-                        {{-- @empty 
+                        {{-- @empty
                            <tr>
                                 <td colspan="7" class="text-center">لا توجد بيانات متاحة</td>
-                            </tr> 
+                            </tr>
                         @endforelse --}}
                     </tbody>
                 </table>

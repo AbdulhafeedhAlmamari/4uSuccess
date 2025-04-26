@@ -201,9 +201,21 @@ class AuthController extends Controller
         DB::beginTransaction();
 
         try {
-            // معالجة الملفات المرفوعة
-            $identityImagePath = $request->file('idUpload')->store('identity_images', 'public');
-            $certificateImagePath = $request->file('certificateUpload')->store('certificate_images', 'public');
+
+
+            // Make sure the directory exists
+            if (!file_exists(public_path('images/consultants'))) {
+                mkdir(public_path('images/consultants'), 0755, true);
+            }
+
+            $identityImage = $request->file('idUpload');
+            $identityImage->move(public_path('images/consultants'), $identityImage->getClientOriginalName());
+            $identityImagePath = 'images/consultants/' . $identityImage->getClientOriginalName();
+
+            $commercialRegImage = $request->file('certificateUpload');
+            $commercialRegImage->move(public_path('images/consultants'), $commercialRegImage->getClientOriginalName());
+            $certificateImagePath = 'images/consultants/' . $commercialRegImage->getClientOriginalName();
+
 
             // إنشاء المستخدم
             $user = User::create([

@@ -41,7 +41,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // consultants routes
 Route::get('/consultants', [ConsultantController::class, 'index'])->name('home.consultants');
-Route::get('/consultant-show', [ConsultantController::class, 'show'])->name('home.consultants.show');
+Route::get('/consultant-show/{id}', [ConsultantController::class, 'show'])->name('home.consultants.show');
 // Route::get('/consultation-request', [ConsultantController::class, 'consultationRequest'])->name('home.consultants.consultation_request');
 Route::get('/consultation-requests', [ConsultantController::class, 'consultationRequests'])->name('home.consultants.consultation_requests');
 
@@ -117,35 +117,32 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/transportation-profile', [DashboardTransportationController::class, 'profile'])->name('dashboard.transportation_profile');
     Route::put('/dashboard/transportation/profile/update', [DashboardTransportationController::class, 'updateProfile'])->name('transportation.profile.update');
 
+    // consultants routes
+
+    // consultants routes
+    //  route('dashboard.consultant_orders', ['status' => 'current'])
+    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+
+    Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
+    // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
+    Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
+    Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
+
+    // Consultation request routes dashboard
+    Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
+    Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
+    Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
+
+    Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
 
 
 
-     // consultants routes
-     //  route('dashboard.consultant_orders', ['status' => 'current'])
-     // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
- 
-     Route::get('/consultants', [DashboardConsultantController::class, 'index'])->name('dashboard.consultants');
-     Route::get('/consultant-orders', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
-     // Route::get('/consultant-orders/{status}', [DashboardConsultantController::class, 'orders'])->name('dashboard.consultant_orders');
-     Route::get('/consultant-profile', [DashboardConsultantController::class, 'profile'])->name('dashboard.consultant_profile');
-     Route::put('/dashboard/consultant/profile/update', [DashboardConsultantController::class, 'updateProfile'])->name('consultant.profile.update');
- 
-     // Consultation request routes dashboard
-     Route::get('/consultant-orders/{status}', [ConsultationRequestController::class, 'index'])->name('dashboard.consultant_orders');
-     Route::get('/consultation-request/accept/{id}', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
-     // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
-     Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
- 
-     // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
-     Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
- 
- 
-     // Consultation request routes
-     Route::get('/consultation-request', [ConsultationRequestController::class, 'create'])->name('home.consultants.consultation_request');
-     Route::post('/consultation-request', [ConsultationRequestController::class, 'store'])->name('consultation.request.store');
-     Route::get('/filter-consultants', [ConsultationRequestController::class, 'filterConsultants'])->name('filter.consultants');
- 
-
+    // Consultation request routes
+    Route::get('/consultation-request', [ConsultationRequestController::class, 'create'])->name('home.consultants.consultation_request');
+    Route::post('/consultation-request', [ConsultationRequestController::class, 'store'])->name('consultation.request.store');
+    Route::get('/filter-consultants', [ConsultationRequestController::class, 'filterConsultants'])->name('filter.consultants');
 
     // finances routes
     Route::get('/finances', [DashboardFinanceController::class, 'index'])->name('dashboard.finances');
@@ -167,4 +164,19 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/house-profile', [DashboardHouseController::class, 'profile'])->name('dashboard.house_profile');
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
     Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
+});
+
+
+// Chat routes
+// Inside the existing auth middleware group
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/consultant/{consultantId}', [App\Http\Controllers\ChatController::class, 'getConsultantDetails'])->name('chat.consultant');
+
+    // New consultant chat route
+    Route::get('/consultant/chat', [App\Http\Controllers\ChatController::class, 'consultantChat'])->name('consultant.chat');
+
+    // Pusher authentication route
+    Route::post('/broadcasting/auth', [App\Http\Controllers\ChatController::class, 'auth']);
 });

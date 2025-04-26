@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('specialization');
             $table->string('consultation_duration');
             $table->string('activity_type');
+            $table->string('gender')->nullable();
+            $table->string('university')->nullable();
             $table->string('identity_image');
             $table->string('certificate_image');
             $table->timestamps();
