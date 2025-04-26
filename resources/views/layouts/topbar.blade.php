@@ -30,10 +30,6 @@
                             <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
                                 href="{{ route('dashboard.consultants') }}">لوحة التحكم</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
-                                href="{{ route('consultant.chat') }}">لوحة التحكم</a>
-                        </li>
                         <li>
                             <a href="{{ route('consultant.chat') }}"
                                 class="nav-link {{ request()->routeIs('consultant.chat*') ? 'active' : '' }}">

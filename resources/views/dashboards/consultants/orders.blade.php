@@ -144,7 +144,8 @@
                                             @if ($request->status == 'pending')
                                                 <div class="d-flex justify-content-start gap-1">
                                                     <!-- قبول -->
-                                                    <a href="{{ route('consultation.request.accept', $request->id) }}"
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#acceptModal{{ $request->id }}"
                                                         class="btn custom-success">قبول</a>
                                                     <!-- رفض -->
                                                     {{-- <a href="{{ route('consultation.request.reject', $request->id) }}"
@@ -230,7 +231,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Modal for each request -->
                                     <div class="modal fade orders-section-modal" id="orderModal{{ $request->id }}"
                                         tabindex="-1" aria-hidden="true">

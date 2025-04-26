@@ -127,8 +127,9 @@ Route::prefix('/dashboard')->group(function () {
     // Route::get('/consultation-request/reject/{id}', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
     Route::get('/consultation-request/complete/{id}', [ConsultationRequestController::class, 'complete'])->name('consultation.request.complete');
 
-    // Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
+    Route::post('/consultation-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('consultation.request.accept');
     Route::post('/consultation-request/{id}/reject', [ConsultationRequestController::class, 'reject'])->name('consultation.request.reject');
+
 
 
     // Consultation request routes

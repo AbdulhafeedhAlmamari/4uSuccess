@@ -14,9 +14,9 @@ class ConsultationRequestController extends Controller
     {
         // Get all consultation requests for the logged-in consultant
         $consultationRequests = ConsultationRequest::where('consultant_id', Auth::id())
-        ->where('status', $status)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('status', $status)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('dashboards.consultants.orders', compact('consultationRequests', 'status'));
     }
@@ -112,38 +112,38 @@ class ConsultationRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function accept($id)
-    {
-        $consultationRequest = ConsultationRequest::findOrFail($id);
-
-        // Check if the consultant is authorized to update this request
-        if ($consultationRequest->consultant_id != Auth::id()) {
-            return redirect()->back()->with('error', 'غير مصرح لك بتحديث هذا الطلب');
-        }
-
-        $consultationRequest->status = 'accepted';
-        $consultationRequest->save();
-
-        return redirect()->back()->with('success', 'تم قبول الطلب بنجاح');
-    }
-    // public function accept(Request $request, $id)
+    // public function accept($id)
     // {
-    //     // التحقق من صحة البيانات
-    //     $request->validate([
-    //         'response' => 'required|string|max:1000',
-    //     ]);
-
-    //     // جلب الطلب من قاعدة البيانات
     //     $consultationRequest = ConsultationRequest::findOrFail($id);
 
-    //     // تحديث حالة الطلب وإضافة الرد
+    //     // Check if the consultant is authorized to update this request
+    //     if ($consultationRequest->consultant_id != Auth::id()) {
+    //         return redirect()->back()->with('error', 'غير مصرح لك بتحديث هذا الطلب');
+    //     }
+
     //     $consultationRequest->status = 'accepted';
-    //     $consultationRequest->response = $request->input('response');
     //     $consultationRequest->save();
 
-    //     // إعادة التوجيه مع رسالة نجاح
-    //     return redirect()->back()->with('success', 'تم قبول الطلب وإضافة الرد بنجاح.');
+    //     return redirect()->back()->with('success', 'تم قبول الطلب بنجاح');
     // }
+    public function accept(Request $request, $id)
+    {
+        // التحقق من صحة البيانات
+        $request->validate([
+            'response' => 'required|string|max:1000',
+        ]);
+
+        // جلب الطلب من قاعدة البيانات
+        $consultationRequest = ConsultationRequest::findOrFail($id);
+
+        // تحديث حالة الطلب وإضافة الرد
+        $consultationRequest->status = 'accepted';
+        $consultationRequest->reply = $request->input('response');
+        $consultationRequest->save();
+
+        // إعادة التوجيه مع رسالة نجاح
+        return redirect()->back()->with('success', 'تم قبول الطلب وإضافة الرد بنجاح.');
+    }
 
     /**
      * Reject a consultation request.
@@ -167,6 +167,24 @@ class ConsultationRequestController extends Controller
     // }
 
     public function reject(Request $request, $id)
+    {
+        // التحقق من صحة البيانات
+        $request->validate([
+            'reply' => 'required|string|max:1000',
+        ]);
+
+        // جلب الطلب من قاعدة البيانات
+        $consultationRequest = ConsultationRequest::findOrFail($id);
+
+        // تحديث حالة الطلب وإضافة سبب الرفض
+        $consultationRequest->status = 'rejected';
+        $consultationRequest->reply = $request->input('reply');
+        $consultationRequest->save();
+
+        // إعادة التوجيه مع رسالة نجاح
+        return redirect()->back()->with('success', 'تم رفض الطلب مع إضافة السبب بنجاح.');
+    }
+    public function updateStatus(Request $request, $id)
     {
         // التحقق من صحة البيانات
         $request->validate([
