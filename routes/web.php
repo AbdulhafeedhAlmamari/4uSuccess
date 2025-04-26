@@ -157,3 +157,18 @@ Route::prefix('/dashboard')->group(function () {
     Route::put('/dashboard/house/profile/update', [DashboardHouseController::class, 'updateProfile'])->name('house.profile.update');
     Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
 });
+
+
+// Chat routes
+// Inside the existing auth middleware group
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/consultant/{consultantId}', [App\Http\Controllers\ChatController::class, 'getConsultantDetails'])->name('chat.consultant');
+
+    // New consultant chat route
+    Route::get('/consultant/chat', [App\Http\Controllers\ChatController::class, 'consultantChat'])->name('consultant.chat');
+
+    // Pusher authentication route
+    Route::post('/broadcasting/auth', [App\Http\Controllers\ChatController::class, 'auth']);
+});

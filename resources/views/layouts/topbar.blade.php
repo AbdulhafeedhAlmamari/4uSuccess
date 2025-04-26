@@ -146,6 +146,11 @@
                         @elseif (Auth::user()->role == 'consultant')
                             <li><a class="dropdown-item" href="{{ route('dashboard.consultant_profile') }}">الملف
                                     الشخصي</a></li>
+                            <li>
+                                <a href="{{ route('consultant.chat') }}" class="nav-link">
+                                    <i class="fas fa-comments"></i> المحادثات
+                                </a>
+                            </li>
                             {{-- <li><a class="dropdown-item" href="{{ route('dashboard.consultants') }}">لوحة تحكم
                                     المشتشار</a>
                             </li> --}}

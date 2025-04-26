@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         Student::factory(7)->create();
         FinancingCompany::factory(7)->create();
         FinanceRequest::factory(7)->create();
-        HousingCompany::factory(7)->create();
+        // HousingCompany::factory(7)->create();
         TransportationCompany::factory(3)->create();
         Trip::factory(7)->create();
         Photo::factory(7)->create();
