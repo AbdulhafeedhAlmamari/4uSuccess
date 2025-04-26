@@ -10,17 +10,17 @@ class FinancingCompaniesTableSeeder extends Seeder
     public function run()
     {
         $companies = [
-            [
-                'user_id' => 7,
-                'address' => 'الرياض، حي المركز',
-                'description' => 'شركة رائدة في مجال التمويل العقاري',
-                'commercial_register_number' => '1012345678',
-                'phone_number' => '0112345678',
-                'identity_image' => 'company_identity_1.jpg',
-                'commercial_register_image' => 'commercial_register_1.jpg',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'user_id' => 7,
+            //     'address' => 'الرياض، حي المركز',
+            //     'description' => 'شركة رائدة في مجال التمويل العقاري',
+            //     'commercial_register_number' => '1012345678',
+            //     'phone_number' => '0112345678',
+            //     'identity_image' => 'company_identity_1.jpg',
+            //     'commercial_register_image' => 'commercial_register_1.jpg',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'user_id' => 8,
                 'address' => 'جدة، حي الشمال',

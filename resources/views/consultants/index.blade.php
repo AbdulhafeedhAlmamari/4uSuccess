@@ -78,10 +78,10 @@
                             <div class="card border-0 shadow p-2 rounded-3">
                                 @if (isset($consultant->user->profile_image))
                                     <img src="{{ asset($consultant->user->profile_image) }}"
-                                        class="card-img-top rounded-circle h-25 w-50 m-auto" alt="صورة المستشار">
+                                        class="card-img-top rounded-circle w-50 m-auto" style="height: 150px" alt="صورة المستشار">
                                 @else
                                     <img src="{{ asset('build/assets/images/consultant-01.png') }}"
-                                        class="card-img-top rounded-circle h-25 w-50 m-auto" alt="صورة المستشار">
+                                        class="card-img-top rounded-circle h-25 w-50 m-auto" style="height: 200px" alt="صورة المستشار">
                                 @endif
                                 <div class="card-body px-0 m-0">
                                     <h5 class="card-title">{{ $consultant->user->name }}</h5>
