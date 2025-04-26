@@ -30,6 +30,17 @@
                             <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
                                 href="{{ route('dashboard.consultants') }}">لوحة التحكم</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('dashboard.consultants*') ? 'active' : '' }}"
+                                href="{{ route('consultant.chat') }}">لوحة التحكم</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('consultant.chat') }}"
+                                class="nav-link {{ request()->routeIs('consultant.chat*') ? 'active' : '' }}">
+                                {{-- <i class="fas fa-comments"></i> --}}
+                                المحادثات
+                            </a>
+                        </li>
                         {{-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -146,11 +157,7 @@
                         @elseif (Auth::user()->role == 'consultant')
                             <li><a class="dropdown-item" href="{{ route('dashboard.consultant_profile') }}">الملف
                                     الشخصي</a></li>
-                            <li>
-                                <a href="{{ route('consultant.chat') }}" class="nav-link">
-                                    <i class="fas fa-comments"></i> المحادثات
-                                </a>
-                            </li>
+
                             {{-- <li><a class="dropdown-item" href="{{ route('dashboard.consultants') }}">لوحة تحكم
                                     المشتشار</a>
                             </li> --}}

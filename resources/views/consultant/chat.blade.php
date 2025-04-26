@@ -23,11 +23,14 @@
             border-left: 1px solid #e0e0e0;
             height: 100%;
             overflow-y: auto;
+            padding-left: 0 !important;
         }
 
         .chat-sidebar-header {
             padding: 15px;
-            background-color: #3a2a6c;
+            /* background-color: #3a2a6c; */
+            background: linear-gradient(90deg, #54B6B7 0%, #61528B 100%);
+
             color: white;
             font-weight: bold;
             border-bottom: 1px solid #e0e0e0;
@@ -101,6 +104,7 @@
 
         .chat-header {
             padding: 15px;
+            padding-left: 0 !important;
             background-color: #fff;
             border-bottom: 1px solid #e0e0e0;
             display: flex;
@@ -139,7 +143,8 @@
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
-            max-width: 75%;
+            /* max-width: 75%; */
+            max-width: 50%;
         }
 
         .message-sent {
@@ -163,7 +168,8 @@
         }
 
         .message-received .message-content {
-            background-color: #3a2a6c;
+            background: linear-gradient(90deg, #54B6B7 0%, #61528B 100%);
+            /* background-color: #3a2a6c; */
             color: white;
             border-bottom-left-radius: 5px;
         }
@@ -204,7 +210,8 @@
         }
 
         .chat-send-btn {
-            background-color: #3a2a6c;
+            background: linear-gradient(90deg, #54B6B7 0%, #61528B 100%);
+            /* background-color: #3a2a6c; */
             color: white;
             border: none;
             border-radius: 50%;
@@ -371,9 +378,11 @@
 
 @section('script')
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize variables
             let currentStudentId = null;
             const consultantId = {{ Auth::id() }};
 
@@ -413,40 +422,27 @@
             // Handle contact selection
             chatContacts.forEach(contact => {
                 contact.addEventListener('click', function() {
-                    // Remove active class from all contacts
                     chatContacts.forEach(c => c.classList.remove('active'));
-
-                    // Add active class to selected contact
                     this.classList.add('active');
 
-                    // Get student info
                     const studentId = this.dataset.studentId;
                     const studentName = this.dataset.studentName;
 
-                    // Update current student
                     currentStudentId = studentId;
 
-                    // Update chat header
                     chatHeaderName.textContent = studentName;
-                    const avatarSrc = this.querySelector('.contact-avatar').src;
-                    chatHeaderAvatar.src = avatarSrc;
+                    chatHeaderAvatar.src = this.querySelector('.contact-avatar').src;
 
-                    // Show chat area
                     noChatSelected.style.display = 'none';
                     chatArea.style.display = 'flex';
 
-                    // Load messages
                     loadMessages(studentId);
-
-                    // Subscribe to channel
                     subscribeToChannel(consultantId, studentId);
 
-                    // Hide sidebar on mobile
                     if (window.innerWidth < 768) {
                         chatSidebar.classList.remove('show');
                     }
 
-                    // Clear unread badge
                     const unreadBadge = this.querySelector('.unread-badge');
                     if (unreadBadge) {
                         unreadBadge.remove();
@@ -454,7 +450,6 @@
                 });
             });
 
-            // Load messages function
             function loadMessages(studentId) {
                 chatMessages.innerHTML =
                     '<div class="text-center my-3"><div class="spinner-border text-primary" role="status"></div></div>';
@@ -468,8 +463,6 @@
                             data.messages.forEach(message => {
                                 appendMessage(message, consultantId);
                             });
-
-                            // Scroll to bottom
                             scrollToBottom();
                         } else {
                             chatMessages.innerHTML =
@@ -483,10 +476,8 @@
                     });
             }
 
-            // Append message function
             function appendMessage(message, consultantId) {
-                const isReceived = message.sender_id !=
-                    consultantId; // إذا كان المرسل ليس المستشار، فهي رسالة مستلمة
+                const isReceived = message.sender_id != consultantId;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message message-${isReceived ? 'received ms-auto' : 'sent me-auto'}`;
 
@@ -497,25 +488,22 @@
                 });
 
                 messageElement.innerHTML = `
-        <div class="message-content">${message.message}</div>
-        <div class="message-time">${timeString}</div>
-    `;
+                    <div class="message-content">${message.message}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
 
                 chatMessages.appendChild(messageElement);
+                scrollToBottom();
             }
 
-            // Subscribe to channel function
             function subscribeToChannel(consultantId, studentId) {
-                // Sort IDs to ensure consistent channel naming
                 const ids = [parseInt(consultantId), parseInt(studentId)].sort();
                 const channelName = `private-chat.${ids[0]}.${ids[1]}`;
 
-                // Unsubscribe from any existing channel
                 if (window.currentChannel) {
                     pusher.unsubscribe(window.currentChannel);
                 }
 
-                // Subscribe to new channel
                 const channel = pusher.subscribe(channelName);
                 window.currentChannel = channelName;
 
@@ -523,12 +511,10 @@
                     if (data.message.sender_id == currentStudentId || data.message.receiver_id ==
                         currentStudentId) {
                         appendMessage(data.message, consultantId);
-                        scrollToBottom();
                     }
                 });
             }
 
-            // Send message function
             chatForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
@@ -548,21 +534,11 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
+                        if (data.success && data.message) {
                             messageInput.value = '';
-                            console.log('Message sent successfully');
-                            // Update last message in sidebar
-                            const contact = document.querySelector(
-                                `.chat-contact[data-student-id="${currentStudentId}"]`);
-                            if (contact) {
-                                const lastMessageEl = contact.querySelector('.contact-last-message');
-                                if (lastMessageEl) {
-                                    console.log(lastMessageEl);
-                                    lastMessageEl.textContent = message;
-                                }
-                            }
+                            appendMessage(data.message, consultantId);
                         } else {
-                            console.error('Error sending message:', data.error);
+                            console.error('Error sending message:', data.error || 'Unknown error');
                         }
                     })
                     .catch(error => {
@@ -570,7 +546,6 @@
                     });
             });
 
-            // Scroll to bottom function
             function scrollToBottom() {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }

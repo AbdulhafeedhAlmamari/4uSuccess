@@ -66,8 +66,21 @@ class ChatController extends Controller
 
         // Broadcast the message
         broadcast(new NewChatMessage($message))->toOthers();
-
-        return response()->json($message);
+        $userRole = Auth::user()->role;
+        if ($userRole === 'consultant') {
+            return response()->json([
+                'success' => true,
+                'user_type' => 'consultant',
+                'message' => $message
+            ]);
+        } else {
+            return response()->json($message);
+        }
+        // Return a structured JSON response
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 
     /**
@@ -136,24 +149,6 @@ class ChatController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    //     public function consultantChat()
-    //     {
-    //         // Ensure the user is a consultant
-    //         $user = Auth::user();
-    //         $consultant = Consultant::where('user_id', $user->id)->first();
-
-    //         if (!$consultant) {
-    //             return redirect()->route('home')->with('error', 'Only consultants can access this page');
-    //         }
-
-    //         // Get all students who have chatted with this consultant
-    //         $students = $this->getStudentContacts($user->id);
-
-    //         return view('consultant.chat', [
-    //             'consultant' => $consultant,
-    //             'students' => $students
-    //         ]);
-    //     }
 
     //     /**
     //      * Get all students who have chatted with this consultant.
@@ -161,56 +156,6 @@ class ChatController extends Controller
     //      * @param int $consultantId
     //      * @return \Illuminate\Database\Eloquent\Collection
     //      */
-    //     private function getStudentContacts($consultantId)
-    //     {
-    //         // Get all unique student IDs from chat messages
-    //         $studentIds = DB::table('chat_messages')
-    //             ->where('sender_id', $consultantId)
-    //             ->orWhere('receiver_id', $consultantId)
-    //             ->get(['sender_id', 'receiver_id'])
-    //             ->map(function ($message) use ($consultantId) {
-    //                 return $message->sender_id == $consultantId ? $message->receiver_id : $message->sender_id;
-    //             })
-    //             ->unique()
-    //             ->values();
-
-    //         // Get student users with their last message
-    //         $students = User::whereIn('id', $studentIds)
-    //             ->whereHas('student') // Ensure they are students
-    //             ->with('student')
-    //             ->get()
-    //             ->map(function ($user) use ($consultantId) {
-    //                 // Get the last message between this student and consultant
-    //                 $lastMessage = DB::table('chat_messages')
-    //                     ->where(function ($query) use ($consultantId, $user) {
-    //                         $query->where('sender_id', $consultantId)
-    //                             ->where('receiver_id', $user->id);
-    //                     })
-    //                     ->orWhere(function ($query) use ($consultantId, $user) {
-    //                         $query->where('sender_id', $user->id)
-    //                             ->where('receiver_id', $consultantId);
-    //                     })
-    //                     ->orderBy('created_at', 'desc')
-    //                     ->first();
-
-    //                 // Get unread message count
-    //                 $unreadCount = DB::table('chat_messages')
-    //                     ->where('sender_id', $user->id)
-    //                     ->where('receiver_id', $consultantId)
-    //                     ->where('is_read', false)
-    //                     ->count();
-
-    //                 $user->last_message = $lastMessage ? $lastMessage->message : null;
-    //                 $user->last_message_time = $lastMessage ? $lastMessage->created_at : null;
-    //                 $user->unread_count = $unreadCount;
-
-    //                 return $user;
-    //             })
-    //             ->sortByDesc('last_message_time');
-
-    //         return $students;
-    //     }
-
 
     public function consultantChat()
     {
@@ -243,24 +188,105 @@ class ChatController extends Controller
      * @param int $consultantId
      * @return \Illuminate\Support\Collection
      */
+    // private function getStudentContacts($consultantId)
+    // {
+    //     $user = Auth::user();
+    //     // Fetch all unique student IDs from chat messages
+    //     $studentIds = ChatMessage::where(function ($query) use ($consultantId) {
+    //         $query->where('sender_id', $consultantId)
+    //             ->orWhere('receiver_id', $consultantId);
+    //     })
+    //         ->get(['sender_id', 'receiver_id']) // Get both sender and receiver IDs
+    //         ->map(function ($message) use ($consultantId) {
+    //             // Determine the other party in the chat
+    //             return $message->sender_id == $consultantId ? $message->receiver_id : $message->sender_id;
+    //         })
+    //         ->unique() // Ensure uniqueness
+    //         ->values(); // Reset the keys
+
+    //     $lastMessage = DB::table('chat_messages')
+    //         ->where(function ($query) use ($consultantId, $user) {
+    //             $query->where('sender_id', $consultantId)
+    //                 ->where('receiver_id', $user->id);
+    //         })
+    //         ->orWhere(function ($query) use ($consultantId, $user) {
+    //             $query->where('sender_id', $user->id)
+    //                 ->where('receiver_id', $consultantId);
+    //         })
+    //         ->orderBy('created_at', 'desc')
+    //         ->first();
+
+    //     // Get unread message count
+    //     $unreadCount = DB::table('chat_messages')
+    //         ->where('sender_id', $user->id)
+    //         ->where('receiver_id', $consultantId)
+    //         ->where('is_read', false)
+    //         ->count();
+
+    //     $user->last_message = $lastMessage ? $lastMessage->message : null;
+    //     $user->last_message_time = $lastMessage ? $lastMessage->created_at : null;
+    //     $user->unread_count = $unreadCount;
+    //     // Fetch student details
+    //     $students = User::whereIn('id', $studentIds)->get();
+    //     dd($students);
+    //     return $students;
+    // }
+
+
     private function getStudentContacts($consultantId)
     {
-        // Fetch all unique student IDs from chat messages
-        $studentIds = ChatMessage::where(function ($query) use ($consultantId) {
-            $query->where('sender_id', $consultantId)
-                ->orWhere('receiver_id', $consultantId);
-        })
-            ->get(['sender_id', 'receiver_id']) // Get both sender and receiver IDs
+        // Step 1: Get all unique student IDs who chatted with the consultant
+        $studentIds = ChatMessage::where('sender_id', $consultantId)
+            ->orWhere('receiver_id', $consultantId)
+            ->get(['sender_id', 'receiver_id'])
             ->map(function ($message) use ($consultantId) {
-                // Determine the other party in the chat
                 return $message->sender_id == $consultantId ? $message->receiver_id : $message->sender_id;
             })
-            ->unique() // Ensure uniqueness
-            ->values(); // Reset the keys
+            ->unique()
+            ->values();
 
-        // Fetch student details
-        $students = User::whereIn('id', $studentIds)->get();
-        // dd($students);
-        return $students;
+        if ($studentIds->isEmpty()) {
+            return collect(); // No students, return empty collection
+        }
+
+        // Step 2: Get all students with their student relationship
+        $students = User::whereIn('id', $studentIds)
+            ->whereHas('student') // Ensure the user is a student
+            ->with('student')
+            ->get();
+
+        // Step 3: Prepare student data with last message and unread count
+        $studentData = $students->map(function ($student) use ($consultantId) {
+            // Get the last message between consultant and student
+            $lastMessage = ChatMessage::where(function ($query) use ($consultantId, $student) {
+                $query->where('sender_id', $consultantId)
+                    ->where('receiver_id', $student->id);
+            })
+                ->orWhere(function ($query) use ($consultantId, $student) {
+                    $query->where('sender_id', $student->id)
+                        ->where('receiver_id', $consultantId);
+                })
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            // Get the count of unread messages sent by the student to the consultant
+            $unreadCount = ChatMessage::where('sender_id', $student->id)
+                ->where('receiver_id', $consultantId)
+                ->where('is_read', false)
+                ->count();
+
+            // Attach data to student object
+            $student->last_message = $lastMessage ? $lastMessage->message : null;
+            $student->last_message_time = $lastMessage ? $lastMessage->created_at : null;
+            $student->unread_count = $unreadCount;
+            // $total_unread_count = ChatMessage::where('sender_id', $student->id)
+            //     ->where('receiver_id', $consultantId)
+            //     ->where('is_read', false)
+            //     ->count();
+            return $student;
+        });
+
+        // Step 4: Sort students by the time of the last message
+        return $studentData->sortByDesc('last_message_time')->values();
     }
 }

@@ -73,8 +73,4 @@ class User extends Authenticatable
         return $this->hasOne(TransportationCompany::class);
     }
 
-public function requests()
-{
-    return $this->hasMany(Request::class, 'student_id');
-}
 }

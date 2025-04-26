@@ -55,7 +55,7 @@
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <script src="{{ asset('build/assets/js/chat.js') }}"></script>
 
->
+    >
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -122,7 +122,8 @@
                     .then(data => {
                         // Set recipient name in modal title
                         document.getElementById('chat-recipient-name').textContent = data.consultant.user.name;
-                        document.getElementById('chat-recipient-avatar').src = data.consultant.user.profile_image;
+                        document.getElementById('chat-recipient-avatar').src = data.consultant.user
+                            .profile_image;
                         // Set receiver ID for sending messages
                         receiverId = data.user_id;
                         receiverIdInput.value = receiverId;
@@ -136,7 +137,7 @@
                     .catch(error => {
                         console.error('Error fetching consultant details:', error);
                         chatMessages.innerHTML =
-                            '<div class="alert alert-danger">'+error+'</div>';
+                            '<div class="alert alert-danger">' + error + '</div>';
                     });
             }
 
@@ -160,6 +161,7 @@
                             chatMessages.innerHTML =
                                 '<div class="text-center text-muted p-3">لا توجد رسائل سابقة. ابدأ المحادثة الآن!</div>';
                         } else {
+
                             renderMessages(data.messages, data.current_user_id);
                         }
 
@@ -176,6 +178,7 @@
             // Render messages in the chat
             function renderMessages(messages, currentUserId) {
                 messages.forEach(message => {
+                    // console.log(message..JSON);
                     const isCurrentUser = message.sender_id == currentUserId;
                     const messageClass = isCurrentUser ? 'message-sent' : 'message-received';
                     const alignment = isCurrentUser ? 'ms-auto' : 'me-auto';
@@ -259,6 +262,7 @@
                                 message: formData.get('message')
                             })
                         })
+
                         .then(response => response.json())
                         .then(data => {
                             // Add the sent message to the chat
