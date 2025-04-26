@@ -60,7 +60,7 @@
                                                 <img src="{{ asset($house->primaryPhoto->path) }}"
                                                     class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
                                             @else
-                                                <img src="{{ asset('images/default.jpg') }}"
+                                                <img src="{{ asset('images/default.jpeg') }}"
                                                     class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
                                             @endif
                                         </div>

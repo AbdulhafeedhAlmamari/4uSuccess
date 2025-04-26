@@ -15,7 +15,7 @@ class ConsultationRequestFactory extends Factory
     public function definition()
     {
         return [
-            'student_id' => User::where('role', 'student')->inRandomOrder()->first()->id,
+            'student_id' => User::factory()->create(['role' => 'student'])->id,
             'specialization' => $this->faker->randomElement(['الذكاء الاصطناعي', 'إدارة الاعمال', 'التربية الادبية', 'علوم الحاسب']),
             'consultant_id' => User::where('role', 'consultant')->inRandomOrder()->first()->id,
             'subject' => $this->faker->sentence,

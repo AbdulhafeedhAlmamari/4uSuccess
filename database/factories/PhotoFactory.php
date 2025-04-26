@@ -19,7 +19,7 @@ class PhotoFactory extends Factory
     {
         return [
             'housing_id' => Housing::all()->random()->id,
-            'path' => $this->faker->imageUrl(800, 600, 'housing', true),
+            'path' => 'images/default.jpeg',
             'is_primary' => $this->faker->boolean(20), // 20% chance of being primary
         ];
     }

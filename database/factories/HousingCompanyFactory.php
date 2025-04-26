@@ -22,7 +22,7 @@ class HousingCompanyFactory extends Factory
         Storage::fake('public');
 
         return [
-            'user_id' => User::where('role', 'housing')->inRandomOrder()->first()->id,
+            'user_id' => User::all()->random()->id,
             'commercial_register_number' => $this->faker->unique()->numerify('CR########'),
             'phone_number' => $this->faker->phoneNumber,
             'identity_image' => UploadedFile::fake()
