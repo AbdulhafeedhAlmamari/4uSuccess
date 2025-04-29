@@ -5,6 +5,7 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -206,6 +207,18 @@ class FinanceController extends Controller
         $financeRequest = FinanceRequest::findOrFail($request->id);
         $financeRequest->status = $request->status;
         $financeRequest->save();
+
+        if ($request->status === 'accepted') {
+            Invoice::create([
+                'reservation_request_id' => $financeRequest->id,
+                'amount_invoice' => $financeRequest->amount,
+                'vat' =>  15,
+                'service_fee' => 23,
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'date_invoice' => now(),
+            ]);
+        }
 
         return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
     }

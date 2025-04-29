@@ -180,3 +180,15 @@ Route::middleware(['auth'])->group(function () {
     // Pusher authentication route
     Route::post('/broadcasting/auth', [App\Http\Controllers\ChatController::class, 'auth']);
 });
+
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'showPaymentForm'])->name('payment');
+//     Route::post('/process-payment', [App\Http\Controllers\PaymentController::class, 'processPayment'])->name('process.payment');
+// Route::post('/checkout', [App\Http\Controllers\PaymentController::class, 'purchase'])->name('checkout.payment');
+// Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'handlePaymentSuccess'])->name('payment.success');
+// });
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment');
+    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
+// });

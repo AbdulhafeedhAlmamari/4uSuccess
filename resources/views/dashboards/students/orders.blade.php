@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                            margin: -20px -25px 10px; */
+                                                                                                                                                                    margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -208,8 +208,8 @@
                                             {{ $order->housing->price ?? 'غير متوفر' }} ريال</div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $order->status == 'confirmed' ? 'success' : 'warning' }}">
-                                            {{ $order->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                        <span class="badge bg-{{ $order->status == 'pending' ? 'warning' : 'success' }}">
+                                            {{ $order->status == 'pending' ? 'قيد الانتظار' : 'تمت الموافقة' }}
                                         </span>
                                     </td>
                                     <td>{{ $order->request_date }}</td>
@@ -219,9 +219,13 @@
                                                 data-bs-target="#orderModal{{ $order->id }}">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                        @else
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#">
+                                            <a href="{{ route('payment', $order->id) }}">
                                                 <i class="fa-brands fa-paypal"></i>
+                                            </a>
+                                        @else
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $order->id }}">
+                                                <i class="fa-regular fa-eye"></i>
                                             </a>
                                         @endif
 
@@ -261,8 +265,8 @@
                                                         </p>
                                                         <p class="status-boxx">حالة الطلب:
                                                             <span
-                                                                class="badge bg-{{ $order->status == 'confirmed' ? 'success' : 'warning' }}">
-                                                                {{ $order->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                                                class="badge bg-{{ $order->status == 'pending' ? 'warning' : 'success' }}">
+                                                                {{ $order->status == 'pending' ? 'قيد الانتظار' : 'تمت الموافقة' }}
                                                             </span>
                                                         </p>
                                                     </div>
@@ -367,10 +371,22 @@
                                             </span>
                                         </td>
                                         <td class="actions">
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#orderModal{{ $transportationRequest->id }}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
+                                            @if ($transportationRequest->status == 'completed')
+                                                {{-- <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#orderModal{{ $transportationRequest->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </a> --}}
+                                                <a href="{{ route('payment', $order->id) }}">
+                                                    <i class="fa-brands fa-paypal"></i>
+                                                </a>
+                                            @endif
+                                            @if ($transportationRequest->status == 'paid')
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#orderModal{{ $transportationRequest->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </a>
+                                            @endif
+
                                         </td>
                                     </tr>
 
@@ -503,10 +519,23 @@
                                             </span>
                                         </td>
                                         <td class="actions">
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#financeOrderModal{{ $request->id }}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
+
+                                            @if ($request->status == 'completed')
+                                                {{-- <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#orderModal{{ $transportationRequest->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </a> --}}
+                                                <a href="{{ route('payment', $order->id) }}">
+                                                    <i class="fa-brands fa-paypal"></i>
+                                                </a>
+                                            @endif
+                                            @if ($request->status == 'paid')
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#financeOrderModal{{ $request->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </a>
+                                            @endif
+
                                         </td>
                                     </tr>
 
