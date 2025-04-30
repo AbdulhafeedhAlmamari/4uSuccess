@@ -68,9 +68,13 @@ class User extends Authenticatable
         return $this->hasOne(HousingCompany::class);
     }
 
+    public function housing()
+    {
+        return $this->hasMany(Housing::class);
+    }
+
     public function transportationCompany()
     {
         return $this->hasOne(TransportationCompany::class);
     }
-
 }

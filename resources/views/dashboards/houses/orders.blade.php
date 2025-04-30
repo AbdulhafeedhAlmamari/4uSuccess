@@ -216,7 +216,7 @@
                                                         <span>{{ $reservation->housing?->price ?? '-' }}</span> ريال
                                                     </p>
                                                     <p class="status-box">نوع السكن:
-                                                        <span>{{ $reservation->housing?->type ?? '-' }}</span>
+                                                        <span>{{ $reservation->housing?->housing_type ?? '-' }}</span>
                                                     </p>
                                                 </div>
                                                 <div>
@@ -241,7 +241,7 @@
                                                         <span>{{ $reservation->housing?->address ?? '-' }}</span>
                                                     </p>
                                                     <p><strong>المسافة عن الجامعة:</strong>
-                                                        <span>{{ $reservation->housing?->distance ?? '-' }}</span> كم
+                                                        <span>{{ $reservation->housing?->distance_from_university ?? '-' }}</span> كم
                                                     </p>
                                                 </div>
                                                 <div class="col-md-6">

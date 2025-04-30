@@ -46,7 +46,7 @@
                             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
                                 <div class="portfolio-content h-100">
                                     <img src="{{ $financingCompany->user->profile_image ? asset($financingCompany->user->profile_image) : asset('images/default.jpeg') }}"
-                                        class="img-fluid" alt="">
+                                        class="img-fluid" alt="" style="width: 100%; height: 200px;">
                                     <div class="portfolio-info">
 
                                         <p>{{ $financingCompany->user->name }} </p>

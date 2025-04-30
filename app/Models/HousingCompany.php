@@ -19,11 +19,11 @@ class HousingCompany extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function housing()
-    {
-        return $this->hasMany(Housing::class);
-    }
+    // public function housing()
+    // {
+    //     return $this->hasMany(Housing::class);
+    // }
 }

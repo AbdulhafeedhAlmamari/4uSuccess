@@ -14,14 +14,14 @@
 @endsection
 @section('content')
     <!-- consultants section -->
-
+<br>
     <section class="container mt-5 consultant-details">
         <div class="card border-0">
             <div class="row g-0">
                 <div class="col-md-4 w-25 h-75">
                     @if (isset($consultant->user->profile_image))
                         <img src="{{ asset($consultant->user->profile_image) }}" alt="صورة المستشار"
-                            class="img-fluid rounded-3" style="width: 100%; height: 100%;">
+                            class="img-fluid rounded-3" style="width: 300px; height: 250px;">
                     @else
                         <img src="{{ asset('build/assets/images/consultant-05.png') }}" alt="صورة المستشار"
                             class="img-fluid rounded-3" style="width: 100%; height: 100%;">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="col-md-8 p-4">
-                    <h2 class="fw-bold text-center text-md-end">تفاصيل المستشار</h2>
+                    <h2 class="fw-bold text-center text-md-start">تفاصيل المستشار</h2>
                     <p><strong>التخصص:</strong> {{ $consultant->specialization ?? 'غير متوفر' }}</p>
                     <p><strong>مدة الاستشارة:</strong> {{ $consultant->consultation_duration ?? 'غير محدد' }} دقيقة
                     </p>
@@ -48,14 +48,13 @@
     </section>
 
     @include('components.chat-modal')
+    <br><br>
 @endsection
 
 @section('script')
     <script src="{{ asset('build/assets/js/scroll_cards.js') }}"></script>
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
-    <script src="{{ asset('build/assets/js/chat.js') }}"></script>
-
-    >
+    {{-- <script src="{{ asset('build/assets/js/chat.js') }}"></script> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -233,11 +232,11 @@
                 });
 
                 // Handle subscription error
-                channel.bind('pusher:subscription_error', function(status) {
-                    console.error('Pusher subscription error:', status);
-                    chatMessages.innerHTML +=
-                        '<div class="alert alert-danger">حدث خطأ في الاتصال. يرجى تحديث الصفحة.</div>';
-                });
+                // channel.bind('pusher:subscription_error', function(status) {
+                //     console.error('Pusher subscription error:', status);
+                //     chatMessages.innerHTML +=
+                //         '<div class="alert alert-danger">حدث خطأ في الاتصال. يرجى تحديث الصفحة.</div>';
+                // });
             }
 
             // Send a new message

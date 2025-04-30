@@ -21,7 +21,7 @@
                                     <div class="image-container">
                                         @if (isset($house->primaryPhoto))
                                             <img src="{{ asset($house->primaryPhoto->path) }}"
-                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن"  id="mainImage">
                                         @else
                                             <img src="{{ asset('images/default.jpeg') }}"
                                                 class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
@@ -133,6 +133,7 @@
 
 @section('script')
     <script>
+        
         function changeMainImage(imageElement) {
             // Get the main image element
             const mainImage = document.getElementById('mainImage');

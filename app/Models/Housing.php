@@ -27,7 +27,7 @@ class Housing extends Model
      */
     public function housingCompany()
     {
-        return $this->belongsTo(HousingCompany::class, 'housing_company_id', 'user_id');
+        return $this->belongsTo(User::class, 'housing_company_id');
     }
 
     /**

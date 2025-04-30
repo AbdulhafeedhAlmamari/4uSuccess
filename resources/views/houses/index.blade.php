@@ -98,10 +98,10 @@
                                         <div class="col-md-5">
                                             @if (isset($house->primaryPhoto))
                                                 <img src="{{ asset($house->primaryPhoto->path) }}"
-                                                    class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                                    class="card-img-top rounded-start" style="height: 200px" alt="صورة السكن">
                                             @else
                                                 <img src="{{ asset('images/default.jpeg') }}"
-                                                    class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
+                                                    class="card-img-top rounded-start" alt="صورة السكن">
                                             @endif
                                         </div>
                                         <div class="col-md-7">

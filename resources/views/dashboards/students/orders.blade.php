@@ -200,7 +200,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>
-                                        {{ $order->housing->housingCompany->user->name ?? 'غير متوفر' }}
+                                        {{ $order->housing->housingCompany->name ?? 'غير متوفر' }}
                                     </td>
                                     <td>{{ $order->housing->housing_type ?? 'غير متوفر' }}</td>
                                     <td>
@@ -246,7 +246,7 @@
                                                             @endif
 
                                                             <h5 class="ms-3">
-                                                                {{ $order->housing->housingCompany->user->name ?? 'غير متوفر' }}
+                                                                {{ $order->housing->housingCompany->name ?? 'غير متوفر' }}
                                                             </h5>
                                                         </div>
                                                         <p class="text-muted">
@@ -491,7 +491,7 @@
                                 @forelse($financeRequests as $index => $request)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $request->financingCompany->user->name ?? 'غير متوفر' }}</td>
+                                        <td>{{ $request->financingCompany->name ?? 'غير متوفر' }}</td>
                                         <td>{{ $request->student->student->university_number ?? 'غير متوفر' }}</td>
                                         <td>{{ $request->finance_type }}</td>
                                         <td>{{ $request->amount }} ريال</td>

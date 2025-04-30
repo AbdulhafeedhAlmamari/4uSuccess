@@ -17,6 +17,7 @@ class Consultant extends Model
         'specialization',
         'identity_image',
         'certificate_image',
+        'gender',
     ];
 
     public function user()

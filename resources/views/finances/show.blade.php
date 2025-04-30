@@ -161,6 +161,8 @@
     </style>
 @endsection
 @section('content')
+
+<br><br><br><br><br>
     <div class="container my-5">
         <div class="row align-items-center text-center">
             <div class="col-md-4 text-center">
@@ -180,6 +182,7 @@
             </div>
         </div>
     </div>
+    <br><br><br><br><br>
 @endsection
 
 @section('script')

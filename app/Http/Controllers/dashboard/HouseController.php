@@ -18,7 +18,12 @@ class HouseController extends Controller
     public function index()
     {
         // Get counts of pending and confirmed orders
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'housing')->count();
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')
+        ->whereNotNull('housing_id')
+        ->whereHas('housing', function ($query) {
+            $query->where('housing_company_id', Auth::user()->id);
+        })
+        ->count();
         $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'housing')->count();
 
         return view('dashboards.houses.index', compact('pendingOrdersCount', 'confirmedOrdersCount'));
@@ -282,6 +287,8 @@ class HouseController extends Controller
             })
             ->latest()
             ->get();
+
+        // dd(auth()->user()->id);
         return view('dashboards.houses.orders', compact('reservations', 'status'));
     }
     public function updateStatus(Request $request, ReservationRequest $reservation)

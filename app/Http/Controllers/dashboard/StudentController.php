@@ -35,12 +35,15 @@ class StudentController extends Controller
             ->get();
 
         $housingRequests = ReservationRequest::with([
-            'housing.housingCompany.user', // Load housing company and user
-        ])->where('reservation_type', 'housing')->get();
+            'housing.housingCompany', // Load housing company and user
+        ])->where('reservation_type', 'housing')
+            ->where('student_id', Auth::id())->get();
 
         $transportationRequests = ReservationRequest::with([
             'trip.transportationCompany', // Load housing company and user
-        ])->where('reservation_type', 'transportations')->get();
+        ])->where('reservation_type', 'transportations')
+            ->where('student_id', Auth::id())
+            ->get();
 
 
         return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
