@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
+            $table->string('status');
+            $table->string('payment_id');
+            $table->string('payment_method');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('date_payment');
             $table->timestamps();
         });

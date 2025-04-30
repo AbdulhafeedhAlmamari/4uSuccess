@@ -5,6 +5,7 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Housing;
 use App\Models\HousingCompany;
+use App\Models\Invoice;
 use App\Models\Photo;
 use App\Models\ReservationRequest;
 use Illuminate\Http\Request;
@@ -302,6 +303,17 @@ class HouseController extends Controller
         $reservation->status = $request->status;
         $reservation->save();
 
+        if ($request->status == 'confirmed') {
+            Invoice::create([
+                'reservation_request_id' => $reservation->id,
+                'amount_invoice' => $reservation->housing->price,
+                'vat' =>  15,
+                'service_fee' => 23,
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'date_invoice' => now(),
+            ]);
+        }
         return back()->with('success', 'تم تحديث حالة الطلب بنجاح');
     }
 

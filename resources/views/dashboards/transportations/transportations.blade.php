@@ -454,11 +454,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">تاريخ الذهاب</label>
-                            <input type="datetime-local" name="go_date" class="form-control" required>
+                            <input type="date" name="go_date" class="form-control" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">تاريخ العودة</label>
-                            <input type="datetime-local" name="back_date" class="form-control">
+                            <input type="date" name="back_date" class="form-control">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">نوع الرحلة</label>
