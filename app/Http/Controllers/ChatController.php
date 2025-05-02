@@ -89,6 +89,7 @@ class ChatController extends Controller
     public function getConsultantDetails($consultantId)
     {
         $consultant = Consultant::with('user:id,name,profile_image')->findOrFail($consultantId);
+        // dd($consultant);
         return response()->json([
             'consultant' => [
                 'user' => [

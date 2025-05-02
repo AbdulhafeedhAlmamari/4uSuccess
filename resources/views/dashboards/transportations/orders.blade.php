@@ -137,7 +137,7 @@
                                     طلبات النقل
                                     @if (request('status') == 'pending')
                                         الحالية
-                                    @elseif(request('status') == 'confirmed')
+                                    @elseif(request('status') == 'completed')
                                         السابقة
                                     @else
                                         المرفوضه
@@ -170,22 +170,22 @@
                                         <td>{{ \Carbon\Carbon::parse($reservation->trip->go_date ?? '')->format('d M Y') }}
                                         </td>
                                         <td>
-                                            @if ($reservation->status == 'confirmed')
+                                            @if ($reservation->status == 'completed')
                                                 <span class="badge bg-success">تمت الموافقة</span>
                                             @elseif($reservation->status == 'rejected')
                                                 <span class="badge bg-danger">مرفوض</span>
                                             @else
                                                 <div class="d-flex justify-content-start gap-1">
                                                     <form
-                                                        action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                        action="{{ route('dashboard.transportation.reservation.status', $reservation->id) }}"
                                                         method="POST" style="display:inline;">
                                                         @csrf
                                                         {{-- @method('PATCH') --}}
-                                                        <input type="hidden" name="status" value="confirmed">
+                                                        <input type="hidden" name="status" value="completed">
                                                         <button type="submit" class="btn custom-success">مؤكده</button>
                                                     </form>
                                                     <form
-                                                        action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                        action="{{ route('dashboard.transportation.reservation.status', $reservation->id) }}"
                                                         method="POST" style="display:inline;">
                                                         @csrf
                                                         {{-- @method('PATCH') --}}
@@ -243,7 +243,7 @@
                                                             </p>
                                                             <p class="text-muted">
                                                                 حالة الطلب:
-                                                                @if ($reservation->status == 'confirmed')
+                                                                @if ($reservation->status == 'completed')
 
                                                                     <span class="badge bg-success">تمت الموافقة</span>
 
@@ -256,7 +256,7 @@
                                                                     <span class="badge bg-danger">مرفوضة</span>
 
                                                                 @endif
-                                                            
+
                                                             </p>
                                                         </div>
                                                     </div>
@@ -299,7 +299,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <form
-                                                    action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
+                                                    action="{{ route('dashboard.transportation.reservation.status', $reservation->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     <input type="hidden" name="status" value="rejected">

@@ -41,10 +41,9 @@ class StudentController extends Controller
 
         $transportationRequests = ReservationRequest::with([
             'trip.transportationCompany', // Load housing company and user
-        ])->where('reservation_type', 'transportations')
+        ])->where('reservation_type', 'transportation')
             ->where('student_id', Auth::id())
             ->get();
-
 
         return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
     }

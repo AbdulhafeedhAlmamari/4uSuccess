@@ -113,7 +113,7 @@ Route::prefix('/dashboard')->group(function () {
     Route::put('/transportations/{id}', [DashboardTransportationController::class, 'update'])->name('dashboard.transportations.update');
     Route::delete('/transportations/{id}', [DashboardTransportationController::class, 'destroy'])->name('dashboard.transportations.destroy');
     Route::get('/transportation-orders/{status}', [DashboardTransportationController::class, 'orders'])->name('dashboard.transportation_orders');
-    Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
+    Route::post('/transportation/reservation/{reservation}/status', [DashboardTransportationController::class, 'updateStatus'])->name('dashboard.transportation.reservation.status');
     Route::get('/transportation-profile', [DashboardTransportationController::class, 'profile'])->name('dashboard.transportation_profile');
     Route::put('/dashboard/transportation/profile/update', [DashboardTransportationController::class, 'updateProfile'])->name('transportation.profile.update');
 

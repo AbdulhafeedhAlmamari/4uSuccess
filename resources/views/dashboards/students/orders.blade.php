@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                    margin: -20px -25px 10px; */
+                                                                                                                                                                                    margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -366,8 +366,8 @@
                                         <td>{{ $transportationRequest->trip->price ?? 'غير متوفر' }} ريال</td>
                                         <td>
                                             <span
-                                                class="badge bg-{{ $transportationRequest->status == 'completed' ? 'success' : ($transportationRequest->status == 'rejected' ? 'danger' : 'warning') }}">
-                                                {{ $transportationRequest->status == 'completed' ? 'مكتملة' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
+                                                class="badge bg-{{ $transportationRequest->status == 'pending' ? 'warning' : ($transportationRequest->status == 'rejected' ? 'danger' : 'success') }}">
+                                                {{ $transportationRequest->status == 'pending' ? 'قيد الانتظار' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' :($transportationRequest->status == 'completed' ? 'تمت الموافقة' : 'مكتملة')) }}
                                             </span>
                                         </td>
                                         <td class="actions">
@@ -376,7 +376,7 @@
                                                     data-bs-target="#orderModal{{ $transportationRequest->id }}">
                                                     <i class="fa-regular fa-eye"></i>
                                                 </a> --}}
-                                                <a href="{{ route('payment', $order->id) }}">
+                                                <a href="{{ route('payment', $transportationRequest->id) }}">
                                                     <i class="fa-brands fa-paypal"></i>
                                                 </a>
                                             @endif
@@ -520,7 +520,7 @@
                                         </td>
                                         <td class="actions">
 
-                                            @if ($request->status == 'completed')
+                                            @if ($request->status == 'accepted')
                                                 {{-- <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#orderModal{{ $transportationRequest->id }}">
                                                     <i class="fa-regular fa-eye"></i>
