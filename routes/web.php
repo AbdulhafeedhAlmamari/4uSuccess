@@ -59,8 +59,8 @@ Route::post('/house-reservation-store', [HouseController::class, 'reservationSto
 
 // transports routes
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');
-Route::get('/transport-show', [TransportController::class, 'show'])->name('home.transport.show');
-Route::get('/transport-search', [TransportController::class, 'search'])->name('home.transport.search');
+Route::get('/transport-show/{type}', [TransportController::class, 'show'])->name('home.transport.show');
+Route::get('/transport-search/{type}', [TransportController::class, 'search'])->name('home.transport.search');
 // Route::get('/transport-search-result', [TransportController::class, 'searchResult'])->name('home.transport.search_result');
 Route::post('/transport/store', [TransportController::class, 'store'])->name('home.transport.store');
 Route::post('/transport/search/trip', [TransportController::class, 'searchForTrip'])->name('home.transport.search.for_trip');

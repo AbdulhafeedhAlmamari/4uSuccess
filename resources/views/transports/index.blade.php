@@ -18,7 +18,7 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">نقل جماعي</h5>
-                            <a href="{{ route('home.transport.show') }}" class="btn btn-purple">تفاصيل النقل</a>
+                            <a href="{{ route('home.transport.show', ['type' => 'group']) }}" class="btn btn-purple">تفاصيل النقل</a>
                         </div>
                     </div>
                 </div>
@@ -28,8 +28,9 @@
                             <img src="{{ asset('build/assets/images/image (1).png') }}" class="card-img-top" alt="نقل فردي">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">نقل فردي</h5>
-                            <a href="{{ route('home.transport.show') }}" class="btn btn-purple">تفاصيل النقل</a>
+                            <h5 class="card-title">نقل فردي</h5><a
+                                href="{{ route('home.transport.show', ['type' => 'single']) }}"
+                                class="btn btn-purple">تفاصيل النقل</a>
                         </div>
                     </div>
                 </div>

@@ -140,7 +140,7 @@
                                 {{-- <td>{{ $reservation->id }}</td> --}}
                                 <td>{{ $reservation->student->name ?? 'غير موجود' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($reservation->request_date)->format('Y-m-d') }}</td>
-                                <td>{{ $reservation->student?->user?->email }}</td>
+                                <td>{{ $reservation->student->email }}</td>
                                 <td>
                                     @if ($reservation->status == 'confirmed')
                                         <span class="badge bg-success">تمت الموافقة</span>

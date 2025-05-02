@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FinanceController extends Controller
 {
+
     public function index()
     {
         $financingCompanies = FinancingCompany::all();

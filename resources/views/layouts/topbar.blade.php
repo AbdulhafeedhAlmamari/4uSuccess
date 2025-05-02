@@ -81,7 +81,14 @@
                                 <li><a class="dropdown-item" href="{{ route('home.transports') }}">النقل</a></li>
                             </ul>
                         </li>
-                        <li
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('home.consultants.consultation_request*') ? 'active' : '' }}"
+                                href="{{ route('home.consultants.consultation_request') }}">طلب استشارة</a>
+                        </li>
+
+
+                        {{-- <li
                             class="nav-item dropdown {{ request()->routeIs('home.consultants.consultation_request*') ? 'active' : '' }}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -94,7 +101,7 @@
                                 <li><a class="dropdown-item" href="{{ route('dashboard.student_orders') }}">طلباتي</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('home.consultants') ? 'active' : '' }}"
                                 href="{{ route('home.consultants') }}">المستشارين</a>

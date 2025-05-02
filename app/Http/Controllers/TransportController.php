@@ -13,14 +13,15 @@ class TransportController extends Controller
         return view('transports.index');
     }
 
-    public function show()
+    public function show($type)
     {
-        return view('transports.show');
+
+        return view('transports.show', compact('type'));
     }
 
-    public function search()
+    public function search($type)
     {
-        return view('transports.search');
+        return view('transports.search', compact('type'));
     }
 
     public function searchResult()

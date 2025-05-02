@@ -4,7 +4,7 @@
 @endsection
 @section('css')
     <link href="{{ asset('build/assets/css/aboutt.css') }}" rel="stylesheet">
-    <link href="{{ asset('build/assets/css/bootstrp.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('build/assets/css/bootstrp.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('build/assets/css/aa.css') }}" rel="stylesheet">
     <link href="{{ asset('build/assets/css/home2.css') }}" rel="stylesheet">
 
@@ -20,11 +20,12 @@
     <!-- about us -->
 
     <div class="position-relative">
-        <img class="end--10px position-absolute top-200px z-index-1070 w-sm-70px" src="img/snapel-gray-lg.svg" />
+        <img class="end--10px position-absolute top-200px z-index-1070 w-sm-70px"
+            src="{{ asset('images/about-image.jpg') }}" />
         <img class="d-md-block d-none position-absolute start--10px top-100px z-index-1070"
-            src="{{ asset('build/assets/images/one-bg.svg') }}" />
+            src="{{ asset('images/about-image.jpg') }}" />
         <img class="bottom-200px position-absolute start--10px w-350px d-none d-md-block"
-            src="/src/images/aboutpage/snapel-green-lg.svg" />
+            src="{{ asset('images/about-image.jpg') }}" />
     </div>
     <section class="about-vision">
         <h2
@@ -34,30 +35,32 @@
             <div class="d-flex justify-content-center my-5 flex-column flex-md-row">
                 <div class="text-center">
                     <div class="about-vision-icon arrow-lg-1">
-                        <img src="img/1.svg" class="vector-icon w-sm-70px" />
+                        <img src="{{ asset('images/about-image.jpg') }}" class="vector-icon w-sm-70px" />
                     </div>
-                    <img src="img/2.svg" class="d-block d-md-none w-fit-content m-auto position-relative top--15px" />
+                    <img src="{{ asset('images/about-image.jpg') }}"
+                        class="d-block d-md-none w-fit-content m-auto position-relative top--15px" />
                     <p class="fs-18px text-grey-4">توفير بيئة داعمة للطلاب</p>
                 </div>
 
-                <img class="d-none d-md-block" src="img/left-arrow-up.svg" />
+                <img class="d-none d-md-block" src="{{ asset('images/about-image.jpg') }}" />
                 <div class="d-flex flex-column text-center">
-                    <img src="img/2.svg" class="dashed-line h-18px m-auto w-fit-content d-block d-md-none" />
+                    <img src="{{ asset('images/about-image.jpg') }}"
+                        class="dashed-line h-18px m-auto w-fit-content d-block d-md-none" />
                     <div class="about-vision-icon arrow-lg-2 m-auto w-fit-content">
-                        <img src="img/2.svg" class="dashed-circle w-90px d-block d-md-none" />
-                        <img src="img/2.svg" class="p-1 vector-icon w-sm-80px" />
+                        <img src="{{ asset('images/about-image.jpg') }}" class="dashed-circle w-90px d-block d-md-none" />
+                        <img src="{{ asset('images/about-image.jpg') }}" class="p-1 vector-icon w-sm-80px" />
                     </div>
-                    <img src="img/2.svg" class="dashed-line-2 d-block d-md-none w-fit-content m-auto" />
+                    <img src="{{ asset('images/about-image.jpg') }}"
+                        class="dashed-line-2 d-block d-md-none w-fit-content m-auto" />
                     <p class=" fs-18px text-grey-4">تمكين الشباب وبناء المستقبل</p>
                 </div>
-                <img class="d-none d-md-block" src="img/left-arrow-down.svg">
+                <img class="d-none d-md-block" src="{{ asset('images/about-image.jpg') }}">
                 <div class="d-flex flex-column text-center">
-                    <img src="/assets/images/aboutpage/about-vision/3-2.svg"
+                    <img src="{{ asset('images/about-image.jpg') }}"
                         class="dashed-line h-18px m-auto w-fit-content d-block d-md-none" />
                     <div class="about-vision-icon m-auto w-fit-content">
-                        <img src="/assets/images/aboutpage/about-vision/3-1.svg"
-                            class="dashed-circle d-block d-md-none w-90px" />
-                        <img src="img/3.svg" class="vector-icon w-sm-80px p-1" />
+                        <img src="{{ asset('images/about-image.jpg') }}" class="dashed-circle d-block d-md-none w-90px" />
+                        <img src="{{ asset('images/about-image.jpg') }}" />
                     </div>
                     <p class="fs-18px text-grey-4">تعزيز الاستدامة والتحول الرقمي</p>
                 </div>
@@ -105,7 +108,7 @@
             <div class="row justify-content-center px-md-5 px-2">
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">توفير </h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">تقديم خدمات النقل، السكن، والتمويل لتلبية
@@ -115,7 +118,7 @@
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">تسهيل</h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">مساعدة الطلاب على التركيز على دراستهم من خلال
@@ -125,7 +128,7 @@
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">تمكين </h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">دعم الشباب بحلول مبتكرة تساعدهم على تحقيق
@@ -135,7 +138,7 @@
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">التحول</h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">استخدام التكنولوجيا لتقديم خدمات ذكية وسريعة
@@ -145,7 +148,7 @@
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">تحسين</h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">الإسهام في توفير بيئة مناسبة للطلاب تدعم
@@ -156,7 +159,7 @@
 
                 <div class="col-6 col-md-3 mb-3">
                     <div class="about-goals-box align-items-baseline d-flex">
-                        <img class="me-1 w-22px" src="img/icon-about-goals.svg" />
+                        <img class="me-1 w-22px" src="{{ asset('images/about-image.jpg') }}" />
                         <div class="">
                             <h5 class="font-bold fs-28px text-primary-blue">توسيع</h5>
                             <p class="fs-20px text-grey-4 fs-sm-14px">التوسع في تقديم حلول إضافية لدعم الطلاب في

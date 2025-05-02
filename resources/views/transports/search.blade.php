@@ -13,7 +13,7 @@
         <form action="{{ route('home.transport.search.for_trip') }}" method="POST">
             @csrf
             <div class="search-container">
-                <h2 class="text-center fw-bold mb-5">بحث النقل الجماعي</h2>
+                <h2 class="text-center fw-bold mb-5">بحث النقل {{ $type == 'single' ? 'فردي' : 'جماعي' }}</h2>
                 <div class="btn-group toggle-buttons d-flex mt-3" role="group">
                     <button type="button" class="btn active" data-toggle="oneWay">ذهاب فقط</button>
                     <button type="button" class="btn" data-toggle="round_trip">ذهاب وعودة</button>

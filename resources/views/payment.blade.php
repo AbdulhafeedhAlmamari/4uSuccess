@@ -63,12 +63,12 @@
                                     src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
                                     width="30"></label>
                         </div>
-                        <div class="p-2 rounded mb-3 border w-50 payment-method-selector" data-method="paypal">
+                        {{-- <div class="p-2 rounded mb-3 border w-50 payment-method-selector" data-method="paypal">
                             <input type="radio" name="paymentMethod" id="paypal">
                             <label for="paypal">باي بال <img
                                     src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
                                     width="30"></label>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <form id="payment-form">
