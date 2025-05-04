@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                    margin: -20px -25px 10px; */
+                                                                                                                                                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -367,7 +367,7 @@
                                         <td>
                                             <span
                                                 class="badge bg-{{ $transportationRequest->status == 'pending' ? 'warning' : ($transportationRequest->status == 'rejected' ? 'danger' : 'success') }}">
-                                                {{ $transportationRequest->status == 'pending' ? 'قيد الانتظار' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' :($transportationRequest->status == 'completed' ? 'تمت الموافقة' : 'مكتملة')) }}
+                                                {{ $transportationRequest->status == 'pending' ? 'قيد الانتظار' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : ($transportationRequest->status == 'completed' ? 'تمت الموافقة' : 'مكتملة')) }}
                                             </span>
                                         </td>
                                         <td class="actions">
@@ -514,28 +514,15 @@
                                         <td>{{ $request->created_at->format('Y-m-d') }}</td>
                                         <td>
                                             <span
-                                                class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'rejected' ? 'danger' : 'warning') }}">
-                                                {{ $request->status == 'completed' ? 'مكتملة' : ($request->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
+                                                class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'rejected' ? 'danger' :($request->status == 'accepted' ? 'success' : 'warning')) }}">
+                                                {{ $request->status == 'completed' ? 'مكتملة' : ($request->status == 'rejected' ? 'مرفوضة' : ($request->status == 'accepted' ? 'مقبولة' : 'قيد الانتظار')) }}
                                             </span>
                                         </td>
                                         <td class="actions">
-
-                                            @if ($request->status == 'accepted')
-                                                {{-- <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#orderModal{{ $transportationRequest->id }}">
-                                                    <i class="fa-regular fa-eye"></i>
-                                                </a> --}}
-                                                <a href="{{ route('payment', $order->id) }}">
-                                                    <i class="fa-brands fa-paypal"></i>
-                                                </a>
-                                            @endif
-                                            @if ($request->status == 'paid')
-                                                <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#financeOrderModal{{ $request->id }}">
-                                                    <i class="fa-regular fa-eye"></i>
-                                                </a>
-                                            @endif
-
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#financeOrderModal{{ $request->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
 
@@ -564,8 +551,8 @@
                                                             <p class="text-muted">تاريخ الإصدار:
                                                                 {{ $request->created_at->format('d/m/Y') }}</p>
                                                             <p class="text-muted">حالة الطلب:
-                                                                @if ($request->status == 'completed')
-                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @if ($request->status == 'accepted')
+                                                                    <span class="badge bg-success">مقبولة</span>
                                                                 @elseif($request->status == 'rejected')
                                                                     <span class="badge bg-danger">مرفوضة</span>
                                                                 @else

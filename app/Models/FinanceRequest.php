@@ -20,9 +20,12 @@ class FinanceRequest extends Model
         'description',
         'amount',
         'installment_period',
+        'total_paid',
         'finance_type',
         'is_agreed',
         'terms_and_conditions',
+        'status',
+        'reply',
     ];
 
     /**
@@ -31,8 +34,9 @@ class FinanceRequest extends Model
      * @var array
      */
     protected $casts = [
-        'is_agreed' => 'boolean',
         'amount' => 'decimal:2',
+        'total_paid' => 'decimal:2',
+        'is_agreed' => 'boolean',
     ];
 
     /**
@@ -49,5 +53,41 @@ class FinanceRequest extends Model
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    /**
+     * Get the installments for the finance request.
+     */
+    public function installments()
+    {
+        return $this->hasMany(Installment::class);
+    }
+
+    /**
+     * Get the remaining amount to be paid.
+     */
+    public function getRemainingAmountAttribute()
+    {
+        return $this->amount - $this->total_paid;
+    }
+
+    /**
+     * Get the payment progress as a percentage.
+     */
+    public function getPaymentProgressAttribute()
+    {
+        if ($this->amount <= 0) {
+            return 100;
+        }
+
+        return min(100, round(($this->total_paid / $this->amount) * 100));
+    }
+
+    /**
+     * Get the paid installments count.
+     */
+    public function getPaidInstallmentsCountAttribute()
+    {
+        return $this->installments()->where('status', 'paid')->count();
     }
 }

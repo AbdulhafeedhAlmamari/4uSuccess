@@ -48,6 +48,10 @@ class StudentController extends Controller
         return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
     }
 
+public function installment()
+{
+    return view('dashboards.students.installment');
+}
     public function profile()
     {
         // Get the authenticated user
