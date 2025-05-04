@@ -19,7 +19,7 @@
                             <p>ابحث بين أكثر من 15,000 إعلان لخدمات مختلفة</p>
                         </div>
                         <!---->
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <form action="" class="search-form">
                                 <div class=" px-2">
                                     <input type="email" class="form-control" id="exampleFormControlInput1"
@@ -40,7 +40,7 @@
                                 </select>
                                 <button class="btn mx-2">ابحث الآن</button>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </section>
@@ -54,7 +54,7 @@
                             <p>ابحث بين أكثر من 15,000 إعلان لخدمات مختلفة</p>
                         </div>
                         <!---->
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <form action="" class="search-form">
                                 <div class=" px-2">
                                     <input type="email" class="form-control" id="exampleFormControlInput1"
@@ -75,7 +75,7 @@
                                 </select>
                                 <button class="btn mx-2">ابحث الآن</button>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </section>
@@ -88,7 +88,7 @@
                             <h1>مرحبــاً بكم في منصة 4uSuccess</h1>
                             <p>ابحث بين أكثر من 15,000 إعلان لخدمات مختلفة</p>
                         </div>
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <form action="" class="search-form">
                                 <div class=" px-2">
                                     <input type="email" class="form-control" id="exampleFormControlInput1"
@@ -109,7 +109,7 @@
                                 </select>
                                 <button class="btn mx-2">ابحث الآن</button>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </section>

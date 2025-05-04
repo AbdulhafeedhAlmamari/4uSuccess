@@ -32,9 +32,9 @@ class AdminController extends Controller
 
 
         // Get all users with their respective role details
-        $users = User::all()->sortByDesc('created_at');
+        $users = User::latest()->get();
         // get with latest data
-        $usersRequest = User::all()->sortByDesc('created_at');
+        $usersRequest = User::latest()->get();
         // $usersRequest = User::where('is_approved', 0)->get();
 
         return view('dashboards.admin.index', compact(

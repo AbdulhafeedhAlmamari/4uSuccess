@@ -217,24 +217,26 @@
                                     </td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
                                     <td>
-                                        @if ($user->is_approved != 1)
-                                            <a
-                                                href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 1]) }}"class="btn btn-link m-0 p-0">
-                                                <i class="fa-solid fa-check-circle text-success"></i>
-                                            </a>
-                                        @endif
-                                        @if ($user->is_approved == 1 || $user->is_approved == 0)
-                                            <a href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 2]) }}"
-                                                class="btn btn-link">
-                                                <i class="fa-solid fa-xmark-circle text-danger"></i>
-                                            </a>
-                                        @endif
+                                        @if ($user->role != 'admin')
+                                            @if ($user->is_approved != 1)
+                                                <a
+                                                    href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 1]) }}"class="btn btn-link m-0 p-0">
+                                                    <i class="fa-solid fa-check-circle text-success"></i>
+                                                </a>
+                                            @endif
+                                            @if ($user->is_approved == 1 || $user->is_approved == 0)
+                                                <a href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 2]) }}"
+                                                    class="btn btn-link">
+                                                    <i class="fa-solid fa-xmark-circle text-danger"></i>
+                                                </a>
+                                            @endif
 
-                                        {{-- show data --}}
-                                        <a href="#" class="btn btn-link" data-bs-toggle="modal"
-                                            data-bs-target="#userModal{{ $user->id }}">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
+                                            {{-- show data --}}
+                                            <a href="#" class="btn btn-link" data-bs-toggle="modal"
+                                                data-bs-target="#userModal{{ $user->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
 
@@ -247,8 +249,8 @@
                                                 <div class="info-section d-flex justify-content-between">
                                                     <div class="text-start">
                                                         <div class="image-container d-flex align-items-center">
-                                                            <img src="{{ asset($user->profile_image ? $user->profile_image : 'images/logo.png') }}"
-                                                                alt="صورة المستخدم" class="me-3"
+                                                            <img src="{{ asset($user->profile_image ? $user->profile_image : 'images/user-logo.svg') }}"
+                                                                alt="{{ $user->profile_image }}" class="me-3"
                                                                 style="border-radius: 8px;">
                                                             <h5 class="ms-3">{{ $user->name }}</h5>
                                                         </div>
@@ -268,7 +270,7 @@
                                                             </p>
                                                         @elseif($user->role == 'transportation')
                                                             <p class="text-muted"><strong>رقم الهاتف:</strong>
-                                                                {{ $user->transportation->phone_number ?? 'غير متوفر' }}
+                                                                {{ $user->transportationCompany->phone_number ?? 'غير متوفر' }}
                                                             </p>
                                                         @elseif($user->role == 'financing')
                                                             <p class="text-muted"><strong>رقم الهاتف:</strong>
@@ -311,9 +313,9 @@
                                                             <p><strong>الرقم الجامعي:</strong>
                                                                 {{ $user->student->university_number ?? 'غير متوفر' }}</p>
                                                             <p><strong>الجامعة:</strong>
-                                                                {{ $user->student->university ?? 'غير متوفر' }}</p>
-                                                            <p><strong>التخصص:</strong>
-                                                                {{ $user->student->specialization ?? 'غير متوفر' }}</p>
+                                                                {{ $user->student->university_name ?? 'غير متوفر' }}</p>
+                                                            <p><strong>العنوان:</strong>
+                                                                {{ $user->student->student_address ?? 'غير متوفر' }}</p>
                                                         @elseif($user->role == 'consultant')
                                                             <p><strong>التخصص:</strong>
                                                                 {{ $user->consultant->specialization ?? 'غير متوفر' }}</p>
@@ -322,27 +324,30 @@
                                                             </p>
                                                             <p><strong>نوع النشاط:</strong>
                                                                 {{ $user->consultant->activity_type ?? 'غير متوفر' }}</p>
-                                                        @elseif($user->role == 'housing' || $user->role == 'transportation' || $user->role == 'financing')
-                                                            <p><strong>اسم الشركة:</strong> {{ $user->name }}</p>
-                                                            <p><strong>العنوان:</strong>
-                                                                {{ $user->financingCompany->address ?? 'غير متوفر' }}</p>
+                                                        @elseif($user->role == 'housing' || $user->role == 'financing')
+                                                            {{-- <p><strong>العنوان:</strong>
+                                                                {{ $user->financingCompany->address ?? 'غير متوفر' }}</p> --}}
                                                             <p><strong>رقم السجل التجاري:</strong>
-                                                                {{ $user->financingCompany->commercial_register_number ?? 'غير متوفر' }}
+                                                                {{ $user->housingCompany->commercial_register_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'transportation')
+                                                            <p><strong>رقم السجل التجاري:</strong>
+                                                                {{ $user->transportationCompany->commercial_register_number ?? 'غير متوفر' }}
                                                             </p>
                                                         @endif
                                                     </div>
                                                     <div class="col-md-4">
                                                         {{-- <h6 class="fw-bold">الإحصائيات</h6> --}}
                                                         @if ($user->role == 'student')
-                                                            <p><strong>عدد طلبات السكن:</strong>
-                                                                {{-- {{ $user->housingRequests()->count() ?? 0 }}</p> --}}
+                                                            {{-- <p><strong>عدد طلبات السكن:</strong>
+                                                                {{ $user->housingRequests()->count() ?? 0 }}</p>
                                                             <p><strong>عدد طلبات النقل:</strong>
-                                                                {{-- {{ $user->transportationRequests()->count() ?? 0 }}</p> --}}
+                                                                {{ $user->transportationRequests()->count() ?? 0 }}</p>
                                                             <p><strong>عدد طلبات التمويل:</strong>
-                                                                {{-- {{ $user->financeRequests()->count() ?? 0 }}</p> --}}
+                                                                {{ $user->financeRequests()->count() ?? 0 }}</p>
                                                             <p><strong>عدد طلبات الاستشارة:</strong>
-                                                                {{-- {{ $user->consultationRequests()->count() ?? 0 }}</p> --}}
-                                                            @elseif($user->role == 'consultant')
+                                                                {{ $user->consultationRequests()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'consultant')
                                                             <p><strong>صورة السجل التجاري:</strong>
                                                             </p>
                                                             <img src="{{ asset($user->financingCompany->commercial_register_image ?? '') }}"
@@ -359,17 +364,39 @@
                                                             <p><strong>التقييم:</strong>
                                                                 {{ $user->rating ?? 'لا يوجد تقييم' }}</p> --}}
                                                         @elseif($user->role == 'housing')
-                                                            <p><strong>عدد الوحدات السكنية:</strong>
-                                                                {{-- {{ $user->housings()->count() ?? 0 }}</p> --}}
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->housingCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->housingCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+                                                            {{-- <p><strong>عدد الوحدات السكنية:</strong>
+                                                                {{ $user->housings()->count() ?? 0 }}</p>
                                                             <p><strong>عدد الحجوزات:</strong>
-                                                                {{-- {{ $user->housingReservations()->count() ?? 0 }}</p> --}}
-                                                            @elseif($user->role == 'transportation')
-                                                            <p><strong>عدد الرحلات:</strong>
-                                                                {{-- {{ $user->trips()->count() ?? 0 }}</p> --}}
-                                                            <p><strong>عدد الحجوزات:</strong>
-                                                                {{-- {{ $user->tripReservations()->count() ?? 0 }}</p> --}}
-                                                            @elseif($user->role == 'financing')
-                                                                {{-- show images --}}
+                                                                {{ $user->housingReservations()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'transportation')
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->transportationCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->transportationCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+                                                            {{-- <p><strong>عدد الرحلات:</strong>
+                                                                {{ $user->trips()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد الحجوزات:</strong> --}}
+                                                            {{-- {{ $user->tripReservations()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'financing')
+                                                            {{-- show images --}}
                                                             <p><strong>صورة السجل التجاري:</strong>
                                                             </p>
                                                             <img src="{{ asset($user->financingCompany->commercial_register_image ?? '') }}"

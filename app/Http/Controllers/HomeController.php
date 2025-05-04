@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Consultant;
 use App\Models\FinancingCompany;
 use App\Models\Housing;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,10 @@ class HomeController extends Controller
         $consultants = Consultant::get();
         $houses = Housing::with('primaryPhoto')->get();
         $financings = FinancingCompany::get();
-        return view('home', compact('consultants', 'houses', 'financings'));
+        if (Auth::check()) {
+            return view('home', compact('consultants', 'houses', 'financings'));
+        }
+        return view('guest');
     }
     public function guest()
     {
@@ -36,5 +40,11 @@ class HomeController extends Controller
     public function joinUs()
     {
         return view('register-request');
+    }
+
+    // questions
+    public function questions()
+    {
+        return view('questions');
     }
 }

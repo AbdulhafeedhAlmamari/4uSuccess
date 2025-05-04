@@ -49,6 +49,7 @@
 
     @include('components.chat-modal')
     <br><br>
+    <br><br>
 @endsection
 
 @section('script')
@@ -86,7 +87,7 @@
                         }
                     }
                 });
-                alert(pusher);
+                // alert(pusher);
 
 
             }

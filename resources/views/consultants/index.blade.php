@@ -20,7 +20,7 @@
             <p class="consultants_header mb-5">المستشارون</p>
             <form action="{{ route('home.consultants') }}" method="GET">
                 <div class="d-flex justify-content-center">
-                    <select class="form-select ms-4" name="specialization" aria-label="Default select example">
+                    <select class="form-select me-4" name="specialization" aria-label="Default select example">
                         <option value="">التخصص</option>
                         <option value="الذكاء الاصطناعي"
                             {{ request('specialization') == 'الذكاء الاصطناعي' ? 'selected' : '' }}>الذكاء الاصطناعي
@@ -32,14 +32,14 @@
                         <option value="علوم الحاسب" {{ request('specialization') == 'علوم الحاسب' ? 'selected' : '' }}>علوم
                             الحاسب</option>
                     </select>
-                    <div class="form-check ms-4 mt-2">
+                    <div class="form-check me-4 mt-2">
                         <input class="form-check-input" type="radio" name="gender" value="ذكر" id="maleRadio"
                             {{ request('gender') == 'male' ? 'checked' : '' }}>
                         <label class="form-check-label" for="maleRadio">
                             ذكر
                         </label>
                     </div>
-                    <div class="form-check ms-4 mt-2">
+                    <div class="form-check me-4 mt-2">
                         <input class="form-check-input" type="radio" name="gender" value="انثى" id="femaleRadio"
                             {{ request('gender') == 'female' ? 'checked' : '' }}>
                         <label class="form-check-label" for="femaleRadio">
@@ -60,7 +60,7 @@
                             @endif
                             @if (request('gender'))
                                 <span class="badge bg-success me-2">الجنس:
-                                    {{ request('gender') == 'male' ? 'ذكر' : 'انثى' }}</span>
+                                    {{ request('gender') == 'ذكر' ? 'ذكر' : 'انثى' }}</span>
                             @endif
                         </div>
                         <a href="{{ route('home.consultants') }}" class="btn btn-primary   float-end w-auto">إلغاء

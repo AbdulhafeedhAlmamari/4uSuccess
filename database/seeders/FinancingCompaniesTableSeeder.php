@@ -22,7 +22,7 @@ class FinancingCompaniesTableSeeder extends Seeder
             //     'updated_at' => now(),
             // ],
             [
-                'user_id' => 8,
+                'user_id' => 7,
                 'address' => 'جدة، حي الشمال',
                 'description' => 'شركة رائدة في مجال التمويل الاستثماري',
                 'commercial_register_number' => '1023456789',
@@ -33,7 +33,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 9,
+                'user_id' => 8,
                 'address' => 'الدمام، حي الشرق',
                 'description' => 'شركة رائدة في مجال التمويل الشخصي',
                 'commercial_register_number' => '1034567890',
@@ -44,7 +44,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 10,
+                'user_id' => 9,
                 'address' => 'مكة، حي الغرب',
                 'description' => 'شركة رائدة في مجال التمويل التجاري',
                 'commercial_register_number' => '1045678901',
@@ -55,7 +55,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 11,
+                'user_id' => 10,
                 'address' => 'المدينة، حي الجنوب',
                 'description' => 'شركة رائدة في مجال التمويل الصناعي',
                 'commercial_register_number' => '1056789012',
@@ -66,7 +66,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 12,
+                'user_id' => 11,
                 'address' => 'الخبر، حي الروضة',
                 'description' => 'شركة رائدة في مجال التمويل الزراعي',
                 'commercial_register_number' => '1067890123',
@@ -77,7 +77,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 13,
+                'user_id' => 12,
                 'address' => 'الطائف، حي النزهة',
                 'description' => 'شركة رائدة في مجال التمويل التعليمي',
                 'commercial_register_number' => '1078901234',
@@ -88,7 +88,7 @@ class FinancingCompaniesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 14,
+                'user_id' => 13,
                 'address' => 'بريدة، حي الخالدية',
                 'description' => 'شركة رائدة في مجال التمويل الصحي',
                 'commercial_register_number' => '1089012345',
