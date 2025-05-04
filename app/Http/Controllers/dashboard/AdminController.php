@@ -32,8 +32,9 @@ class AdminController extends Controller
 
 
         // Get all users with their respective role details
-        $users = User::all();
-        $usersRequest = User::all();
+        $users = User::all()->sortByDesc('created_at');
+        // get with latest data
+        $usersRequest = User::all()->sortByDesc('created_at');
         // $usersRequest = User::where('is_approved', 0)->get();
 
         return view('dashboards.admin.index', compact(
@@ -84,5 +85,10 @@ class AdminController extends Controller
         $user->delete();
 
         return redirect()->back()->with('success', 'تم حذف المستخدم بنجاح');
+    }
+
+    public function showUser()
+    {
+        return view('dashboards.admin.index');
     }
 }

@@ -46,4 +46,5 @@ class ConsultantController extends Controller
 
         return view('dashboards.consultants.profile', compact('user', 'consultant'));
     }
+    
 }

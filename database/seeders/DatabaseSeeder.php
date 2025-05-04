@@ -51,13 +51,13 @@ class DatabaseSeeder extends Seeder
         // Photo::factory(7)->create();
         // ReservationRequest::factory(3)->create();
         // // admin user
-        // User::create([
-        //     'name' => 'admin',
-        //     'email' => 'admin@gmail.com',
-        //     'password' => Hash::make('12345678'),
-        //     'role' => 'admin',
-        //     'is_approved' => '1',
-        //     'profile_image' => 'https://ui-avatars.com/api/?name=admin&background=random',
-        // ]);
+        User::create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('12345678'),
+            'role' => 'admin',
+            'is_approved' => '1',
+            'profile_image' => 'https://ui-avatars.com/api/?name=admin&background=random',
+        ]);
     }
 }
