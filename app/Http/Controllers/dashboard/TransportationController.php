@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\ReservationRequest;
 use App\Models\TransportationCompany;
 use App\Models\Trip;
@@ -13,9 +14,9 @@ class TransportationController extends Controller
 {
     public function index()
     {
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportations')->count();
-        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'transportations')->count();
-        $rejectedOrdersCount = ReservationRequest::where('status', 'rejected')->where('reservation_type', 'transportations')->count();
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportation')->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'transportation')->count();
+        $rejectedOrdersCount = ReservationRequest::where('status', 'rejected')->where('reservation_type', 'transportation')->count();
         return view('dashboards.transportations.index', compact('pendingOrdersCount', 'confirmedOrdersCount', 'rejectedOrdersCount'));
     }
 
@@ -49,6 +50,29 @@ class TransportationController extends Controller
             ->latest()
             ->get();
         return view('dashboards.transportations.orders', compact('reservations', 'status'));
+    }
+    public function updateStatus(Request $request, ReservationRequest $reservation)
+    {
+        $request->validate([
+            'status' => 'nullable|in:completed,rejected',
+            'reply' => 'nullable|string',
+
+        ]);
+        $reservation->status = $request->status;
+        $reservation->save();
+
+        if ($request->status == 'completed') {
+            Invoice::create([
+                'reservation_request_id' => $reservation->id,
+                'amount_invoice' => $reservation->trip->price,
+                'vat' =>  15,
+                'service_fee' => 23,
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'date_invoice' => now(),
+            ]);
+        }
+        return back()->with('success', 'تم تحديث حالة الطلب بنجاح');
     }
     public function store(Request $request)
     {

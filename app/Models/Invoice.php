@@ -8,6 +8,7 @@ class Invoice extends Model
 {
     protected $fillable  = [
         'reservation_request_id',
+        'installment_id',
         'user_id',
         'status',
         'amount_invoice',
@@ -19,5 +20,9 @@ class Invoice extends Model
     public function reservationRequest()
     {
         return $this->belongsTo(ReservationRequest::class);
+    }
+    public function installment()
+    {
+        return $this->belongsTo(Installment::class);
     }
 }

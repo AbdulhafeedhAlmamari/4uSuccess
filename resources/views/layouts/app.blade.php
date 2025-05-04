@@ -27,8 +27,6 @@
         <div class="main-content">
             <div class="page-content">
                 @yield('content')
-
-
                 <!-- login modal -->
                 <x-login-modal />
 

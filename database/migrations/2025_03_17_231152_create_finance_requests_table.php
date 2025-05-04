@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->text('description');
             $table->decimal('amount', 10, 2);
-            $table->string('installment_period');
+            $table->integer('installment_period');
+            $table->decimal('total_paid', 10, 2)->default(0);
             $table->string('finance_type');
             // أوافق على جميع البيانات المدخلة صحيحة وأتحمل مسؤوليتها.
             $table->boolean('is_agreed')->default(false);

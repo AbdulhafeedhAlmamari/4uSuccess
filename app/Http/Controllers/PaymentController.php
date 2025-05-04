@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Installment;
 use App\Models\Payment;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
@@ -24,7 +25,10 @@ class PaymentController extends Controller
             return redirect()->route('home')->with('error', 'لا يوجد طلبات للدفع');
         }
         $invoice = Invoice::where('reservation_request_id', $orderId)->first();
-
+        if (!$invoice) {
+            // $invoice = Installment::where('finance_request_id', $orderId)->first();
+            $invoice = Invoice::where('installment_id', $orderId)->first();
+        }
         $amount = $invoice->amount_invoice; // Default amount
         // If invoice_id is provided, get the actual amount from the invoice
         if (!$invoice) {
@@ -66,7 +70,6 @@ class PaymentController extends Controller
         // dd($request->all());
         // Set your Stripe API key
         Stripe::setApiKey(env('STRIPE_SECRET'));
-
         try {
             // Create a PaymentIntent
             $paymentIntent = PaymentIntent::create([
@@ -87,7 +90,7 @@ class PaymentController extends Controller
                 $paymentIntent->status === 'requires_action' &&
                 $paymentIntent->next_action->type === 'use_stripe_sdk'
             ) {
-
+                dd($request->all());
                 // Tell the client to handle the action
                 return response()->json([
                     'requires_action' => true,
@@ -197,10 +200,17 @@ class PaymentController extends Controller
             // If there's an invoice, update its status
             if ($invoiceId) {
                 $invoice = Invoice::find($invoiceId);
+                // dd($invoice);
                 if ($invoice) {
                     $invoice->status = 'paid';
                     $invoice->save();
-                    $invoice->reservationRequest->update(['status' => 'paid']);
+                    if ($invoice->reservationRequest) {
+                        $invoice->reservationRequest->update(['status' => 'paid']);
+                    }
+                    if($invoice->installment){
+                        $invoice->installment->update(['status' => 'paid']);
+                    }
+                    // $invoice->financeRequest->update(['status' => 'paid']);
                 }
             }
 

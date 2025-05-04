@@ -30,7 +30,7 @@ class StudentController extends Controller
             ->get();
 
         $financeRequests = FinanceRequest::where('student_id', Auth::id())
-            ->with('student', 'financingCompany')
+            ->with('student', 'financingCompany','installments')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -41,14 +41,17 @@ class StudentController extends Controller
 
         $transportationRequests = ReservationRequest::with([
             'trip.transportationCompany', // Load housing company and user
-        ])->where('reservation_type', 'transportations')
+        ])->where('reservation_type', 'transportation')
             ->where('student_id', Auth::id())
             ->get();
-
 
         return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
     }
 
+public function installment()
+{
+    return view('dashboards.students.installment');
+}
     public function profile()
     {
         // Get the authenticated user

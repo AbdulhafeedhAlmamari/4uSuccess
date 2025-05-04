@@ -14,7 +14,7 @@
 @endsection
 @section('content')
     <!-- consultants section -->
-<br>
+    <br>
     <section class="container mt-5 consultant-details">
         <div class="card border-0">
             <div class="row g-0">
@@ -52,7 +52,7 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('build/assets/js/scroll_cards.js') }}"></script>
+    {{-- <script src="{{ asset('build/assets/js/scroll_cards.js') }}"></script> --}}
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     {{-- <script src="{{ asset('build/assets/js/chat.js') }}"></script> --}}
 
@@ -73,8 +73,9 @@
                 // Get Pusher credentials from meta tags
                 const pusherKey = document.querySelector('meta[name="pusher-app-key"]').content;
                 const pusherCluster = document.querySelector('meta[name="pusher-app-cluster"]').content;
-
                 // Initialize Pusher
+
+
                 pusher = new Pusher(pusherKey, {
                     cluster: pusherCluster,
                     forceTLS: true,
@@ -85,8 +86,11 @@
                         }
                     }
                 });
-            }
+                alert(pusher);
 
+
+            }
+            console.log('saaaaaa');
             // Initialize chat when modal is shown
             if (chatModal) {
                 chatModal.addEventListener('show.bs.modal', function(event) {
@@ -100,6 +104,7 @@
                         }
 
                         initializeChat(consultantId);
+
                     }
                 });
 
@@ -119,13 +124,16 @@
                 fetch(`/chat/consultant/${consultantId}`)
                     .then(response => response.json())
                     .then(data => {
+                        // alert(data.user_id);
                         // Set recipient name in modal title
                         document.getElementById('chat-recipient-name').textContent = data.consultant.user.name;
                         document.getElementById('chat-recipient-avatar').src = data.consultant.user
                             .profile_image;
+
                         // Set receiver ID for sending messages
                         receiverId = data.user_id;
                         receiverIdInput.value = receiverId;
+
 
                         // Load previous messages
                         loadMessages(receiverId);

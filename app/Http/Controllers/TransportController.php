@@ -45,8 +45,10 @@ class TransportController extends Controller
             'status' => 'pending',
             'request_date' => now(),
         ]);
+        $type = $reservation->trip->transport_type;
+        $type == 'single' ? 'نقل فردي' : 'نقل جماعي';
 
-        return redirect()->route('home.transport.search')->with('success', 'تم إرسال طلب الحجز بنجاح. سيتم إشعارك عند الموافقة عليه.');
+        return redirect()->route('home.transport.search', ['type' => $type])->with('success', 'تم إرسال طلب الحجز بنجاح. سيتم إشعارك عند الموافقة عليه.');
     }
 
     public function searchForTrip(Request $request)

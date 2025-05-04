@@ -14,6 +14,7 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\HousingController;
+use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
@@ -104,7 +105,13 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/student-orders', [DashboardStudentController::class, 'orders'])->name('dashboard.student_orders');
     Route::get('/student-profile', [DashboardStudentController::class, 'profile'])->name('dashboard.student_profile');
     Route::put('/student/profile/update', [DashboardStudentController::class, 'updateProfile'])->name('student.profile.update');
-    // Route::get('/student/consultations/orders', [DashboardStudentController::class, 'index'])->name('student.consultations.orders');
+    Route::get('/student/installments', [DashboardStudentController::class, 'installment'])->name('student.installment');
+// Installment routes
+    Route::get('/student/{id}/installments', [InstallmentController::class, 'show'])->name('installment.show');
+    // Route::post('/student/{id}/create-installments', [InstallmentController::class, 'createInstallments'])->name('installment.create');
+    Route::post('/installment/{id}/update-status', [InstallmentController::class, 'updateStatus'])->name('installment.update-status');
+    Route::get('/check-overdue-installments', [InstallmentController::class, 'checkOverdueInstallments'])->name('installment.check-overdue');
+
 
     // transportations routes
     Route::get('/transportations', [DashboardTransportationController::class, 'index'])->name('dashboard.transportations');
@@ -113,7 +120,7 @@ Route::prefix('/dashboard')->group(function () {
     Route::put('/transportations/{id}', [DashboardTransportationController::class, 'update'])->name('dashboard.transportations.update');
     Route::delete('/transportations/{id}', [DashboardTransportationController::class, 'destroy'])->name('dashboard.transportations.destroy');
     Route::get('/transportation-orders/{status}', [DashboardTransportationController::class, 'orders'])->name('dashboard.transportation_orders');
-    Route::post('/houses/reservation/{reservation}/status', [DashboardHouseController::class, 'updateStatus'])->name('dashboard.houses.reservation.status');
+    Route::post('/transportation/reservation/{reservation}/status', [DashboardTransportationController::class, 'updateStatus'])->name('dashboard.transportation.reservation.status');
     Route::get('/transportation-profile', [DashboardTransportationController::class, 'profile'])->name('dashboard.transportation_profile');
     Route::put('/dashboard/transportation/profile/update', [DashboardTransportationController::class, 'updateProfile'])->name('transportation.profile.update');
 
@@ -150,6 +157,7 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/finance-profile', [DashboardFinanceController::class, 'profile'])->name('dashboard.finance_profile');
     Route::put('/dashboard/finance/profile/update', [DashboardFinanceController::class, 'updateProfile'])->name('finance.profile.update');
     Route::post('/finance-orders/reject/{id}', [DashboardFinanceController::class, 'reject'])->name('consultation.request.reject');
+    // Route::post('/finance-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('finance.request.accept');
     Route::post('/dashboard/finance-orders/update-status', [DashboardFinanceController::class, 'updateStatus'])->name('dashboard.finance_orders.update_status');
     Route::get('/finances/details', [DashboardFinanceController::class, 'showDetails'])->name('dashboard.finances.details');
 

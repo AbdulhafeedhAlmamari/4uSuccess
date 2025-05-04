@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('installments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('finance_request_id')->constrained('finance_requests')->onDelete('cascade');
+            $table->foreignId('finance_request_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('name'); // e.g., "القسط الأول", "القسط الثاني"
             $table->decimal('amount', 10, 2);
             $table->date('due_date');
-            $table->dateTime('paid_at')->nullable();
-            $table->string('status');
+            $table->enum('status', ['paid', 'unpaid', 'overdue'])->default('unpaid');
             $table->timestamps();
         });
     }

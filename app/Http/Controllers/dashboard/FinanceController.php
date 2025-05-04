@@ -5,9 +5,12 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\FinanceRequest;
 use App\Models\FinancingCompany;
+use App\Models\Installment;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -169,7 +172,7 @@ class FinanceController extends Controller
             return redirect()->back()->with('success', 'تم تحديث الملف الشخصي بنجاح');
         } catch (\Exception $e) {
             // Log the error
-            \Log::error('Profile update error: ' . $e->getMessage());
+            Log::error('Profile update error: ' . $e->getMessage());
 
             // Return error response for AJAX request
             if ($request->ajax()) {
@@ -209,9 +212,65 @@ class FinanceController extends Controller
         $financeRequest->save();
 
         if ($request->status === 'accepted') {
+            $installment = $this->createInstallments($financeRequest);
+            // dd($installment);
+        }
+
+        return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
+    }
+
+
+    public function createInstallments(FinanceRequest $financeRequest)
+    {
+        // $request->validate([
+        //     'installment_period' => 'required|integer|min:1|max:24',
+        // ]);
+
+        // $financeRequest = FinanceRequest::findOrFail($id);
+
+        // Check if user is authorized to create installments for this finance request
+        if (Auth::id() !== $financeRequest->financing_company_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if installments already exist
+        if ($financeRequest->installments()->count() > 0) {
+            return redirect()->back()->with('error', 'الأقساط موجودة بالفعل لهذا الطلب');
+        }
+
+        $installmentPeriod = $financeRequest->installment_period;
+
+        // // Update finance request with installment period
+        // $financeRequest->update([
+        //     'installment_period' => $installmentPeriod
+        // ]);
+
+        // Calculate installment amount
+        $installmentAmount = round($financeRequest->amount / $installmentPeriod, 2);
+
+        // Create installments
+        for ($i = 1; $i <= $installmentPeriod; $i++) {
+            $dueDate = Carbon::now()->addMonths($i);
+
+            $arabicNumbers = [
+                'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس',
+                'السابع', 'الثامن', 'التاسع', 'العاشر', 'الحادي عشر', 'الثاني عشر'
+            ];
+
+            $installmentName = 'القسط ' . ($i <= 12 ? $arabicNumbers[$i - 1] : $i);
+            // dd($financeRequest);
+            $installment =  Installment::create([
+                'finance_request_id' => $financeRequest->id,
+                'user_id' => $financeRequest->student_id,
+                'name' => $installmentName,
+                'amount' => $installmentAmount,
+                'due_date' => $dueDate,
+                'status' => 'unpaid'
+            ]);
+            // dd($installment);
             Invoice::create([
-                'reservation_request_id' => $financeRequest->id,
-                'amount_invoice' => $financeRequest->amount,
+                'installment_id' => $installment->id,
+                'amount_invoice' => $installmentAmount,
                 'vat' =>  15,
                 'service_fee' => 23,
                 'user_id' => Auth::id(),
@@ -220,6 +279,6 @@ class FinanceController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
+        return $installment;
     }
 }
