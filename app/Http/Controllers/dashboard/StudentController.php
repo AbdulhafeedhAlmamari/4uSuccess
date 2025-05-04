@@ -30,7 +30,7 @@ class StudentController extends Controller
             ->get();
 
         $financeRequests = FinanceRequest::where('student_id', Auth::id())
-            ->with('student', 'financingCompany')
+            ->with('student', 'financingCompany','installments')
             ->orderBy('created_at', 'desc')
             ->get();
 

@@ -10,6 +10,7 @@ use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -171,7 +172,7 @@ class FinanceController extends Controller
             return redirect()->back()->with('success', 'تم تحديث الملف الشخصي بنجاح');
         } catch (\Exception $e) {
             // Log the error
-            \Log::error('Profile update error: ' . $e->getMessage());
+            Log::error('Profile update error: ' . $e->getMessage());
 
             // Return error response for AJAX request
             if ($request->ajax()) {
@@ -211,7 +212,8 @@ class FinanceController extends Controller
         $financeRequest->save();
 
         if ($request->status === 'accepted') {
-            $this->createInstallments($financeRequest);
+            $installment = $this->createInstallments($financeRequest);
+            // dd($installment);
         }
 
         return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
@@ -256,8 +258,8 @@ class FinanceController extends Controller
             ];
 
             $installmentName = 'القسط ' . ($i <= 12 ? $arabicNumbers[$i - 1] : $i);
-
-            Installment::create([
+            // dd($financeRequest);
+            $installment =  Installment::create([
                 'finance_request_id' => $financeRequest->id,
                 'user_id' => $financeRequest->student_id,
                 'name' => $installmentName,
@@ -265,8 +267,18 @@ class FinanceController extends Controller
                 'due_date' => $dueDate,
                 'status' => 'unpaid'
             ]);
+            // dd($installment);
+            Invoice::create([
+                'installment_id' => $installment->id,
+                'amount_invoice' => $installmentAmount,
+                'vat' =>  15,
+                'service_fee' => 23,
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'date_invoice' => now(),
+            ]);
         }
 
-        return redirect()->back()->with('success', 'تم إنشاء الأقساط بنجاح');
+        return $installment;
     }
 }
