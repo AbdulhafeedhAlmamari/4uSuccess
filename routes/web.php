@@ -106,8 +106,8 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/student-profile', [DashboardStudentController::class, 'profile'])->name('dashboard.student_profile');
     Route::put('/student/profile/update', [DashboardStudentController::class, 'updateProfile'])->name('student.profile.update');
     Route::get('/student/installments', [DashboardStudentController::class, 'installment'])->name('student.installment');
-// Installment routes
-    Route::get('/student/{id}/installments', [InstallmentController::class, 'show'])->name('installment.show');
+    // Installment routes
+    Route::get('/request/{id}/installments', [InstallmentController::class, 'show'])->name('installment.show');
     // Route::post('/student/{id}/create-installments', [InstallmentController::class, 'createInstallments'])->name('installment.create');
     Route::post('/installment/{id}/update-status', [InstallmentController::class, 'updateStatus'])->name('installment.update-status');
     Route::get('/check-overdue-installments', [InstallmentController::class, 'checkOverdueInstallments'])->name('installment.check-overdue');
@@ -197,6 +197,6 @@ Route::middleware(['auth'])->group(function () {
 // Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'handlePaymentSuccess'])->name('payment.success');
 // });
 // Route::middleware(['auth'])->group(function () {
-    Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment');
-    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
+Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment');
+Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
 // });

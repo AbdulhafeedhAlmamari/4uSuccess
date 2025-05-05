@@ -36,12 +36,12 @@ class InstallmentController extends Controller
         // Refresh the finance request to get updated installments
         $financeRequest = FinanceRequest::with('installments')->findOrFail($id);
         $installments = $financeRequest->installments;
-
+        $paidAmount = Installment::where('finance_request_id', $id)->where('status', 'paid')->sum('amount');
         return view('dashboards.students.installment', [
             'financeRequest' => $financeRequest,
             'installments' => $installments,
             'totalAmount' => $financeRequest->amount,
-            'paidAmount' => $financeRequest->total_paid,
+            'paidAmount' => $paidAmount,
             'remainingAmount' => $financeRequest->remaining_amount,
             'installmentProgress' => $financeRequest->paid_installments_count . '/' . $financeRequest->installment_period
         ]);
@@ -65,7 +65,7 @@ class InstallmentController extends Controller
         $installment = Installment::findOrFail($id);
 
         // Check if user is authorized to update this installment
-        if (Auth::id() !== $installment->financeRequest->financing_company_id ) {
+        if (Auth::id() !== $installment->financeRequest->financing_company_id) {
             abort(403, 'Unauthorized action.');
         }
 

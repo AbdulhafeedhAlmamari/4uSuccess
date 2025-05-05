@@ -222,11 +222,6 @@ class FinanceController extends Controller
 
     public function createInstallments(FinanceRequest $financeRequest)
     {
-        // $request->validate([
-        //     'installment_period' => 'required|integer|min:1|max:24',
-        // ]);
-
-        // $financeRequest = FinanceRequest::findOrFail($id);
 
         // Check if user is authorized to create installments for this finance request
         if (Auth::id() !== $financeRequest->financing_company_id) {
@@ -240,10 +235,7 @@ class FinanceController extends Controller
 
         $installmentPeriod = $financeRequest->installment_period;
 
-        // // Update finance request with installment period
-        // $financeRequest->update([
-        //     'installment_period' => $installmentPeriod
-        // ]);
+
 
         // Calculate installment amount
         $installmentAmount = round($financeRequest->amount / $installmentPeriod, 2);

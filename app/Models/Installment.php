@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Installment extends Model
 {
@@ -64,7 +65,7 @@ class Installment extends Model
     public function isOverdue()
     {
         return $this->status === 'overdue' ||
-               ($this->status === 'unpaid' && $this->due_date < now());
+            ($this->status === 'unpaid' && $this->due_date < now());
     }
 
     /**
@@ -75,5 +76,9 @@ class Installment extends Model
         if ($this->status === 'unpaid' && $this->due_date < now()) {
             $this->update(['status' => 'overdue']);
         }
+    }
+    public function isStudent()
+    {
+        return $this->user->role === Auth::user()->role;
     }
 }

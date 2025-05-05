@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                margin: -20px -25px 10px; */
+                                                                                                                                                                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -524,9 +524,9 @@
                                                     data-bs-target="#financeOrderModal{{ $request->id }}">
                                                     <i class="fa-regular fa-eye"></i>
                                                 </a>
-                                            @else
+                                            @elseif ($request->status == 'accepted')
                                                 <a href="{{ route('installment.show', $request->id) }}">
-                                                    <i class="fa-brands fa-paypal"></i>
+                                                    <i class="fa-regular fa-eye"></i>
                                                 </a>
                                             @endif
 

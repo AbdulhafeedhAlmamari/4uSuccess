@@ -90,11 +90,13 @@
                             </td>
                             <td>
                                 @if ($installment->status == 'paid')
-                                    -
                                 @else
-                                    <a href="{{ route('payment', $installment->id) }}">
-                                        <i class="fa-brands fa-paypal"></i>
-                                    </a>
+                                    @if ($installment->isStudent())
+                                        <a href="{{ route('payment', $installment->id) }}">
+                                            <i class="fa-brands fa-paypal"></i>
+                                        </a>
+                                    @else
+                                    @endif
                                 @endif
                             </td>
                         </tr>
