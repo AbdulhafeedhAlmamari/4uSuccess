@@ -75,7 +75,7 @@ class UsersTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            // Financing Companies (8 companies) - IDs 7-14
+            // Financing Companies (7 companies) 
             [
                 'name' => 'الشركة الوطنية للتمويل',
                 'email' => 'national@example.com',
@@ -146,26 +146,26 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'التمويل السريع',
-                'email' => 'quick@example.com',
-                'password' => Hash::make('12345678'),
-                'role' => 'financing',
-                'is_approved' => '1',
-                'profile_image' => 'images/finances/8.jpg',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'التمويل السريع',
+            //     'email' => 'quick@example.com',
+            //     'password' => Hash::make('12345678'),
+            //     'role' => 'financing',
+            //     'is_approved' => '1',
+            //     'profile_image' => 'images/finances/8.jpg',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
 
             
-            //  Housing Companies (3 companies) - IDs 15-17
+            //  Housing Companies (14 companies)
             [
                 'name' => 'دار السكن الطلابي',
                 'email' => 'housing1@example.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'housing',
                 'is_approved' => '1',
-                'profile_image' => 'housing1.jpg',
+                'profile_image' => 'images/housing1.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -175,7 +175,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'housing',
                 'is_approved' => '1',
-                'profile_image' => 'housing2.jpg',
+                'profile_image' => 'images/housing2.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -185,7 +185,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'housing',
                 'is_approved' => '1',
-                'profile_image' => 'housing3.jpg',
+                'profile_image' => 'images/housing3.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -195,7 +195,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'housing',
                 'is_approved' => '1',
-                'profile_image' => 'housing4.jpg',
+                'profile_image' => 'images/housing4.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

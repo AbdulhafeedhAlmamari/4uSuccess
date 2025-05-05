@@ -37,6 +37,82 @@
         .nav-pills .nav-link.active {
             background: linear-gradient(90deg, #54B6B7 0%, #61528B 100%);
         }
+
+        /* modal style */
+
+        .orders-section-modal .modal-content {
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .orders-section-modal .modal-header,
+        .orders-section-modal .modal-footer {
+            border: none;
+            background: none;
+        }
+
+        .orders-section-modal .modal-body {
+            padding: 20px;
+        }
+
+        .orders-section-modal .info-section {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .orders-section-modal .info-box {
+            padding: 10px;
+        }
+
+        .orders-section-modal .divider {
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .orders-section-modal .status-box {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .orders-section-modal .icon-box {
+            width: 15px;
+            height: 15px;
+            background: #bbb;
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .orders-section-modal .image-container {
+            display: flex;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .orders-section-modal .image-container img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        /* image preview */
+
+        .preview-img {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .preview-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 @endsection
 @section('content')
@@ -141,20 +217,206 @@
                                     </td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
                                     <td>
-                                        @if ($user->is_approved != 1)
-                                            <a
-                                                href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 1]) }}"class="btn btn-link m-0 p-0">
-                                                <i class="fa-solid fa-check-circle text-success"></i>
-                                            </a>
-                                        @endif
-                                        @if ($user->is_approved == 1 || $user->is_approved == 0)
-                                            <a href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 2]) }}"
-                                                class="btn btn-link">
-                                                <i class="fa-solid fa-xmark-circle text-danger"></i>
+                                        @if ($user->role != 'admin')
+                                            @if ($user->is_approved != 1)
+                                                <a
+                                                    href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 1]) }}"class="btn btn-link m-0 p-0">
+                                                    <i class="fa-solid fa-check-circle text-success"></i>
+                                                </a>
+                                            @endif
+                                            @if ($user->is_approved == 1 || $user->is_approved == 0)
+                                                <a href="{{ route('admin.User.update.request', ['id' => $user->id, 'is_approved' => 2]) }}"
+                                                    class="btn btn-link">
+                                                    <i class="fa-solid fa-xmark-circle text-danger"></i>
+                                                </a>
+                                            @endif
+
+                                            {{-- show data --}}
+                                            <a href="#" class="btn btn-link" data-bs-toggle="modal"
+                                                data-bs-target="#userModal{{ $user->id }}">
+                                                <i class="fa-regular fa-eye"></i>
                                             </a>
                                         @endif
                                     </td>
                                 </tr>
+
+                                <!-- Modal for each user -->
+                                <div class="modal fade orders-section-modal" id="userModal{{ $user->id }}"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="info-section d-flex justify-content-between">
+                                                    <div class="text-start">
+                                                        <div class="image-container d-flex align-items-center">
+                                                            <img src="{{ asset($user->profile_image ? $user->profile_image : 'images/user-logo.svg') }}"
+                                                                alt="{{ $user->profile_image }}" class="me-3"
+                                                                style="border-radius: 8px;">
+                                                            <h5 class="ms-3">{{ $user->name }}</h5>
+                                                        </div>
+                                                        <p class="text-muted mt-3"><strong>البريد الإلكتروني:</strong>
+                                                            {{ $user->email }}</p>
+
+                                                        @if ($user->role == 'student')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->student->student_phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'consultant')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->consultant->phone_number ?? 'غير متوفر' }}</p>
+                                                        @elseif($user->role == 'housing')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->housingCompany->phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'transportation')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->transportationCompany->phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'financing')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->financingCompany->phone_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'admin')
+                                                            <p class="text-muted"><strong>رقم الهاتف:</strong>
+                                                                {{ $user->admin->phone_number ?? 'غير متوفر' }}</p>
+                                                        @endif
+                                                    </div>
+                                                    <div class="mt-4">
+                                                        <h5>رقم المستخدم: {{ $user->id }}</h5>
+                                                        <p class="text-muted">تاريخ التسجيل:
+                                                            {{ $user->created_at->format('Y-m-d') }}</p>
+                                                        <p class="status-box">نوع المستخدم:
+                                                            @if ($user->role == 'admin')
+                                                                <span class="badge bg-primary">مدير</span>
+                                                            @elseif($user->role == 'student')
+                                                                <span class="badge bg-info">طالب</span>
+                                                            @elseif($user->role == 'consultant')
+                                                                <span class="badge bg-success">مستشار</span>
+                                                            @elseif($user->role == 'housing')
+                                                                <span class="badge bg-warning">شركة سكن</span>
+                                                            @elseif($user->role == 'transportation')
+                                                                <span class="badge bg-secondary">شركة نقل</span>
+                                                            @elseif($user->role == 'financing')
+                                                                <span class="badge bg-dark">شركة تمويل</span>
+                                                            @else
+                                                                <span
+                                                                    class="badge bg-light text-dark">{{ $user->role }}</span>
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="divider my-4"></div>
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="col-md-6">
+                                                        <h6 class="fw-bold">معلومات إضافية</h6>
+                                                        @if ($user->role == 'student')
+                                                            <p><strong>الرقم الجامعي:</strong>
+                                                                {{ $user->student->university_number ?? 'غير متوفر' }}</p>
+                                                            <p><strong>الجامعة:</strong>
+                                                                {{ $user->student->university_name ?? 'غير متوفر' }}</p>
+                                                            <p><strong>العنوان:</strong>
+                                                                {{ $user->student->student_address ?? 'غير متوفر' }}</p>
+                                                        @elseif($user->role == 'consultant')
+                                                            <p><strong>التخصص:</strong>
+                                                                {{ $user->consultant->specialization ?? 'غير متوفر' }}</p>
+                                                            <p><strong>مدة الاستشارة:</strong>
+                                                                {{ $user->consultant->consultation_duration ?? 'غير متوفر' }}
+                                                            </p>
+                                                            <p><strong>نوع النشاط:</strong>
+                                                                {{ $user->consultant->activity_type ?? 'غير متوفر' }}</p>
+                                                        @elseif($user->role == 'housing' || $user->role == 'financing')
+                                                            {{-- <p><strong>العنوان:</strong>
+                                                                {{ $user->financingCompany->address ?? 'غير متوفر' }}</p> --}}
+                                                            <p><strong>رقم السجل التجاري:</strong>
+                                                                {{ $user->housingCompany->commercial_register_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @elseif($user->role == 'transportation')
+                                                            <p><strong>رقم السجل التجاري:</strong>
+                                                                {{ $user->transportationCompany->commercial_register_number ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        {{-- <h6 class="fw-bold">الإحصائيات</h6> --}}
+                                                        @if ($user->role == 'student')
+                                                            {{-- <p><strong>عدد طلبات السكن:</strong>
+                                                                {{ $user->housingRequests()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد طلبات النقل:</strong>
+                                                                {{ $user->transportationRequests()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد طلبات التمويل:</strong>
+                                                                {{ $user->financeRequests()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد طلبات الاستشارة:</strong>
+                                                                {{ $user->consultationRequests()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'consultant')
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->financingCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->financingCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+                                                            {{-- <p><strong>عدد الاستشارات المقدمة:</strong>
+                                                                {{ $user->consultantRequests->count() ?? 0 }}</p>
+                                                            <p><strong>التقييم:</strong>
+                                                                {{ $user->rating ?? 'لا يوجد تقييم' }}</p> --}}
+                                                        @elseif($user->role == 'housing')
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->housingCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->housingCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+                                                            {{-- <p><strong>عدد الوحدات السكنية:</strong>
+                                                                {{ $user->housings()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد الحجوزات:</strong>
+                                                                {{ $user->housingReservations()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'transportation')
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->transportationCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->transportationCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+                                                            {{-- <p><strong>عدد الرحلات:</strong>
+                                                                {{ $user->trips()->count() ?? 0 }}</p>
+                                                            <p><strong>عدد الحجوزات:</strong> --}}
+                                                            {{-- {{ $user->tripReservations()->count() ?? 0 }}</p> --}}
+                                                        @elseif($user->role == 'financing')
+                                                            {{-- show images --}}
+                                                            <p><strong>صورة السجل التجاري:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->financingCompany->commercial_register_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            <p><strong>صورة الهوية:</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->financingCompany->identity_image ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
+                                                            {{-- {{ $user->financeRequests()->count() ?? 0 }}</p> --}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
@@ -359,10 +621,35 @@
             </div>
         </div>
     </div>
+
+    {{-- image preview modal --}}
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Image Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
+        function showImagePreview(imgElement) {
+            const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            const modalImage = document.getElementById('modalImage');
+
+            modalImage.src = imgElement.src;
+            modalImage.alt = imgElement.alt;
+            document.querySelector('#imagePreviewModal .modal-title').textContent = imgElement.alt;
+
+            modal.show();
+        }
         $(document).ready(function() {
             // Initialize DataTables
             var table1 = $('#tableID').DataTable({

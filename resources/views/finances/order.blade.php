@@ -168,7 +168,7 @@
             {{-- filepath: resources/views/finances/order.blade.php --}}
             <form action="{{ route('home.finances.store') }}" method="POST">
                 @csrf
-                <input type="hidden" name="financing_company_id" value="{{ $financingCompany->id }}">
+                <input type="hidden" name="financing_company_id" value="{{ $financingCompany->user_id }}">
                 <div class="mb-3">
                     <label for="loanType" class="form-label">نوع التمويل <span
                             class="wpforms-required-label">*</span></label>

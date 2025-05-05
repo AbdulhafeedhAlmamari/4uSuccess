@@ -24,10 +24,11 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/guest', [HomeController::class, 'guest'])->name('guest');
+// Route::get('/guest', [HomeController::class, 'guest'])->name('guest');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contact.us');
 Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about.us');
 Route::get('/join-us', [HomeController::class, 'joinUs'])->name('join.us');
+Route::get('/questions', [HomeController::class, 'questions'])->name('questions');
 
 // register routes
 Route::post('/student-register', [AuthController::class, 'studentRegister'])->name('student.register');

@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasOne(Consultant::class);
     }
 
+    public function consultantRequests()
+    {
+        return $this->hasMany(ConsultationRequest::class, 'consultant_id');
+    }
+
     public function financingCompany()
     {
         return $this->hasOne(FinancingCompany::class);

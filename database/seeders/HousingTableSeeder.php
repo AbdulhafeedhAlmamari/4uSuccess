@@ -12,7 +12,7 @@ class HousingTableSeeder extends Seeder
         $housingUnits = [
             // Housing Company 1 (ID 15)
             [
-                'housing_company_id' => 15,
+                'housing_company_id' => 14,
                 'address' => 'الرياض، حي الجامعة، شارع الملك عبدالله',
                 'distance_from_university' => 1.5,
                 'price' => 12000.00,
@@ -24,7 +24,7 @@ class HousingTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'housing_company_id' => 16,
+                'housing_company_id' => 15,
                 'address' => 'الرياض، حي النخيل، شارع الأمير محمد',
                 'distance_from_university' => 3.2,
                 'price' => 8000.00,
@@ -38,7 +38,7 @@ class HousingTableSeeder extends Seeder
 
             // Housing Company 2 (ID 16)
             [
-                'housing_company_id' => 17,
+                'housing_company_id' => 16,
                 'address' => 'جدة، حي الجامعة، شارع الأمير سلطان',
                 'distance_from_university' => 0.8,
                 'price' => 15000.00,

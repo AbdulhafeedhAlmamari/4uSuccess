@@ -29,7 +29,8 @@
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
                                     <h4 class="mb-3">خدمــة النقل</h4>
                                     <p>سيتمكن الطلاب من طلب وسيلة نقل من وإلى ، مع إمكانية اختيار الوقت والمكان .</p>
-                                    <a class="fw-medium" href="">الدخــول للخدمة</a>
+                                    <a class="fw-medium" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">الدخــول للخدمة</a>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +44,8 @@
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
                                     <h4 class="mb-3">خدمــة السكن</h4>
                                     <p>سيتمكن الطلاب من طلب سكن من وإلى الجامعة، مع إمكانية اختيار المكان.</p>
-                                    <a class="fw-medium" href=""> الدخـول للخدمة</a>
+                                    <a class="fw-medium" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal"> الدخـول للخدمة</a>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +60,8 @@
                                     <h4 class="mb-3">خدمــة الاستشارة</h4>
                                     <p>سيتمكن الطلاب من التواصل مع مستشارين أكاديميين للحصول على الإرشاد المناسب.
                                     </p>
-                                    <a class="fw-medium" href="">الدخول للخدمة</a>
+                                    <a class="fw-medium" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">الدخول للخدمة</a>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +74,8 @@
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
                                     <h4 class="mb-3">خدمــة التمويل</h4>
                                     <p>سيتمكن الطلاب من البحث عن المنح الدراسية والقروض التعليمية المتاحة.</p>
-                                    <a class="fw-medium" href="">الدخول للخدمــة</a>
+                                    <a class="fw-medium" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">الدخول للخدمــة</a>
                                 </div>
                             </div>
                         </div>
