@@ -2,162 +2,110 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewChatMessage;
 use App\Models\ChatMessage;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Consultant;
-use App\Models\Student;
+use App\Models\Message;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Pusher\Pusher;
 
 class ChatController extends Controller
 {
     /**
-     * Get chat messages between authenticated user and another user
+     * Get messages between the current user and another user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getMessages(Request $request)
     {
-        $userId = Auth::id();
-        $otherUserId = $request->user_id;
-        // Fetch messages where current user is either sender or receiver
-        $messages = ChatMessage::where(function ($query) use ($userId, $otherUserId) {
-            $query->where('sender_id', $userId)
-                ->where('receiver_id', $otherUserId);
-        })->orWhere(function ($query) use ($userId, $otherUserId) {
-            $query->where('sender_id', $otherUserId)
-                ->where('receiver_id', $userId);
-        })
-            ->with(['sender:id,name,profile_image'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $recipientId = $request->input('receiver_id');
 
-        // Mark messages as read
-        ChatMessage::where('sender_id', $otherUserId)
-            ->where('receiver_id', $userId)
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+        if (!$recipientId) {
+            return response()->json(['error' => 'Recipient ID is required'], 400);
+        }
+
+        $currentUserId = Auth::id();
+
+        // Get messages between the two users
+        $messages = ChatMessage::where(function ($query) use ($currentUserId, $recipientId) {
+            $query->where('sender_id', $currentUserId)
+                ->where('receiver_id', $recipientId);
+        })
+            ->orWhere(function ($query) use ($currentUserId, $recipientId) {
+                $query->where('sender_id', $recipientId)
+                    ->where('receiver_id', $currentUserId);
+            })
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($message) {
+                $sender = User::find($message->sender_id);
+                return [
+                    'id' => $message->id,
+                    'message' => $message->message,
+                    'sender_id' => $message->sender_id,
+                    'sender_name' => $sender ? $sender->name : 'Unknown User',
+                    'created_at' => $message->created_at
+                ];
+            });
+
         return response()->json([
-            'messages' => $messages,
-            'current_user_id' => $userId
+            'success' => true,
+            'messages' => $messages
         ]);
     }
 
     /**
-     * Send a new message
+     * Send a message to another user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function sendMessage(Request $request)
     {
         $request->validate([
-            'receiver_id' => 'required|exists:users,id',
-            'message' => 'required|string'
+            'receiver_id' => 'nullable',
+            'message' => 'nullable|string'
         ]);
-
+        // dd($request->all());
         $message = ChatMessage::create([
             'sender_id' => Auth::id(),
             'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
-            'is_read' => false
+            'message' => $request->message
         ]);
 
-        // Load the sender relationship
-        $message->load('sender:id,name,profile_image');
-
-        // Broadcast the message
-        broadcast(new NewChatMessage($message))->toOthers();
-        $userRole = Auth::user()->role;
-        if ($userRole === 'consultant') {
-            return response()->json([
-                'success' => true,
-                'user_type' => 'consultant',
-                'message' => $message
-            ]);
-        } else {
-            return response()->json($message);
-        }
-        // Return a structured JSON response
         return response()->json([
             'success' => true,
-            'message' => $message
+            'message' => 'Message sent successfully',
+            'message_id' => $message->id
         ]);
     }
 
     /**
-     * Get consultant details for chat
+     * Get consultant details for chat.
+     *
+     * @param  int  $consultantId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getConsultantDetails($consultantId)
     {
-        $consultant = Consultant::with('user:id,name,profile_image')->findOrFail($consultantId);
-        // dd($consultant);
+        $consultant = User::where('id', $consultantId)
+            ->where('role', 'consultant')
+            ->first();
+
+        if (!$consultant) {
+            return response()->json(['error' => 'Consultant not found'], 404);
+        }
+
         return response()->json([
+            'success' => true,
             'consultant' => [
-                'user' => [
-                    'name' => $consultant->user->name,
-                    'profile_image' => asset($consultant->user->profile_image),
-                ],
-            ],
-            'user_id' => [
-                $consultant->user->id,
+                'id' => $consultant->id,
+                'name' => $consultant->name,
+                'profile_image' => $consultant->profile_image
             ]
         ]);
     }
-
-    /**
-     * Generate authentication signature for Pusher
-     */
-    public function auth(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return response('Forbidden', 403);
-        }
-
-        $channelName = $request->input('channel_name');
-        $socketId = $request->input('socket_id');
-
-        // Extract user IDs from channel name (format: private-chat.1.2)
-        $channelParts = explode('.', str_replace('private-chat.', '', $channelName));
-
-        if (count($channelParts) !== 2) {
-            return response('Forbidden', 403);
-        }
-
-        $user1 = (int)$channelParts[0];
-        $user2 = (int)$channelParts[1];
-
-        // Check if current user is one of the participants
-        if ($user->id !== $user1 && $user->id !== $user2) {
-            return response('Forbidden', 403);
-        }
-
-        // Create Pusher instance
-        $pusher = new \Pusher\Pusher(
-            config('broadcasting.connections.pusher.key'),
-            config('broadcasting.connections.pusher.secret'),
-            config('broadcasting.connections.pusher.app_id'),
-            config('broadcasting.connections.pusher.options')
-        );
-
-        // Generate auth signature
-        $auth = $pusher->socket_auth($channelName, $socketId);
-
-        return response($auth);
-    }
-
-    /**
-     * Display the consultant chat interface.
-     *
-     * @return \Illuminate\View\View
-     */
-
-    //     /**
-    //      * Get all students who have chatted with this consultant.
-    //      *
-    //      * @param int $consultantId
-    //      * @return \Illuminate\Database\Eloquent\Collection
-    //      */
-
     public function consultantChat()
     {
         // Ensure the user is a consultant
@@ -176,64 +124,6 @@ class ChatController extends Controller
             'students' => $students
         ]);
     }
-
-    /**
-     * Get all students who have chatted with this consultant.
-     *
-     * @param int $consultantId
-     * @return \Illuminate\Support\Collection
-     */
-    /**
-     * Get all students who have chatted with this consultant.
-     *
-     * @param int $consultantId
-     * @return \Illuminate\Support\Collection
-     */
-    // private function getStudentContacts($consultantId)
-    // {
-    //     $user = Auth::user();
-    //     // Fetch all unique student IDs from chat messages
-    //     $studentIds = ChatMessage::where(function ($query) use ($consultantId) {
-    //         $query->where('sender_id', $consultantId)
-    //             ->orWhere('receiver_id', $consultantId);
-    //     })
-    //         ->get(['sender_id', 'receiver_id']) // Get both sender and receiver IDs
-    //         ->map(function ($message) use ($consultantId) {
-    //             // Determine the other party in the chat
-    //             return $message->sender_id == $consultantId ? $message->receiver_id : $message->sender_id;
-    //         })
-    //         ->unique() // Ensure uniqueness
-    //         ->values(); // Reset the keys
-
-    //     $lastMessage = DB::table('chat_messages')
-    //         ->where(function ($query) use ($consultantId, $user) {
-    //             $query->where('sender_id', $consultantId)
-    //                 ->where('receiver_id', $user->id);
-    //         })
-    //         ->orWhere(function ($query) use ($consultantId, $user) {
-    //             $query->where('sender_id', $user->id)
-    //                 ->where('receiver_id', $consultantId);
-    //         })
-    //         ->orderBy('created_at', 'desc')
-    //         ->first();
-
-    //     // Get unread message count
-    //     $unreadCount = DB::table('chat_messages')
-    //         ->where('sender_id', $user->id)
-    //         ->where('receiver_id', $consultantId)
-    //         ->where('is_read', false)
-    //         ->count();
-
-    //     $user->last_message = $lastMessage ? $lastMessage->message : null;
-    //     $user->last_message_time = $lastMessage ? $lastMessage->created_at : null;
-    //     $user->unread_count = $unreadCount;
-    //     // Fetch student details
-    //     $students = User::whereIn('id', $studentIds)->get();
-    //     dd($students);
-    //     return $students;
-    // }
-
-
     private function getStudentContacts($consultantId)
     {
         // Step 1: Get all unique student IDs who chatted with the consultant

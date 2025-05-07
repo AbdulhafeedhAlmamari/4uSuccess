@@ -30,7 +30,9 @@
                         <h4 class="fw-bold mt-4">{{ $consultant->user->name ?? 'اسم المستشار غير متوفر' }}</h4>
                         {{-- <p class="text-muted">{{ $consultant->university ?? 'الجامعة غير متوفرة' }}</p> --}}
                         <button class="btn btn-primary rounded-pill px-4 py-2" data-bs-toggle="modal"
-                            data-bs-target="#chatModal" data-consultant-id="{{ $consultant->id }}">دردشة</button>
+                            data-bs-target="#chatModal"
+                            onclick="openChat({{ $consultant->user->id }}, '{{ $consultant->user->name }}', '{{ asset($consultant->user->profile_image) }}')">دردشة</button>
+
                     </div>
                 </div>
                 <div class="col-md-8 p-4">

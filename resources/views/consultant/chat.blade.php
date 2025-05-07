@@ -348,25 +348,27 @@
                                             <p>طالب</p>
                                         </div>
                                     </div>
+
                                     <!-- Student Name Above Messages -->
                                     {{-- <div id="currentStudentName" class="text-center my-3"
                                         style="font-weight: bold; font-size: 1.2rem;"></div> --}}
 
                                     <!-- Chat Messages -->
                                     <div class="chat-messages" id="chatMessages">
+                                        <div class="chat-input">
+                                            <form id="chatForm" class="chat-input-form">
+                                                <input type="text" id="messageInput" class="chat-input-field"
+                                                    placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                                                <button type="submit" class="chat-send-btn">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                         <!-- Messages will be loaded here -->
                                     </div>
                                 </div>
                                 <!-- Chat Input -->
-                                <div class="chat-input">
-                                    <form id="chatForm" class="chat-input-form">
-                                        <input type="text" id="messageInput" class="chat-input-field"
-                                            placeholder="اكتب رسالتك هنا..." autocomplete="off">
-                                        <button type="submit" class="chat-send-btn">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
-                                    </form>
-                                </div>
+
                             </div>
                         </div>
                     </div>
