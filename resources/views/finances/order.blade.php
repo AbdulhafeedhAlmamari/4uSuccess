@@ -186,6 +186,7 @@
                 <div class="mb-3">
                     <label for="iban" class="form-label">رقم الايبان <span class="wpforms-required-label">*</span></label>
                     <input type="number" class="form-control" id="iban" name="iban" required>
+                    
                 </div>
 
                 <div class="mb-3">

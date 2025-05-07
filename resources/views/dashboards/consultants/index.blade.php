@@ -64,7 +64,7 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                     {{ $acceptedOrdersCount ? $acceptedOrdersCount : 0 }}</h4>
-                                <a href="{{ route('dashboard.consultant_orders', ['status' => 'completed']) }}"
+                                <a href="{{ route('dashboard.consultant_orders', ['status' => 'accepted']) }}"
                                     class="btn btn-outline-success">عرض
                                     جميع الطلبات</a>
                             </div>
@@ -91,7 +91,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-4">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                        data-target="36894">{{ $acceptOrdersCount ? $acceptOrdersCount : 0 }}</span></h4>
+                                        data-target="36894">{{ $rejectedOrdersCount ? $rejectedOrdersCount : 0 }}</span></h4>
                                 <a href="{{ route('dashboard.consultant_orders', ['status' => 'rejected']) }}"
                                     class="btn btn-outline-danger">عرض جميع
                                     الطلبات</a>

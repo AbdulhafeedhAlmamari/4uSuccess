@@ -673,13 +673,13 @@
                                         <td>
                                             @php
                                                 $statusColors = [
-                                                    'completed' => 'success',
+                                                    'accepted' => 'success',
                                                     'rejected' => 'danger',
                                                     'pending' => 'warning',
                                                 ];
 
                                                 $statusLabels = [
-                                                    'completed' => 'مكتملة',
+                                                    'accepted' => 'مقبول',
                                                     'rejected' => 'مرفوضة',
                                                     'pending' => 'قيد الانتظار',
                                                 ];
@@ -732,8 +732,8 @@
                                                             <p class="status-box">حالة الطلب:
                                                                 @if ($request->status == 'pending')
                                                                     <span class="badge bg-warning">قيد الانتظار</span>
-                                                                @elseif($request->status == 'completed')
-                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @elseif($request->status == 'accepted')
+                                                                    <span class="badge bg-success">مقبول</span>
                                                                 @elseif($request->status == 'rejected')
                                                                     <span class="badge bg-danger">مرفوضة</span>
                                                                 @endif

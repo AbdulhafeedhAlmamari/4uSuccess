@@ -96,8 +96,6 @@
     </style>
 @endsection
 @section('content')
-
-
     <!-- company orders section -->
     <!-- main  -->
     <div class="container mt-5 orders-section">
@@ -157,10 +155,6 @@
                                             @else
                                                 <span
                                                     class="badge badge-{{ $request->status_color }}">{{ $request->status_name }}</span>
-                                                @if ($request->status == 'accepted')
-                                                    <a href="{{ route('consultation.request.complete', $request->id) }}"
-                                                        class="btn btn-sm btn-info mt-1">إكمال</a>
-                                                @endif
                                             @endif
                                         </td>
                                         <td class="actions">
@@ -181,9 +175,13 @@
                                                     method="POST">
                                                     @csrf
                                                     <div class="modal-header">
+
                                                         <h5 class="modal-title">قبول الطلب</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
+                                                    </div>
+                                                    <div style="width: 90%; margin: auto">
+                                                        <p>موضوع الاستشارة: {{ $request->subject }}</p>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
@@ -214,6 +212,9 @@
                                                         <h5 class="modal-title">رفض الطلب</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
+                                                    </div>
+                                                    <div style="width: 90%; margin: auto">
+                                                        <p>موضوع الاستشارة: {{ $request->subject }}</p>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
@@ -270,8 +271,8 @@
                                                             <p class="status-box">حالة الطلب:
                                                                 @if ($request->status == 'pending')
                                                                     <span class="badge bg-warning">قيد الانتظار</span>
-                                                                @elseif($request->status == 'completed')
-                                                                    <span class="badge bg-success">مكتملة</span>
+                                                                @elseif($request->status == 'accepted')
+                                                                    <span class="badge bg-success">مقبول</span>
                                                                 @elseif($request->status == 'rejected')
                                                                     <span class="badge bg-danger">مرفوضة</span>
                                                                 @endif
@@ -302,13 +303,13 @@
                                                     <button type="button" class="btn bg-danger text-white"
                                                         data-bs-dismiss="modal">إغلاق</button>
                                                     @if ($request->status == 'pending')
-                                                        <a href="{{ route('consultation.request.accept', $request->id) }}"
+                                                        {{-- <a href="{{ route('consultation.request.accept', $request->id) }}"
                                                             class="btn custom-success">قبول</a>
                                                         <a href="{{ route('consultation.request.reject', $request->id) }}"
-                                                            class="btn custom-danger">رفض</a>
-                                                    @elseif($request->status == 'accepted')
+                                                            class="btn custom-danger">رفض</a> --}}
+                                                        {{-- @elseif($request->status == 'accepted')
                                                         <a href="{{ route('consultation.request.complete', $request->id) }}"
-                                                            class="btn btn-info">إكمال</a>
+                                                            class="btn btn-info">إكمال</a> --}}
                                                     @endif
                                                 </div>
                                             </div>

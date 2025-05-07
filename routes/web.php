@@ -157,7 +157,7 @@ Route::prefix('/dashboard')->group(function () {
     Route::get('/finance-orders/{status}', [DashboardFinanceController::class, 'orders'])->name('dashboard.finance_orders');
     Route::get('/finance-profile', [DashboardFinanceController::class, 'profile'])->name('dashboard.finance_profile');
     Route::put('/dashboard/finance/profile/update', [DashboardFinanceController::class, 'updateProfile'])->name('finance.profile.update');
-    Route::post('/finance-orders/reject/{id}', [DashboardFinanceController::class, 'reject'])->name('consultation.request.reject');
+    Route::post('/finance-orders/reject/{id}', [DashboardFinanceController::class, 'reject'])->name('finance.request.reject');
     // Route::post('/finance-request/{id}/accept', [ConsultationRequestController::class, 'accept'])->name('finance.request.accept');
     Route::post('/dashboard/finance-orders/update-status', [DashboardFinanceController::class, 'updateStatus'])->name('dashboard.finance_orders.update_status');
     Route::get('/finances/details', [DashboardFinanceController::class, 'showDetails'])->name('dashboard.finances.details');
