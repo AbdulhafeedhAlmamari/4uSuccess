@@ -87,7 +87,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                                                                                                                                                                                        margin: -20px -25px 10px; */
+                                                                                                                                                                                                                                                                                                                                                                                                    margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -148,7 +148,6 @@
                                 @endif
 
                                 @if (request('status') != 'rejected')
-                                    {{-- filepath: e:\My students\2024-2025\term 1\مشاريع تخرج\افنان\العملي\4uSuccess\resources\views\dashboards\finances\orders.blade.php --}}
                                     <td>
                                         @if ($request->status == 'under_review')
                                             <form action="{{ route('dashboard.finance_orders.update_status') }}"
@@ -217,7 +216,15 @@
                                     <div class="modal-content">
                                         <div class="modal-body">
                                             <div>
-                                                <h5> {{ $request->student->name ?? 'غير متوفر' }}
+                                                <div class="image-container d-flex align-items-center">
+                                                    <img src="{{ isset($request->student->profile_image) ? asset('storage/' . $request->student->profile_image) : asset('images/user-logo.svg') }}"
+                                                        alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
+                                                        class="me-3" style="">
+                                                    <h5 class="ms-3">
+                                                        {{ $request->student->name ?? 'لا يوجد' }}</h5>
+                                                </div>
+
+                                                {{-- <h5> {{ $request->student->name ?? 'غير متوفر' }} --}}
                                                 </h5>
                                                 <div class="info-section d-flex align-items-start">
                                                     <div class="text-start" style="width: 50%;">
@@ -233,7 +240,7 @@
 
                                                         </p>
                                                         <p class="text-muted">
-                                                            ملاحظات الطلب
+                                                            رقم الجوال
                                                         </p>
                                                     </div>
                                                     <div>
@@ -251,7 +258,9 @@
                                                                 <span class="badge bg-warning">قيد الانتظار</span>
                                                             @endif
                                                         </p>
-                                                        <p class="text-muted">تم تسليم المبلغ بنجاح</p>
+                                                        <p class="text-muted">
+                                                            {{ $request->student->student->student_phone_number ?? 'لا يوجد' }}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,12 +270,10 @@
                                                 <div class="info-section d-flex align-items-start">
                                                     <div class="text-start" style="width: 50%;">
                                                         <p class="text-muted">نوع التمويل</p>
-                                                        </p>
                                                         <p class="text-muted">
                                                             المبلغ المطلوب
-                                                            {{-- <p class="text-muted">
-                                                            تاريخ الصرف المتوقع
-                                                        </p> --}}
+                                                        </p>
+                                                        <p class="text-muted">وصف التمويل</p>
                                                     </div>
                                                     <div>
                                                         <p class="text-muted">
@@ -274,7 +281,7 @@
                                                         </p>
                                                         <p class="text-muted">
                                                             {{ $request->amount ?? 0 }}</p>
-                                                        {{-- <p class="text-muted">تم تسليم المبلغ بنجاح</p> --}}
+                                                        <p class="text-muted">{{ $request->description ?? 'لا يوجد' }}</p>
                                                     </div>
                                                 </div>
                                                 <div class="divider my-4"></div>
@@ -292,7 +299,8 @@
                                                         </p>
                                                         <p class="text-muted">
                                                         </p>
-                                                        SA123000000123456
+
+                                                        <p class="text-muted">{{ $request->iban ?? 'لا يوجد' }}</p>
                                                     </div>
                                                 </div>
 

@@ -133,7 +133,7 @@
                     <div class="table-wrapper ">
                         <div class="table-title d-flex justify-content-between align-items-center">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addTripModal" class="btn custom-success">اضافةرحلة </button>
+                                data-bs-target="#addTripModal" class="btn custom-success">اضافة رحلة</button>
                             <div class="">
 
                                 <h2 class="m-0">
@@ -350,7 +350,7 @@
                                                             <label class="form-label">تغيير صورة الرحلة
                                                                 (اختياري)
                                                             </label><br>
-                                                            <img src="{{ asset($trip->image_path) }}"
+                                                            <img src="{{ asset($trip->image) }}"
                                                                 alt="الصورة الحالية"
                                                                 style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
                                                             <input type="file" name="image" class="form-control"
@@ -358,7 +358,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-custom">حفظ
+                                                        <button type="submit" class="btn btn-primary text-white">حفظ
                                                             التعديلات</button>
                                                     </div>
                                                 </form>

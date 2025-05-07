@@ -26,6 +26,7 @@ class FinanceRequest extends Model
         'terms_and_conditions',
         'status',
         'reply',
+        'iban',
     ];
 
     /**

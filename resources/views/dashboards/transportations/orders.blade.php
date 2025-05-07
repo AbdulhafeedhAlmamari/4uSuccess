@@ -280,7 +280,7 @@
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">تفاصيل إضافية</h6>
                                                             <p><strong>نوع الرحلة:</strong>
-                                                                <span>{{ $reservation->trip->trip_type ?? '-' }}</span>
+                                                                <span>{{ $reservation->trip->trip_type == 'one_way' ? 'ذهاب' : 'ذهاب وعودة' ?? '-' }}</span>
                                                             </p>
                                                             <p><strong>السعر:</strong>
                                                                 <span>{{ $reservation->trip->price ?? '-' }}</span> ريال

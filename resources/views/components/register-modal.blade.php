@@ -41,8 +41,20 @@
 
                             <div class="mb-3">
                                 <label for="university_name" class="form-label">اسم الجامعة</label>
-                                <input type="text" class="form-control" id="university_name" name="university_name"
-                                    placeholder="أدخل اسم الجامعة">
+                                <select class="form-control" id="university_name" name="university_name">
+                                    <option value="" selected disabled>اختر اسم الجامعة</option>
+                                    <option value="جامعة الإمام محمد بن سعود الإسلامية">جامعة الإمام محمد بن سعود
+                                        الإسلامية</option>
+                                    <option value="جامعة الطائف">جامعة الطائف</option>
+                                    <option value="جامعة الملك خالد">جامعة الملك خالد</option>
+                                    <option value="جامعة الملك فيصل">جامعة الملك فيصل</option>
+                                    <option value="جامعة أم القرى">جامعة أم القرى</option>
+                                    <option value="جامعة الجوف">جامعة الجوف</option>
+                                    <option value="جامعة الملك سعود">جامعة الملك سعود</option>
+                                    <option value="جامعة الملك عبد العزيز">جامعة الملك عبد العزيز</option>
+                                    <option value="جامعة الملك فهد للبترول والمعادن">جامعة الملك فهد للبترول والمعادن
+                                    </option>
+                                </select>
                                 <div class="invalid-feedback" id="university_name-error"></div>
                             </div>
 

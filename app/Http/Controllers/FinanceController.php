@@ -46,6 +46,7 @@ class FinanceController extends Controller
             'termsCheck' => 'accepted',
             'termsAgreement' => 'accepted',
             'financing_company_id' => 'required',
+            'iban' => 'required|numeric',
         ]);
 
         $financeRequest =  FinanceRequest::create(array_merge($validatedData, [
@@ -57,6 +58,7 @@ class FinanceController extends Controller
             'terms_and_conditions' => isset($request->termsAgreement) ? 1 : 0,
             'student_id' => $request->user()->id,
             'financing_company_id' => $request->financing_company_id,
+            'iban' => $request->iban
         ]));
         if ($financeRequest) {
             return redirect()->back()->with('success', 'تم إرسال طلب التمويل بنجاح!');

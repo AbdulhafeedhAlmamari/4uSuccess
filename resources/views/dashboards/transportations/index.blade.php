@@ -37,13 +37,13 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4" data-target="{{ $rejectedOrdersCount }}">{{ $rejectedOrdersCount }}</h4>
                                 <a href="{{ route('dashboard.transportation_orders', ['status' => 'rejected']) }}"
-                                    class="btn btn-outline-warning">عرض جميع
+                                    class="btn btn-outline-danger">عرض جميع
                                     الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
-                                <span class="avatar-title bg-warning-subtle rounded fs-3 px-2 py-1">
+                                <span class="avatar-title bg-danger-subtle rounded fs-3 px-2 py-1">
 
-                                    <i class="fa-solid fa-bag-shopping text-warning"></i>
+                                    <i class="fa-solid fa-bag-shopping text-danger"></i>
                                 </span>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-4" data-target="{{ $confirmedOrdersCount }}">
                                     {{ $confirmedOrdersCount }}</h4>
-                                <a href="{{ route('dashboard.transportation_orders', ['status' => 'confirmed']) }}"
+                                <a href="{{ route('dashboard.transportation_orders', ['status' => 'completed']) }}"
                                     class="btn btn-outline-success">عرض جميع الطلبات</a>
                             </div>
                             <div class="avatar-sm flex-shrink-0">

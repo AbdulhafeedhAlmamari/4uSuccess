@@ -14,9 +14,17 @@ class TransportationController extends Controller
 {
     public function index()
     {
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportation')->count();
-        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'transportation')->count();
-        $rejectedOrdersCount = ReservationRequest::where('status', 'rejected')->where('reservation_type', 'transportation')->count();
+        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportation')
+            ->whereHas('trip', function ($query) {
+                $query->where('transportation_company_id', auth()->user()->id);
+            })
+            ->count();
+        $confirmedOrdersCount = ReservationRequest::where('status', 'completed')->where('reservation_type', 'transportation')->whereHas('trip', function ($query) {
+            $query->where('transportation_company_id', auth()->user()->id);
+        })->count();
+        $rejectedOrdersCount = ReservationRequest::where('status', 'rejected')->where('reservation_type', 'transportation')->whereHas('trip', function ($query) {
+            $query->where('transportation_company_id', auth()->user()->id);
+        })->count();
         return view('dashboards.transportations.index', compact('pendingOrdersCount', 'confirmedOrdersCount', 'rejectedOrdersCount'));
     }
 

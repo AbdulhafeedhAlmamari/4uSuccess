@@ -36,7 +36,7 @@
                         {{-- form send --}}
                         <form action="{{ route('home.transport.store') }}" method="POST" class="w-100">
                             @csrf
-                            
+
                             <input type="hidden" name="transport_id" value="{{ $trip->id }}">
                             <button type="submit" class="btn-book">حجز الآن</button>
                             <a href="#" class="btn-more ms-2" data-bs-toggle="modal" data-bs-target="#tripModal"><i
@@ -83,11 +83,13 @@
                 </div>
             </div>
         @empty
+            <br><br><br>
             <div class="row result-card align-items-center">
                 <div class="col-md-12 text-center">
                     <h4>لا توجد نتائج مطابقة للبحث</h4>
                 </div>
             </div>
+            <br><br><br><br><br><br><br><br>
         @endforelse
     </div>
 @endsection

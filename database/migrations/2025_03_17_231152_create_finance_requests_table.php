@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->text('description');
             $table->decimal('amount', 10, 2);
+            $table->integer('iban');
             $table->integer('installment_period');
             $table->decimal('total_paid', 10, 2)->default(0);
             $table->string('finance_type');

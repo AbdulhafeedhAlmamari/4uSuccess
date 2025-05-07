@@ -701,10 +701,10 @@
                                                     <div class="info-section d-flex justify-content-between">
                                                         <div class="text-start">
                                                             <div class="image-container d-flex align-items-center">
-                                                                <img src="{{ asset('storage/' . $request->profile_image) }}"
+                                                                <img src="{{ isset($request->student->profile_image) ? asset('storage/' . $request->student->profile_image) : asset('images/user-logo.svg') }}"
                                                                     alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
                                                                     class="me-3"
-                                                                    style="width: 80px; height: 80px; border-radius: 8px;">
+                                                                    style="">
                                                                 <h5 class="ms-3">
                                                                     {{ $request->student->name ?? 'لا يوجد' }}</h5>
                                                             </div>
