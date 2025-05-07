@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                            margin: -20px -25px 10px; */
+                                                                                                                                                                                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -366,18 +366,24 @@
                                         <td>{{ $transportationRequest->trip->price ?? 'غير متوفر' }} ريال</td>
                                         <td>
                                             <span
-                                                class="badge bg-{{ $transportationRequest->status == 'pending' ? 'warning' : ($transportationRequest->status == 'rejected' ? 'danger' : 'success') }}">
-                                                {{ $transportationRequest->status == 'pending' ? 'قيد الانتظار' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : ($transportationRequest->status == 'completed' ? 'تمت الموافقة' : 'مكتملة')) }}
+                                                class="badge bg-{{ $transportationRequest->status == 'pending' ? 'warning' : ($transportationRequest->status == 'rejected' ? 'danger' : ($transportationRequest->status == 'completed' ? 'success' : 'info')) }}">
+                                                {{ $transportationRequest->status == 'pending' ? 'قيد الانتظار' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : ($transportationRequest->status == 'completed' ? 'مكتملة' : 'في انتظار الدفع')) }}
                                             </span>
                                         </td>
                                         <td class="actions">
                                             @if ($transportationRequest->status == 'completed')
-                                                {{-- <a href="#" data-bs-toggle="modal"
+                                                <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#orderModal{{ $transportationRequest->id }}">
                                                     <i class="fa-regular fa-eye"></i>
-                                                </a> --}}
+                                                </a>
+                                            @elseif ($transportationRequest->status == 'onRoad')
                                                 <a href="{{ route('payment', $transportationRequest->id) }}">
                                                     <i class="fa-brands fa-paypal"></i>
+                                                </a>
+                                            @else
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#orderModal{{ $transportationRequest->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
                                                 </a>
                                             @endif
                                             @if ($transportationRequest->status == 'paid')
@@ -703,8 +709,7 @@
                                                             <div class="image-container d-flex align-items-center">
                                                                 <img src="{{ isset($request->student->profile_image) ? asset('storage/' . $request->student->profile_image) : asset('images/user-logo.svg') }}"
                                                                     alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
-                                                                    class="me-3"
-                                                                    style="">
+                                                                    class="me-3" style="">
                                                                 <h5 class="ms-3">
                                                                     {{ $request->student->name ?? 'لا يوجد' }}</h5>
                                                             </div>
