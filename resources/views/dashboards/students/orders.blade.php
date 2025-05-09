@@ -146,7 +146,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                                            margin: -20px -25px 10px; */
+                                                                                                                                                                                                                                    margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -342,7 +342,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar-sm ms-2 bg-light rounded p-1">
-                                                        <img src="{{ asset($transportationRequest->trip->image ?? 'images/default.jpeg') }}"
+                                                        <img src="{{ asset($transportationRequest->trip->image ?? 'images/user-logo.svg') }}"
                                                             alt="Product Image" class="img-fluid d-block"
                                                             style="width: 50px; height: 50px;">
                                                     </div>
@@ -651,7 +651,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar-sm ms-2 bg-light rounded p-1">
-                                                        <img src="{{ asset('img/consultant-01.png') }}"
+                                                        <img src="{{ asset($request->consultant->profile_image) ?? asset('images/user-logo.svg') }}"
                                                             alt="Product Image" class="img-fluid d-block"
                                                             style="width: 50px; height: 50px;">
                                                     </div>
@@ -707,7 +707,7 @@
                                                     <div class="info-section d-flex justify-content-between">
                                                         <div class="text-start">
                                                             <div class="image-container d-flex align-items-center">
-                                                                <img src="{{ isset($request->student->profile_image) ? asset('storage/' . $request->student->profile_image) : asset('images/user-logo.svg') }}"
+                                                                <img src="{{ isset($request->student->profile_image) ? asset($request->student->profile_image) : asset('images/user-logo.svg') }}"
                                                                     alt="{{ $request->student->profile_image ?? 'Profile Image' }}"
                                                                     class="me-3" style="">
                                                                 <h5 class="ms-3">
