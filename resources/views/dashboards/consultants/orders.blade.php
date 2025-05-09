@@ -181,7 +181,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div style="width: 90%; margin: auto">
-                                                        <p>موضوع الاستشارة: {{ $request->subject }}</p>
+                                                        <p> نص الطلب: {{ $request->description }}</p>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
