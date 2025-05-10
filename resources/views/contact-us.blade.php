@@ -10,10 +10,12 @@
     <section class="container mt-5 mb-5 contact-section">
         <div class="container">
 
-            <div class="card" style="width: 60%;">
+            <div class="card" style="width: 100%;">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-8 col-md-12 col-sm-12 text-center">
+                        <div class="col-lg-6 col-md-12 col-sm-12 text-center" data-aos="fade-down"
+                        data-aos-easing="linear"
+                        data-aos-duration="1500">
                             <p class="contact-us-header">تواصــــل معنا</p>
                             <form action="{{ route('contact.store') }}" method="POST">
                                 @csrf
@@ -37,8 +39,9 @@
                                 <button type="submit" class="btn btn-contact-submit mt-5">ارسـال</button>
                             </form>
                         </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12 text-center align-content-center m-md-t-5">
-                            <img src="{{ asset('build/assets/images/footer.png ') }}" alt="img" class="contact-logo">
+                        <div class="col-lg-6 col-md-12 col-sm-12 text-center align-content-center m-md-t-5" data-aos="fade-up"
+                        data-aos-duration="3000">
+                            <img src="{{ asset('build/assets/images/footer.png ') }}" alt="img" class="contact-logo h-50 w-50">
                         </div>
                     </div>
                 </div>

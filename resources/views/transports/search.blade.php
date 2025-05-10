@@ -19,6 +19,8 @@
                     <button type="button" class="btn" data-toggle="round_trip">ذهاب وعودة</button>
                 </div>
                 <input type="hidden" name="trip_type" id="tripType" value="one_way">
+                <input type="hidden" name="transType" id="transType" value="{{ $type == 'single' ? 'single' : 'group' }}">
+
                 <div class="mt-3">
                     <label class="form-label">محطة المغادرة</label>
                     <div class="input-group">

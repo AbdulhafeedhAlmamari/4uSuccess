@@ -90,7 +90,7 @@
                 @endif
 
                 @forelse ($houses as $house)
-                    <div class="col-6">
+                    <div class="col-6" data-aos="flip-up" data-aos-duration="1000">
                         <div class="row justify-content-center align-items-center g-2">
                             <div class="col-12">
                                 <div class="card mb-3" style="max-width: 540px;">
@@ -98,7 +98,8 @@
                                         <div class="col-md-5">
                                             @if (isset($house->primaryPhoto))
                                                 <img src="{{ asset($house->primaryPhoto->path) }}"
-                                                    class="card-img-top rounded-start" style="height: 200px" alt="صورة السكن">
+                                                    class="card-img-top rounded-start" style="height: 200px"
+                                                    alt="صورة السكن">
                                             @else
                                                 <img src="{{ asset('images/default.jpeg') }}"
                                                     class="card-img-top rounded-start" alt="صورة السكن">

@@ -77,7 +77,7 @@
             </div>
             <div class="scroll-container d-flex " id="scrollContainerConsltant">
                 @forelse($consultants as $consultant)
-                    <div class="col-md-4">
+                    <div class="col-md-4"  data-aos="flip-left" data-aos-duration="1000">
                         <div class="card position-relative shadow">
                             @if (isset($consultant->user->profile_image))
                                 <img src="{{ asset($consultant->user->profile_image) }}" class="card-img-top"
@@ -113,7 +113,7 @@
                                     <a href="{{ route('home.consultants.show', $consultant->id) }}">
                                         <div class="d-flex justify-content-between border px-3 rounded-pill">
                                             <p class="p-0 m-0 text-secondary py-1">تفاصيل</p>
-                                            <i class="fa-regular fa-newspaper me-3 text-center py-2 m-0"></i>
+                                            <i class="fa-regular fa-newspaper ms-3 text-center pb-2 pt-1 m-0"></i>
                                         </div>
                                     </a>
                                 </div>
@@ -140,7 +140,7 @@
             </div>
             <div class="scroll-container d-flex " id="scrollContainer">
                 @forelse($houses as $house)
-                    <div class="col-md-4">
+                    <div class="col-md-4" data-aos="flip-up" data-aos-duration="1000">
                         <div class="card position-relative shadow">
                             <span class="price-badge">
                                 {{ isset($house->price) ? rtrim(rtrim(number_format($house->price, 2, '.', ''), '0'), '.') : '0' }}
@@ -186,14 +186,14 @@
                                 @endfor --}}
                                 {{-- </p> --}}
                                 <div class="container-card-footer d-flex justify-content-between ">
-                                    <p class="text-muted mb-0 pt-1"><i class="fas fa-map-marker-alt ms-1"></i>يبعد عن
+                                    <p class="text-muted mb-0 pt-1"><i class="fas fa-map-marker-alt me-1"></i>يبعد عن
                                         {{ $house->distance_from_university ?? '؟' }}
                                         كيلو
                                     </p>
                                     <a href="{{ route('houses.show', $house->id) }}">
                                         <div class="d-flex justify-content-between border px-3 rounded-pill">
                                             <p class="p-0 m-0 text-secondary py-1">تفاصيل</p>
-                                            <i class="fa-regular fa-newspaper me-3 text-center py-2 m-0"></i>
+                                            <i class="fa-regular fa-newspaper ms-3 text-center  pb-2 pt-1 m-0"></i>
                                         </div>
                                     </a>
                                 </div>
@@ -220,7 +220,9 @@
             </div>
             <div class="scroll-container d-flex " id="scrollContainerCompany">
                 @forelse($financings as $financing)
-                    <div class="col-md-2 ms-3">
+                    <div class="col-md-2 ms-3"  data-aos="fade-right"
+                    data-aos-offset="300"
+                    data-aos-easing="ease-in-sine">
                         <div class="card border ">
                             @if (isset($financing->user->profile_image))
                                 <img src="{{ asset($financing->user->profile_image) }}" class="card-img-top"

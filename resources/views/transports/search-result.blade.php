@@ -46,15 +46,15 @@
                 </div>
                 <div class="col-md-4 image-container">
                     @php
-                        $defaultImage =
-                            $trip->trip_type == 'group'
-                                ? 'build/assets/images/bus1.png'
-                                : '';
+                        $defaultImage = $trip->transport_type == 'group' ? 'build/assets/images/bus1.png' : 'build/assets/images/Property 1=2.png';
 
                         $imagePath = $trip->image ? asset($trip->image) : asset($defaultImage);
                     @endphp
-
-                    <img src="{{ $imagePath }}" class="img-fluid rounded" alt="حافلة">
+                    @if ($trip->trip_type)
+                        <img src="{{ $imagePath }}" class="img-fluid rounded" alt="حافلة">
+                    @else
+                        <img src="{{ $imagePath }}" class="img-fluid rounded" alt="حافلة">
+                    @endif
                 </div>
             </div>
 
@@ -68,7 +68,6 @@
                             <h5 class="modal-title ms-2" id="tripModalLabel">تفاصيل الحجز</h5>
                             <button type="button" class="btn-close  m-0" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
-
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
@@ -91,6 +90,9 @@
                     </div>
                 </div>
             </div>
+            @if ($trips->count() == 1)
+                <br><br><br><br>
+            @endif
         @empty
             <br><br><br>
             <div class="row result-card align-items-center">
