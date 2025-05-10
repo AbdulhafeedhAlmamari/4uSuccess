@@ -61,6 +61,7 @@ class TransportController extends Controller
             'return_date'       => 'nullable|date|after_or_equal:departure_date',
             'seats'             => 'nullable|integer|min:1',
             'trip_type'         => 'required|in:one_way,round_trip',
+            'transType' => 'required|string',
         ]);
         // dd($request->all());
         $query = Trip::query();
@@ -69,6 +70,14 @@ class TransportController extends Controller
         if ($request->filled('departure_station')) {
             $query->where('start', 'like', '%' . $request->departure_station . '%');
             // dd($query->get());
+        }
+
+        if ($request->transType === 'single') {
+            $query->where('transport_type', 'single');
+        }
+
+        if ($request->transType === 'group') {
+            $query->where('transport_type', 'group');
         }
 
         if ($request->filled('arrival_station')) {

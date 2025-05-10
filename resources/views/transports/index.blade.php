@@ -11,7 +11,7 @@
     <section>
         <div class="container mt-5 transport-container">
             <div class="row justify-content-center">
-                <div class="col-md-5">
+                <div class="col-md-5" data-aos="zoom-out-left" data-aos-duration="1000">
                     <div class="card custom-card">
                         <div class="image-container">
                             <img src="{{ asset('build/assets/images/image.png') }}" class="card-img-top" alt="نقل جماعي">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5" data-aos="zoom-out-right" data-aos-duration="1000">
                     <div class="card custom-card">
                         <div class="image-container">
                             <img src="{{ asset('build/assets/images/image (1).png') }}" class="card-img-top" alt="نقل فردي">

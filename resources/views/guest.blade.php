@@ -20,7 +20,7 @@
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
                         <!-- الصندوق الأول -->
-                        <div class="swiper-slide">
+                        <div class="swiper-slide" data-aos="zoom-in" data-aos-duration="1000">
                             <div class="service-item">
                                 <div class="overflow-hidden">
                                     <img class="img-fluid" src="{{ asset('build/assets/images/transpot.jpg') }}"
@@ -36,7 +36,7 @@
                         </div>
                         <!-- الصندوق الثاني -->
                         <div class="swiper-slide">
-                            <div class="service-item">
+                            <div class="service-item" data-aos="zoom-in" data-aos-duration="1000">
                                 <div class="overflow-hidden">
                                     <img class="img-fluid" src="{{ asset('build/assets/images/housing.jpg') }}"
                                         alt="">
@@ -51,7 +51,7 @@
                         </div>
                         <!-- الصندوق الثالث -->
                         <div class="swiper-slide">
-                            <div class="service-item">
+                            <div class="service-item" data-aos="zoom-in" data-aos-duration="1000">
                                 <div class="overflow-hidden">
                                     <img class="img-fluid" src="{{ asset('build/assets/images/conss.jpg') }}"
                                         alt="">
@@ -67,7 +67,7 @@
                         </div>
                         <!-- الصندوق الرابع -->
                         <div class="swiper-slide">
-                            <div class="service-item">
+                            <div class="service-item" data-aos="zoom-in" data-aos-duration="1000">
                                 <div class="overflow-hidden">
                                     <img class="img-fluid" src="{{ asset('build/assets/images/fin.jpg') }}" alt="">
                                 </div>

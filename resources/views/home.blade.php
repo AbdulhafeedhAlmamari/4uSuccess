@@ -119,14 +119,14 @@
                                     @endfor
                                 </p>
                                 <div class="container-card-footer d-flex justify-content-between ">
-                                    <p class="text-muted mb-0 pt-1"><i class="fas fa-map-marker-alt ms-1"></i>يبعد عن
+                                    <p class="text-muted mb-0 pt-1"><i class="fas fa-map-marker-alt me-1"></i>يبعد عن
                                         {{ $house->distance_from_university ?? '؟' }}
                                         كيلو
                                     </p>
                                     <a href="{{ route('houses.show', $house->id) }}">
                                         <div class="d-flex justify-content-between border px-3 rounded-pill">
                                             <p class="p-0 m-0 text-secondary py-1">تفاصيل</p>
-                                            <i class="fa-regular fa-newspaper me-3 text-center py-2 m-0"></i>
+                                            <i class="fa-regular fa-newspaper ms-3 text-center  pb-2 pt-1 m-0"></i>
                                         </div>
                                     </a>
                                 </div>

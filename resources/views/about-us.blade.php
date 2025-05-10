@@ -33,7 +33,7 @@
                 منصة 4uSuccess ورؤيـة 2030</h2>
             <div class="container position-relative z-index-1070">
                 <div class="d-flex justify-content-center my-5 flex-column flex-md-row">
-                    <div class="text-center">
+                    <div class="text-center" data-aos="fade-left" data-aos-duration="1000">
                         <div class="about-vision-icon arrow-lg-1">
                             <img src="{{asset('images/1.svg')}}" class="vector-icon w-sm-70px" />
                         </div>
@@ -41,8 +41,8 @@
                         <p class="fs-18px text-grey-4">وطن طموح</p>
                     </div>
 
-                    <img class="d-none d-md-block" src="{{asset('images/left-arrow-up.svg')}}" />
-                    <div class="d-flex flex-column text-center">
+                    <img class="d-none d-md-block" src="{{asset('images/left-arrow-up.svg')}}"  data-aos="fade-left" data-aos-duration="100"/>
+                    <div class="d-flex flex-column text-center" data-aos="fade-left" data-aos-duration="2000">
                         <img src="img/2.svg" class="dashed-line h-18px m-auto w-fit-content d-block d-md-none" />
                         <div class="about-vision-icon arrow-lg-2 m-auto w-fit-content">
                             <img src="{{asset('images/2.svg')}}" class="dashed-circle w-90px d-block d-md-none" />
@@ -51,8 +51,8 @@
                         <img src="img/2.svg" class="dashed-line-2 d-block d-md-none w-fit-content m-auto" />
                         <p class=" fs-18px text-grey-4">مواطنه مسؤول</p>
                     </div>
-                    <img class="d-none d-md-block" src="{{asset('images/left-arrow-down.svg')}}">
-                    <div class="d-flex flex-column text-center">
+                    <img class="d-none d-md-block" src="{{asset('images/left-arrow-down.svg')}}" data-aos="fade-left" data-aos-duration="300">
+                    <div class="d-flex flex-column text-center" data-aos="fade-left" data-aos-duration="3000">
                         <img src="/assets/images/aboutpage/about-vision/3-2.svg"
                             class="dashed-line h-18px m-auto w-fit-content d-block d-md-none" />
                         <div class="about-vision-icon m-auto w-fit-content">
@@ -71,7 +71,7 @@
                 الرؤية والرسالة
             </h2>
             <div class="m-auto w-75 d-flex flex-wrap justify-content-center mb-4 px-md-4">
-                <div class="bg-white col-md-5 col-12 d-block p-4 rounded-10px shadow me-3 text-center mt-4 vision-message">
+                <div class="bg-white col-md-5 col-12 d-block p-4 rounded-10px shadow me-3 text-center mt-4 vision-message"  data-aos="fade-left"  data-aos-duration="1000">
                     <div class="position-relative">
                         <div
                             class="bg-body-tertiary bg-with-img h-50px m-auto rounded-circle w-50px bg-with-img position-relative">
@@ -83,7 +83,7 @@
                         اليومية، وتعزز استقرارهم الأكاديمي، بما يتماشى مع أهداف رؤية السعودية 2030 في دعم وتمكين الشباب
                     </p>
                 </div>
-                <div class="bg-white col-md-5 col-12 d-block p-4 rounded-10px shadow text-center mt-4 vision-message">
+                <div class="bg-white col-md-5 col-12 d-block p-4 rounded-10px shadow text-center mt-4 vision-message" data-aos="fade-right"  data-aos-duration="1000">
                     <div class="position-relative">
                         <div
                             class="bg-body-tertiary bg-with-img h-50px m-auto rounded-circle w-50px bg-with-img position-relative">
@@ -176,7 +176,7 @@
                 الركائــــز
             </h2>
             <div class="m-auto w-75 d-flex flex-wrap justify-content-center mb-4 px-md-4">
-                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow me-0 me-md-4 text-center mt-4">
+                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow me-0 me-md-4 text-center mt-4" data-aos="flip-up" data-aos-duration="1000">
                     <div class="position-relative">
                         <div
                             class="bg-body-tertiary bg-with-img h-50px m-auto rounded-circle w-50px bg-with-img position-relative">
@@ -187,7 +187,7 @@
                         الابتكار والتطور
                     </p>
                 </div>
-                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow me-0 me-md-4 text-center mt-4">
+                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow me-0 me-md-4 text-center mt-4" data-aos="flip-up" data-aos-duration="2000">
                     <div class="position-relative">
                         <div
                             class="bg-body-tertiary bg-with-img h-50px m-auto rounded-circle w-50px bg-with-img position-relative">
@@ -198,7 +198,7 @@
                         الجودة والكفاءة
                     </p>
                 </div>
-                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow text-center mt-4">
+                <div class="bg-white col-md-3 d-block p-4 rounded-10px shadow text-center mt-4" data-aos="flip-up" data-aos-duration="3000">
                     <div class="position-relative">
                         <div
                             class="bg-body-tertiary bg-with-img h-50px m-auto rounded-circle w-50px bg-with-img position-relative">
