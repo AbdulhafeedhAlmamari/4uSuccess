@@ -45,7 +45,16 @@
                     </div>
                 </div>
                 <div class="col-md-4 image-container">
-                    <img src="{{ asset('build/assets/images/bus1.png') }}" class="img-fluid rounded" alt="حافلة">
+                    @php
+                        $defaultImage =
+                            $trip->trip_type == 'group'
+                                ? 'build/assets/images/bus1.png'
+                                : '';
+
+                        $imagePath = $trip->image ? asset($trip->image) : asset($defaultImage);
+                    @endphp
+
+                    <img src="{{ $imagePath }}" class="img-fluid rounded" alt="حافلة">
                 </div>
             </div>
 

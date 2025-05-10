@@ -339,6 +339,12 @@
                                                     <div class="col-md-4">
                                                         {{-- <h6 class="fw-bold">الإحصائيات</h6> --}}
                                                         @if ($user->role == 'student')
+                                                            <p><strong>صورة إثبات قيد الطالب :</strong>
+                                                            </p>
+                                                            <img src="{{ asset($user->student->studentIdUpload ?? '') }}"
+                                                                class="preview-img mb-2 h-25 w-50" alt=""
+                                                                onclick="showImagePreview(this)">
+
                                                             {{-- <p><strong>عدد طلبات السكن:</strong>
                                                                 {{ $user->housingRequests()->count() ?? 0 }}</p>
                                                             <p><strong>عدد طلبات النقل:</strong>

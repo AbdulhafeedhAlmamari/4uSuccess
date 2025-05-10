@@ -71,7 +71,19 @@
                                     name="student_phone_number" placeholder="أدخل رقم الهاتف">
                                 <div class="invalid-feedback" id="student_phone_number-error"></div>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">إثبات قيد الطالب:</label>
+                                <div class="upload-area">
+                                    <input type="file" class="file-input" id="studentIdUpload"
+                                        name="studentIdUpload">
 
+                                    <div class="upload-icon">
+                                        <i class="fas fa-arrow-up-from-bracket"></i>
+                                    </div>
+                                    <div class="upload-text">تحميل الملف</div>
+                                </div>
+                                <div class="invalid-feedback" id="companyIdUpload-error"></div>
+                            </div>
                             <button type="submit" class="btn btn-login mt-3" id="registerBtn">تسجيل حساب</button>
 
                             <div class="mt-3">
@@ -91,6 +103,15 @@
 </div>
 
 <script>
+    document.querySelectorAll('.file-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const fileName = this.files[0]?.name;
+            if (fileName) {
+                const uploadText = this.parentElement.querySelector('.upload-text');
+                uploadText.textContent = fileName;
+            }
+        });
+    });
     $(document).ready(function() {
         $('#studentRegisterForm').submit(function(e) {
             e.preventDefault();
@@ -103,11 +124,14 @@
             $('#registerBtn').prop('disabled', true).html(
                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري التسجيل...'
             );
-
+            const formData = new FormData(this);
+            // alert(formData.get('studentIdUpload'));
             $.ajax({
                 url: '{{ route('student.register') }}',
                 type: 'POST',
-                data: $(this).serialize(),
+                data: formData,
+                processData: false, // ضروري مع FormData
+                contentType: false,
                 success: function(response) {
                     if (response.success) {
                         window.location.href = response.redirect;

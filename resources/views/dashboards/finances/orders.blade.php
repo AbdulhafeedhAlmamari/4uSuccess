@@ -186,7 +186,7 @@
                             <div class="modal fade" id="rejectModal{{ $request->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="{{ route('consultation.request.reject', $request->id) }}"
+                                        <form action="{{ route('finance.request.reject', $request->id) }}"
                                             method="POST">
                                             @csrf
                                             <div class="modal-header">

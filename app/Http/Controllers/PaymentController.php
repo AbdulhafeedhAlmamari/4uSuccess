@@ -205,7 +205,7 @@ class PaymentController extends Controller
                     $invoice->status = 'paid';
                     $invoice->save();
                     if ($invoice->reservationRequest) {
-                        $invoice->reservationRequest->update(['status' => 'paid']);
+                        $invoice->reservationRequest->update(['status' => 'completed']);
                     }
                     if($invoice->installment){
                         $invoice->installment->update(['status' => 'paid']);

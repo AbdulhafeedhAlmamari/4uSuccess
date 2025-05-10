@@ -11,10 +11,11 @@ class ConsultantController extends Controller
 {
     public function index()
     {
-        $pendingOrdersCount = ConsultationRequest::where('status', 'pending')->count();
-        $acceptedOrdersCount = ConsultationRequest::where('status', 'accepted')->count();
-        $acceptOrdersCount = ConsultationRequest::where('status', 'accept')->count();
-        return view('dashboards.consultants.index', compact('pendingOrdersCount', 'acceptedOrdersCount', 'acceptOrdersCount'));
+        $pendingOrdersCount = ConsultationRequest::where('status', 'pending')->where('consultant_id', Auth::user()->id)->count();
+        $acceptedOrdersCount = ConsultationRequest::where('status', 'accepted')->where('consultant_id', Auth::user()->id)->count();
+        $rejectedOrdersCount = ConsultationRequest::where('status', 'rejected')->where('consultant_id', Auth::user()->id)->count();
+
+        return view('dashboards.consultants.index', compact('pendingOrdersCount', 'acceptedOrdersCount', 'rejectedOrdersCount'));
     }
 
     public function show()
@@ -46,5 +47,4 @@ class ConsultantController extends Controller
 
         return view('dashboards.consultants.profile', compact('user', 'consultant'));
     }
-    
 }

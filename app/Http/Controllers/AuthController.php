@@ -101,6 +101,7 @@ class AuthController extends Controller
             'university_name' => 'required|string|max:255',
             'student_address' => 'required|string|max:255',
             'student_phone_number' => 'required|string|max:20',
+            'studentIdUpload' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'required' => 'حقل :attribute مطلوب.',
             'string' => 'حقل :attribute يجب أن يكون نصًا.',
@@ -108,6 +109,7 @@ class AuthController extends Controller
             'max' => 'حقل :attribute يجب ألا يتجاوز :max حرفًا.',
             'min' => 'حقل :attribute يجب أن يكون على الأقل :min أحرف.',
             'unique' => 'هذا :attribute مستخدم بالفعل.',
+            'image' => 'حقل :attribute يجب ان يكون صورة.',
         ], [
             'name' => 'الاسم الكامل',
             'email' => 'البريد الإلكتروني',
@@ -116,19 +118,29 @@ class AuthController extends Controller
             'university_name' => 'اسم الجامعة',
             'student_address' => 'عنوان السكن',
             'student_phone_number' => 'رقم الهاتف',
+            'studentIdUpload' => 'صورة إثبات قيد الطالب',
         ]);
-
+        // dd($request->all());
         // بدء المعاملة
         DB::beginTransaction();
 
         try {
+
+            if (!file_exists(public_path('images/students'))) {
+                mkdir(public_path('images/students'), 0755, true);
+            }
+
+            $studentIdImage = $request->file('studentIdUpload');
+            $studentIdImage->move(public_path('images/students'), $studentIdImage->getClientOriginalName());
+            $studentIdImage = 'images/students/' . $studentIdImage->getClientOriginalName();
+            // dd($studentIdImage);
             // إنشاء المستخدم
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => 'student',
-                'is_approved' => '1',
+                'is_approved' => '0',
             ]);
 
             // إنشاء ملف الطالب
@@ -138,19 +150,23 @@ class AuthController extends Controller
                 'university_name' => $request->university_name,
                 'student_address' => $request->student_address,
                 'student_phone_number' => $request->student_phone_number,
+                'studentIdUpload' => $studentIdImage,
             ]);
 
             // إذا نجح كل شيء، نؤكد المعاملة
             DB::commit();
 
             // تسجيل دخول المستخدم
-            Auth::login($user);
-
-            session()->flash('success', 'تم إنشاء الحساب بنجاح!');
+            // Auth::login($user);
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => 'تم إرسال طلب التسجيل بنجاح! سيتم مراجعته من قبل الإدارة.'
+            // ]);
+            session()->flash('success', 'تم إرسال طلب التسجيل بنجاح! سيتم مراجعته من قبل الإدارة.');
             return response()->json([
                 'success' => true,
                 'redirect' => route('home'),
-                'message' => 'تم إنشاء الحساب بنجاح!'
+                'message' => 'تم إرسال طلب التسجيل بنجاح! سيتم مراجعته من قبل الإدارة.'
             ]);
         } catch (\Exception $e) {
             // في حالة حدوث خطأ، نرجع عن المعاملة
@@ -160,6 +176,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => false,
+                'redirect' => route('home'),
                 'message' => 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.'
             ], 500);
         }

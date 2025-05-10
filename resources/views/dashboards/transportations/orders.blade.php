@@ -171,10 +171,10 @@
                                         </td>
                                         <td>
                                             @if ($reservation->status == 'completed')
-                                                <span class="badge bg-success">تمت الموافقة</span>
+                                                <span class="badge bg-success">مكتملة</span>
                                             @elseif($reservation->status == 'rejected')
                                                 <span class="badge bg-danger">مرفوض</span>
-                                            @else
+                                            @elseif($reservation->status == 'pending')
                                                 <div class="d-flex justify-content-start gap-1">
                                                     <form
                                                         action="{{ route('dashboard.transportation.reservation.status', $reservation->id) }}"
@@ -195,6 +195,8 @@
                                                             data-bs-target="#rejectModal{{ $reservation->id }}">مرفوض</button>
                                                     </form>
                                                 </div>
+                                            @else
+                                                <span class="badge bg-info">في انتظار الدفع</span>
                                             @endif
                                         </td>
                                         <td class="actions">
@@ -244,18 +246,15 @@
                                                             <p class="text-muted">
                                                                 حالة الطلب:
                                                                 @if ($reservation->status == 'completed')
-
-                                                                    <span class="badge bg-success">تمت الموافقة</span>
-
+                                                                    <span class="badge bg-success">مكتمل</span>
                                                                 @elseif ($reservation->status == 'pending')
-
                                                                     <span class="badge bg-warning">قيد الانتظار</span>
-
                                                                 @elseif ($reservation->status == 'rejected')
-
                                                                     <span class="badge bg-danger">مرفوضة</span>
-
+                                                                @else
+                                                                    <span class="badge bg-info">في انتظار الدفع</span>
                                                                 @endif
+
 
                                                             </p>
                                                         </div>

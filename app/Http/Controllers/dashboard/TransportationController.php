@@ -14,7 +14,10 @@ class TransportationController extends Controller
 {
     public function index()
     {
-        $pendingOrdersCount = ReservationRequest::where('status', 'pending')->where('reservation_type', 'transportation')
+        $pendingOrdersCount = ReservationRequest::where(function ($query) {
+            $query->where('status', 'pending')
+                ->orWhere('status', 'onRoad');
+        })->where('reservation_type', 'transportation')
             ->whereHas('trip', function ($query) {
                 $query->where('transportation_company_id', auth()->user()->id);
             })
@@ -51,12 +54,21 @@ class TransportationController extends Controller
 
         $reservations = ReservationRequest::with(['student', 'trip'])
             ->whereNotNull('trip_id')
-            ->where('status', $status)
+            ->where(function ($query) use ($status) {
+                if ($status === 'pending') {
+                    // إذا كانت الحالة pending نعرض أيضًا onRoad
+                    $query->whereIn('status', ['pending', 'onRoad']);
+                } else {
+                    // باقي الحالات نعرض فقط المطابقة
+                    $query->where('status', $status);
+                }
+            })
             ->whereHas('trip', function ($query) use ($transportationCompanyId) {
                 $query->where('transportation_company_id', $transportationCompanyId);
             })
             ->latest()
             ->get();
+
         return view('dashboards.transportations.orders', compact('reservations', 'status'));
     }
     public function updateStatus(Request $request, ReservationRequest $reservation)
@@ -66,7 +78,11 @@ class TransportationController extends Controller
             'reply' => 'nullable|string',
 
         ]);
-        $reservation->status = $request->status;
+        if ($request->status == 'completed') {
+            $reservation->status = 'onRoad';
+        } else {
+            $reservation->status = $request->status;
+        }
         $reservation->save();
 
         if ($request->status == 'completed') {
