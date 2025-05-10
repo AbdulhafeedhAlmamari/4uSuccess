@@ -22,11 +22,11 @@ class HouseController extends Controller
         // Search by address or description
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('address', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('features', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('housing_type', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('features', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('housing_type', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -82,5 +82,26 @@ class HouseController extends Controller
         ]);
 
         return redirect()->route('home')->with('success', 'تم إرسال طلب الحجز بنجاح. سيتم إشعارك عند الموافقة عليه.');
+    }
+    public function rate(Request $request)
+    {
+        if (Auth::guest()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'يجب تسجيل الدخول اولا'
+            ]);
+        }
+        $value = $request->input('value');
+        $housing_id = $request->input('housing_id');
+        // dd($value, $housing_id);
+        $housing = Housing::find($housing_id);
+
+        $rating = auth()->user()->ratings()->updateOrCreate(['housing_id' => $housing->id], ['value' => $value]);
+        return response()->json([
+            'success' => true,
+            'rating' => $rating->value,
+            'averageRating' => $housing->rate(),
+            'message' => 'تم تقييم المنزل بنجاح'
+        ]);
     }
 }

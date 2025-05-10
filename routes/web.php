@@ -58,6 +58,8 @@ Route::post('/finance/store', [FinanceController::class, 'store'])->name('home.f
 Route::get('/houses', [HouseController::class, 'index'])->name('home.houses');
 Route::get('/house-show/{id}', [HouseController::class, 'show'])->name('houses.show');
 Route::post('/house-reservation-store', [HouseController::class, 'reservationStore'])->name('houses.reservation.store');
+Route::post('/rate-house', [HouseController::class, 'rate'])->name('houses.rate');
+
 
 // transports routes
 Route::get('/transports', [TransportController::class, 'index'])->name('home.transports');

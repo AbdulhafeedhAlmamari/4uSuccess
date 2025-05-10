@@ -17,6 +17,47 @@
     <link href="{{ asset('build/assets/css/table.css') }}" rel="stylesheet">
     <style>
         /* student profile orders page */
+        .rating {
+            cursor: pointer;
+        }
+
+        .star-container .stars-inactive {
+            position: absolute;
+            top: 0px;
+            /* left: 104px; */
+        }
+
+        .star-container {
+            width: 40%;
+        }
+
+        .stars-inactive {
+            /* color: #ccc; */
+
+        }
+
+
+
+        .stars-active {
+            color: #54B6B7;
+            !important;
+            position: relative;
+            z-index: 10;
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .rating-star {
+            font-size: 20px;
+            /* color: #ccc; */
+            cursor: pointer;
+        }
+
+        .rating-star.checked {
+            color: #54B6B7;
+            ;
+        }
 
         .orders-section .nav {
             padding-bottom: 10px;
@@ -146,7 +187,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                                                    margin: -20px -25px 10px; */
+                                                                                                                                                                                                                                                                                                                margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -213,7 +254,7 @@
                                         </span>
                                     </td>
                                     <td>{{ $order->request_date }}</td>
-                                    <td class="actions">
+                                    <td class="actions d-flex gap-4">
                                         @if ($order->status == 'confirmed')
                                             <a href="#" data-bs-toggle="modal"
                                                 data-bs-target="#orderModal{{ $order->id }}">
@@ -222,6 +263,39 @@
                                             <a href="{{ route('payment', $order->id) }}">
                                                 <i class="fa-brands fa-paypal"></i>
                                             </a>
+                                        @elseif ($order->status == 'completed')
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $order->id }}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                            @if ($order->housing->rate() > 0)
+                                                <div class="star-container   position-relative">
+                                                    <span class="stars-active"
+                                                        style="width:{{ $order->housing->rate() * 20 }}% ">
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                    </span>
+
+                                                    <span class="stars-inactive">
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                        <span> &#9733;</span>
+                                                    </span>
+                                                </div>
+                                            @else
+                                                <div class="rating" id="rating-{{ $order->housing->id }}" >
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <span data-value="{{ $i }}"
+                                                            onclick="rateHouse({{ $order->housing->id }}, {{ $i }})"
+                                                            class="rating-star ">&#9733;</span>
+                                                    @endfor
+                                                </div>
+                                            @endif
                                         @else
                                             <a href="#" data-bs-toggle="modal"
                                                 data-bs-target="#orderModal{{ $order->id }}">
@@ -933,5 +1007,56 @@
                 });
             });
         });
+    </script>
+    <script>
+        function rateHouse(houseId, ratingValue) {
+            fetch(`/rate-house`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        housing_id: houseId,
+                        value: ratingValue
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateStars(houseId, ratingValue);
+                        updateRatingDisplay(houseId, data.averageRating);
+                        // document.getElementById('alertMessageJson').textContent = data.message;
+                    } else {
+                        // document.getElementById('alertMessageJson').textContent = data.message;
+
+                        // window.location.href = '/login';
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStars(houseId, ratingValue) {
+            const container = document.getElementById(`rating-${houseId}`);
+            const stars = container.querySelectorAll('.rating-star');
+            stars.forEach(star => {
+                const value = parseInt(star.getAttribute('data-value'));
+                if (value <= ratingValue) {
+                    star.classList.add('checked');
+                } else {
+                    star.classList.remove('checked');
+                }
+            });
+        }
+
+        function updateRatingDisplay(houseId, averageRating) {
+            const container = document.querySelector('.star-container .stars-active');
+            // alert(newRating);
+            if (container) {
+
+                container.style.width = `${averageRating * 20}%`;
+            }
+        }
     </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Models\TransportationCompany;
 use App\Models\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TransportationController extends Controller
 {
@@ -300,7 +301,7 @@ class TransportationController extends Controller
             return redirect()->back()->with('success', 'تم تحديث الملف الشخصي بنجاح');
         } catch (\Exception $e) {
             // Log the error
-            \Log::error('Profile update error: ' . $e->getMessage());
+            Log::error('Profile update error: ' . $e->getMessage());
 
             // Return error response for AJAX request
             if ($request->ajax()) {

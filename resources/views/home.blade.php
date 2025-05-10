@@ -21,6 +21,44 @@
         .rooms-section .card .card-body {
             height: 185px;
         }
+
+        .star-container .stars-inactive {
+            position: absolute;
+            top: 0px;
+            /* left: 104px; */
+        }
+
+        .star-container {
+            width: 55%
+        }
+
+        .stars-inactive {
+            /* color: #ccc; */
+
+        }
+
+
+
+        .stars-active {
+            color: #54B6B7;
+            !important;
+            position: relative;
+            z-index: 10;
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .rating-star {
+            font-size: 24px;
+            /* color: #ccc; */
+            cursor: pointer;
+        }
+
+        .rating-star.checked {
+            color: #54B6B7;
+
+        }
     </style>
 @endsection
 
@@ -51,11 +89,23 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $consultant->user->name }}</h5>
                                 <p class="card-text text-muted">{{ $consultant->specialization ?? 'التخصص غير متوفر' }}</p>
-                                <p class="text-warning">
-                                    @for ($i = 0; $i < ($consultant->rating ?? 5); $i++)
+                                <div class="star-container   position-relative">
+                                    <span class="stars-active" style="width:{{ $consultant->rate() * 20 }}% ">
                                         <i class="fas fa-star ms-2"></i>
-                                    @endfor
-                                </p>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                    </span>
+
+                                    <span class="stars-inactive">
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                    </span>
+                                </div>
                                 <div class="container-card-footer d-flex justify-content-between ">
                                     {{-- <p class="text-muted mb-0 pt-1"><i
                                             class="fas fa-map-marker-alt ms-1"></i>{{ $consultant->university ?? 'الجامعة غير متوفرة' }}
@@ -113,11 +163,28 @@
                                 <p class="card-text text-muted text-truncate-multiline">
                                     {{ $house->description ?? 'وصف غير متوفر' }}
                                 </p>
-                                <p class="text-warning">
-                                    @for ($i = 0; $i < ($house->rating ?? 5); $i++)
+                                {{-- <p class="text-warning"> --}}
+                                <div class="star-container   position-relative">
+                                    <span class="stars-active" style="width:{{ $house->rate() * 20 }}% ">
                                         <i class="fas fa-star ms-2"></i>
-                                    @endfor
-                                </p>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                    </span>
+
+                                    <span class="stars-inactive">
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                        <i class="fas fa-star ms-2"></i>
+                                    </span>
+                                </div>
+                                {{-- @for ($i = 0; $i < ($house->rating ?? 5); $i++)
+                                    <i class="fas fa-star ms-2"></i>
+                                @endfor --}}
+                                {{-- </p> --}}
                                 <div class="container-card-footer d-flex justify-content-between ">
                                     <p class="text-muted mb-0 pt-1"><i class="fas fa-map-marker-alt ms-1"></i>يبعد عن
                                         {{ $house->distance_from_university ?? '؟' }}

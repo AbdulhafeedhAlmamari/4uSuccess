@@ -82,4 +82,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(TransportationCompany::class);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'student_id');
+    }
+
+    public function rated(Housing $housing)
+    {
+        return $this->ratings->where('housing_id', $housing->id)->isNotEmpty();
+    }
+
+    public function housingRatings(Housing $housing)
+    {
+        return $this->rated($housing) ? $this->ratings->where('housing_id', $housing->id)->first() : NULL;
+    }
 }

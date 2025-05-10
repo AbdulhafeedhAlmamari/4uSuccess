@@ -20,12 +20,19 @@ class HouseController extends Controller
     {
         // Get counts of pending and confirmed orders
         $pendingOrdersCount = ReservationRequest::where('status', 'pending')
-        ->whereNotNull('housing_id')
-        ->whereHas('housing', function ($query) {
+            ->whereNotNull('housing_id')
+            ->whereHas('housing', function ($query) {
+                $query->where('housing_company_id', Auth::user()->id);
+            })
+            ->count();
+        $confirmedOrdersCount = ReservationRequest::where(function ($query) {
+            $query->where('status', 'confirmed')
+                ->orWhere('status', 'completed')
+                ->orWhere('status', 'rejected');
+        })->where('reservation_type', 'housing')->whereHas('housing', function ($query) {
             $query->where('housing_company_id', Auth::user()->id);
         })
-        ->count();
-        $confirmedOrdersCount = ReservationRequest::where('status', 'confirmed')->where('reservation_type', 'housing')->count();
+            ->count();
 
         return view('dashboards.houses.index', compact('pendingOrdersCount', 'confirmedOrdersCount'));
     }
@@ -282,7 +289,15 @@ class HouseController extends Controller
 
         $reservations = ReservationRequest::with(['student', 'housing'])
             ->whereNotNull('housing_id')
-            ->where('status', $status)
+            // ->where('status', $status)
+            ->where(function ($query) use ($status) {
+                if ($status === 'confirmed') {
+                    $query->whereIn('status', ['confirmed', 'completed', 'rejected']);
+                } else {
+                    // باقي الحالات نعرض فقط المطابقة
+                    $query->where('status', $status);
+                }
+            })
             ->whereHas('housing', function ($query) use ($housingCompanyId) {
                 $query->where('housing_company_id', $housingCompanyId);
             })

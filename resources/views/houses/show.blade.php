@@ -5,6 +5,46 @@
 @section('css')
     <link href="{{ asset('build/assets/css/welcome.css') }}" rel="stylesheet">
     <link href="{{ asset('build/assets/css/house.css') }}" rel="stylesheet">
+    <style>
+        .star-container .stars-inactive {
+            position: absolute;
+            top: 0px;
+            /* left: 104px; */
+        }
+
+        .star-container {
+            /* width: 31%; */
+            width: 26%;
+        }
+
+        .stars-inactive {
+            /* color: #ccc; */
+
+        }
+
+
+
+        .stars-active {
+            color: #54B6B7;
+            !important;
+            position: relative;
+            z-index: 10;
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .rating-star {
+            font-size: 24px;
+            /* color: #ccc; */
+            cursor: pointer;
+        }
+
+        .rating-star.checked {
+            color: #54B6B7;
+            ;
+        }
+    </style>
 @endsection
 @section('content')
     <!-- houses section -->
@@ -21,7 +61,8 @@
                                     <div class="image-container">
                                         @if (isset($house->primaryPhoto))
                                             <img src="{{ asset($house->primaryPhoto->path) }}"
-                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن"  id="mainImage">
+                                                class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن"
+                                                id="mainImage">
                                         @else
                                             <img src="{{ asset('images/default.jpeg') }}"
                                                 class="card-img-top h-100 w-100 rounded-start" alt="صورة السكن">
@@ -78,9 +119,23 @@
                                         <li><strong>القواعد:</strong> {{ $house->rules }}</li>
                                         <li>
                                             <span><strong>التقييمات:</strong>
-                                                <span class="" style="color: #54B6B7;">&#9733; &#9733; &#9733; &#9733;
-                                                    &#9734;</span>
-                                            </span>
+                                            <div class="star-container   position-relative">
+                                                <span class="stars-active" style="width:{{ $house->rate() * 20 }}% ">
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                </span>
+
+                                                <span class="stars-inactive">
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                    <span> &#9733;</span>
+                                                </span>
+                                            </div>
                                         </li>
                                         <li>
                                             <form action="{{ route('houses.reservation.store') }}" method="POST">
@@ -133,7 +188,6 @@
 
 @section('script')
     <script>
-        
         function changeMainImage(imageElement) {
             // Get the main image element
             const mainImage = document.getElementById('mainImage');

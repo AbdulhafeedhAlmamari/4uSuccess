@@ -144,7 +144,7 @@
                                 <td>
                                     @if ($reservation->status == 'confirmed')
                                         <span class="badge bg-success">تمت الموافقة</span>
-                                    @else
+                                    @elseif ($reservation->status == 'pending')
                                         <div class="d-flex justify-content-start gap-1">
                                             <form
                                                 action="{{ route('dashboard.houses.reservation.status', $reservation->id) }}"
@@ -164,6 +164,10 @@
                                                     data-bs-target="#rejectModal{{ $reservation->id }}">مرفوض</button>
                                             </form>
                                         </div>
+                                    @elseif ($reservation->status == 'rejected')
+                                        <span class="badge bg-danger">مرفوض</span>
+                                    @else
+                                        <span class="badge bg-info">مكتملة</span>
                                     @endif
                                 </td>
                                 <td>
@@ -227,8 +231,8 @@
                                                     <p class="text-muted">
                                                         حالة الطلب :
                                                         <span
-                                                            class="badge bg-{{ $reservation->status == 'confirmed' ? 'success' : 'warning' }}">
-                                                            {{ $reservation->status == 'confirmed' ? 'تمت الموافقة' : 'قيد الانتظار' }}
+                                                            class="badge bg-{{ $reservation->status == 'confirmed' ? 'success' : ($reservation->status == 'rejected' ? 'danger' : ($reservation->status == 'pending' ? 'warning' : 'info')) }}">
+                                                            {{ $reservation->status == 'confirmed' ? 'تمت الموافقة' : ($reservation->status == 'rejected' ? 'مرفوضة' : ($reservation->status == 'pending' ? 'قيد الانتظار' : 'مكتملة')) }}
                                                         </span>
                                                     </p>
                                                 </div>
@@ -241,7 +245,8 @@
                                                         <span>{{ $reservation->housing?->address ?? '-' }}</span>
                                                     </p>
                                                     <p><strong>المسافة عن الجامعة:</strong>
-                                                        <span>{{ $reservation->housing?->distance_from_university ?? '-' }}</span> كم
+                                                        <span>{{ $reservation->housing?->distance_from_university ?? '-' }}</span>
+                                                        كم
                                                     </p>
                                                 </div>
                                                 <div class="col-md-6">
