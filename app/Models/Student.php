@@ -15,6 +15,7 @@ class Student extends Model
         'university_name',
         'student_address',
         'student_phone_number',
+        'studentIdUpload',
     ];
 
     public function user()

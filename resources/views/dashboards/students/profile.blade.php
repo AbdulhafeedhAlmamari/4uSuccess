@@ -31,6 +31,41 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            min-height: 150px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            border-color: #6c757d;
+        }
+
+        .upload-box input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 30px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 120px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
     </style>
 @endsection
 @section('content')
@@ -124,6 +159,23 @@
                         <input type="text" class="form-control" id="address" name="address"
                             value="{{ $student->student_address }}">
                         @error('address')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="upload-box d-flex flex-column align-items-center justify-content-center">
+                            @if ($student && $student->studentIdUpload)
+                                <img src="{{ asset($student->studentIdUpload) }}" id="identityImagePreview"
+                                    class="preview-img mb-2" width="100px" height="100px">
+                            @else
+                                <img src="{{ asset('build/assets/images/upload.png') }}" id="identityImagePreview"
+                                    class="preview-img mb-2" width="100px" height="100px">
+                            @endif
+                            <span class="fw-bold">إثبات قيد الطالب</span>
+                            <small class="text-muted">تحميل الملفات المحددة.</small>
+                            <input type="file" id="identityImageUpload" name="identity_image" accept="image/*">
+                        </label>
+                        @error('studentIdUpload')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

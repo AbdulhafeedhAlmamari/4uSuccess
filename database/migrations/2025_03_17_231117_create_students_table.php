@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('university_name');
             $table->string('student_address');
             $table->string('student_phone_number');
+            $table->string('studentIdUpload')->nullable();
             $table->timestamps();
             // $table->string('university_email')->unique();
         });

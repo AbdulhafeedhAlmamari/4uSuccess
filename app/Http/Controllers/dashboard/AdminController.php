@@ -56,7 +56,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Update consultant is_approved 
+     * Update consultant is_approved
      */
     public function updateUserRequest(Request $request, $id)
     {
