@@ -74,7 +74,7 @@
             <div class="container mb-5">
                 <div class="row mt-5">
                     @forelse($consultants as $consultant)
-                        <div class="col-lg-3 col-md-4 mt-3">
+                        <div class="col-lg-3 col-md-4 mt-3" data-aos="fade-down-left" data-aos-duration="1000">
                             <div class="card border-0 shadow p-2 rounded-3">
                                 @if (isset($consultant->user->profile_image))
                                     <img src="{{ asset($consultant->user->profile_image) }}"

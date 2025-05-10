@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     @auth
-    <meta name="user-id" content="{{ Auth::id() }}">
+        <meta name="user-id" content="{{ Auth::id() }}">
     @endauth
 
     <!-- Pusher credentials -->
@@ -38,6 +39,13 @@
         </div>
         <!-- end main content-->
     </div>
+{{-- AOS --}}
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+
+
     <!-- END layout-wrapper -->
 
     {{-- @include('layouts.customizer') --}}

@@ -18,7 +18,10 @@
     <section class="container mt-5 consultant-details">
         <div class="card border-0">
             <div class="row g-0">
-                <div class="col-md-4 w-25 h-75">
+                <div class="col-md-4 w-25 h-75" data-aos="fade-left"
+                data-aos-anchor="#example-anchor"
+                data-aos-offset="100"
+                data-aos-duration="1000">
                     @if (isset($consultant->user->profile_image))
                         <img src="{{ asset($consultant->user->profile_image) }}" alt="صورة المستشار"
                             class="img-fluid rounded-3" style="width: 300px; height: 250px;">
@@ -33,7 +36,10 @@
                             data-bs-target="#chatModal" data-consultant-id="{{ $consultant->id }}">دردشة</button>
                     </div>
                 </div>
-                <div class="col-md-8 p-4">
+                <div class="col-md-8 p-4" data-aos="fade-right"
+                data-aos-anchor="#example-anchor"
+                data-aos-offset="100"
+                data-aos-duration="1000">
                     <h2 class="fw-bold text-center text-md-start">تفاصيل المستشار</h2>
                     <p><strong>التخصص:</strong> {{ $consultant->specialization ?? 'غير متوفر' }}</p>
                     <p><strong>مدة الاستشارة:</strong> {{ $consultant->consultation_duration ?? 'غير محدد' }} دقيقة
