@@ -165,15 +165,15 @@
                     <div class="col-md-6">
                         <label class="upload-box d-flex flex-column align-items-center justify-content-center">
                             @if ($student && $student->studentIdUpload)
-                                <img src="{{ asset($student->studentIdUpload) }}" id="identityImagePreview"
+                                <img src="{{ asset($student->studentIdUpload) }}" id="studentIdImagePreview"
                                     class="preview-img mb-2" width="100px" height="100px">
                             @else
-                                <img src="{{ asset('build/assets/images/upload.png') }}" id="identityImagePreview"
+                                <img src="{{ asset('build/assets/images/upload.png') }}" id="studentIdImagePreview"
                                     class="preview-img mb-2" width="100px" height="100px">
                             @endif
                             <span class="fw-bold">إثبات قيد الطالب</span>
                             <small class="text-muted">تحميل الملفات المحددة.</small>
-                            <input type="file" id="identityImageUpload" name="identity_image" accept="image/*">
+                            <input type="file" id="studentIdUpload" name="studentIdUpload" accept="image/*">
                         </label>
                         @error('studentIdUpload')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -208,7 +208,11 @@
             // Profile image upload preview
             $('#profileImageUpload').change(function(event) {
                 previewImage(event, 'profileImagePreview');
+            }); // Identity image upload preview
+            $('#studentIdUpload').change(function(event) {
+                previewImage(event, 'studentIdImagePreview');
             });
+
 
             // Reset button functionality
             $('.btn-reset').click(function(e) {

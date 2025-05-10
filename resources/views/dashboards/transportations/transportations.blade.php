@@ -350,8 +350,7 @@
                                                             <label class="form-label">تغيير صورة الرحلة
                                                                 (اختياري)
                                                             </label><br>
-                                                            <img src="{{ asset($trip->image) }}"
-                                                                alt="الصورة الحالية"
+                                                            <img src="{{ asset($trip->image) }}" alt="الصورة الحالية"
                                                                 style="max-width: 100%; max-height: 200px; margin-bottom: 10px;">
                                                             <input type="file" name="image" class="form-control"
                                                                 accept="image/*">
@@ -401,7 +400,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">لا توجد لديك رحلات   </td>
+                                        <td colspan="8" class="text-center">لا توجد لديك رحلات </td>
                                     </tr>
                                 @endforelse
 
@@ -454,11 +453,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">تاريخ الذهاب</label>
-                            <input type="date" name="go_date" class="form-control" required>
+                            <input type="datetime-local" name="go_date" class="form-control" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">تاريخ العودة</label>
-                            <input type="date" name="back_date" class="form-control">
+                            <input type="datetime-local" name="back_date" class="form-control">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">نوع الرحلة</label>

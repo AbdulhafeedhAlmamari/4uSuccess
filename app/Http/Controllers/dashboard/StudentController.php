@@ -30,7 +30,7 @@ class StudentController extends Controller
             ->get();
 
         $financeRequests = FinanceRequest::where('student_id', Auth::id())
-            ->with('student', 'financingCompany','installments')
+            ->with('student', 'financingCompany', 'installments')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -48,10 +48,10 @@ class StudentController extends Controller
         return view('dashboards.students.orders', compact('consultationRequests', 'financeRequests', 'transportationRequests', 'housingRequests'));
     }
 
-public function installment()
-{
-    return view('dashboards.students.installment');
-}
+    public function installment()
+    {
+        return view('dashboards.students.installment');
+    }
     public function profile()
     {
         // Get the authenticated user
@@ -74,8 +74,9 @@ public function installment()
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'studentIdUpload' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+        // dd($request->all());
         // Get the authenticated user
         $user = Auth::user();
 
@@ -101,6 +102,28 @@ public function installment()
             $user->profile_image = 'images/profiles/' . $imageName;
             $user->save();
         }
+        // dd($user->student->studentIdUpload);
+        // Handle profile image upload
+
+        if ($request->hasFile('studentIdUpload')) {
+            // Delete old image if exists
+            if ($student->studentIdUpload && file_exists(public_path($student->studentIdUpload))) {
+                unlink(public_path($student->studentIdUpload));
+            }
+
+            $image = $request->file('studentIdUpload');
+            $imageName =  time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'images/students/' . $imageName;
+
+            // Make sure the directory exists
+            if (!file_exists(public_path('images/students'))) {
+                mkdir(public_path('images/students'), 0755, true);
+            }
+
+            $image->move(public_path('images/students'), $imageName);
+            $student->studentIdUpload = $imagePath;
+        }
+
 
         $student->save();
 
