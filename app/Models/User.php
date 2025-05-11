@@ -93,8 +93,27 @@ class User extends Authenticatable
         return $this->ratings->where('housing_id', $housing->id)->isNotEmpty();
     }
 
+
     public function housingRatings(Housing $housing)
     {
         return $this->rated($housing) ? $this->ratings->where('housing_id', $housing->id)->first() : NULL;
+    }
+
+    public function ratingsConsultant()
+    {
+        return $this->hasMany(Rating::class, 'consultant_id');
+    }
+
+    public function ratedConsultant(Consultant $consultant)
+    {
+        return $this->ratings->where('consultant_id', $consultant->id)->isNotEmpty();
+    }
+    public function consultantRatings(Consultant $consultant)
+    {
+        return $this->ratedConsultant($consultant) ? $this->ratings->where('consultant_id', $consultant->id)->first() : NULL;
+    }
+    public function rate()
+    {
+        return $this->ratingsConsultant->isNotEmpty() ? $this->ratingsConsultant()->sum('value') / $this->ratingsConsultant()->count() : 0;
     }
 }

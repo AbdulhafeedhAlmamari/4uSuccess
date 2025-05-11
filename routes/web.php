@@ -46,6 +46,8 @@ Route::get('/consultants', [ConsultantController::class, 'index'])->name('home.c
 Route::get('/consultant-show/{id}', [ConsultantController::class, 'show'])->name('home.consultants.show');
 // Route::get('/consultation-request', [ConsultantController::class, 'consultationRequest'])->name('home.consultants.consultation_request');
 Route::get('/consultation-requests', [ConsultantController::class, 'consultationRequests'])->name('home.consultants.consultation_requests');
+Route::post('/rate-consultant', [ConsultantController::class, 'rate'])->name('consultants.rate');
+
 
 // finance routes
 Route::get('/finances', [FinanceController::class, 'index'])->name('home.finances');

@@ -77,7 +77,7 @@
             </div>
             <div class="scroll-container d-flex " id="scrollContainerConsltant">
                 @forelse($consultants as $consultant)
-                    <div class="col-md-4"  data-aos="flip-left" data-aos-duration="1000">
+                    <div class="col-md-4" data-aos="flip-left" data-aos-duration="1000">
                         <div class="card position-relative shadow">
                             @if (isset($consultant->user->profile_image))
                                 <img src="{{ asset($consultant->user->profile_image) }}" class="card-img-top"
@@ -220,9 +220,8 @@
             </div>
             <div class="scroll-container d-flex " id="scrollContainerCompany">
                 @forelse($financings as $financing)
-                    <div class="col-md-2 ms-3"  data-aos="fade-right"
-                    data-aos-offset="300"
-                    data-aos-easing="ease-in-sine">
+                    <div class="col-md-2 ms-3" data-aos="fade-right" data-aos-offset="300"
+                        data-aos-easing="ease-in-sine">
                         <div class="card border ">
                             @if (isset($financing->user->profile_image))
                                 <img src="{{ asset($financing->user->profile_image) }}" class="card-img-top"

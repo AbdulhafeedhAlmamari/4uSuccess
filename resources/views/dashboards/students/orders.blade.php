@@ -27,8 +27,12 @@
             /* left: 104px; */
         }
 
-        .star-container {
+        #housing .star-container {
             width: 40%;
+        }
+
+        #consultationTable .star-container {
+            /* width: 40%; */
         }
 
         .stars-inactive {
@@ -187,7 +191,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                                                                                                                                margin: -20px -25px 10px; */
+                                                                                                                                                                                                                                                                                                                                                                                            margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -288,7 +292,7 @@
                                                     </span>
                                                 </div>
                                             @else
-                                                <div class="rating" id="rating-{{ $order->housing->id }}" >
+                                                <div class="rating" id="rating-{{ $order->housing->id }}">
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         <span data-value="{{ $i }}"
                                                             onclick="rateHouse({{ $order->housing->id }}, {{ $i }})"
@@ -764,10 +768,49 @@
                                             </span>
                                         </td>
                                         <td class="actions">
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#orderModal{{ $request->id }}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
+                                            <div class=" d-flex gap-3">
+                                                @if ($request->status == 'accepted')
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#orderModal{{ $request->id }}">
+                                                        <i class="fa-regular fa-eye"></i>
+                                                    </a>
+                                                    @if ($request->consultant->rate() > 0)
+                                                        <div class="star-container   position-relative">
+                                                            <span class="stars-active"
+                                                                style="width:{{ $request->consultant->rate() * 20 }}% ">
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                            </span>
+
+                                                            <span class="stars-inactive">
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                                <span> &#9733;</span>
+                                                            </span>
+                                                        </div>
+                                                    @else
+                                                        <div class="rating  d-flex"
+                                                            id="rating-{{ $request->consultant->id }}">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <span data-value="{{ $i }}"
+                                                                    onclick="rateConsultant({{ $request->consultant->id }}, {{ $i }})"
+                                                                    class="rating-star ">&#9733;</span>
+                                                            @endfor
+                                                        </div>
+                                                    @endif
+                                                @else
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#orderModal{{ $request->id }}">
+                                                        <i class="fa-regular fa-eye"></i>
+                                                    </a>
+                                                @endif
+
+                                            </div>
                                         </td>
                                     </tr>
 
@@ -1026,11 +1069,31 @@
                     if (data.success) {
                         updateStars(houseId, ratingValue);
                         updateRatingDisplay(houseId, data.averageRating);
-                        // document.getElementById('alertMessageJson').textContent = data.message;
                     } else {
-                        // document.getElementById('alertMessageJson').textContent = data.message;
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-                        // window.location.href = '/login';
+        function rateConsultant(consultantId, ratingValue) {
+            fetch(`/rate-consultant`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        consultant_id: consultantId,
+                        value: ratingValue
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateStars(consultantId, ratingValue);
+                        updateRatingDisplay(consultantId, data.averageRating);
+                    } else {
                         alert(data.message);
                     }
                 })
