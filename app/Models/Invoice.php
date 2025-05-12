@@ -10,6 +10,7 @@ class Invoice extends Model
         'reservation_request_id',
         'installment_id',
         'user_id',
+        'type_invoice',
         'status',
         'amount_invoice',
         'vat',

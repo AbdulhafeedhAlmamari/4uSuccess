@@ -202,6 +202,7 @@ Route::middleware(['auth'])->group(function () {
 // Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'handlePaymentSuccess'])->name('payment.success');
 // });
 // Route::middleware(['auth'])->group(function () {
-Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment');
+// Route::get('/invo.ices/{type}/{orderId}', [PaymentController::class, 'index'])->name('payment');
+Route::get('/payment/{type}/{orderId}', [PaymentController::class, 'index'])->name('payment');
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
 // });

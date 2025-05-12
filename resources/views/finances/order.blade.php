@@ -184,9 +184,14 @@
 
                 {{-- رقم الايبان --}}
                 <div class="mb-3">
-                    <label for="iban" class="form-label">رقم الايبان <span class="wpforms-required-label">*</span></label>
-                    <input type="number" class="form-control" id="iban" name="iban" required>
-                    
+                    <label for="iban" class="form-label">رقم الايبان <span
+                            class="wpforms-required-label ">*</span></label>
+                    <input type="number" class="form-control @error('iban') is-invalid @enderror" id="iban"
+                        name="iban" required>
+                    @error('iban')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+
                 </div>
 
                 <div class="mb-3">

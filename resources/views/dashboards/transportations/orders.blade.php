@@ -254,9 +254,12 @@
                                                                 @else
                                                                     <span class="badge bg-info">في انتظار الدفع</span>
                                                                 @endif
-
-
                                                             </p>
+                                                            @if ($reservation->status == 'rejected')
+                                                                <p class="text-muted">سبب الرفض:
+                                                                    <span>{{ $reservation->reply ?? '-' }}</span>
+                                                                </p>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="divider"></div>

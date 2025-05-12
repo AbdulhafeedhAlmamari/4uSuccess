@@ -84,6 +84,9 @@ class TransportationController extends Controller
         } else {
             $reservation->status = $request->status;
         }
+        if ($request->status == 'rejected') {
+            $reservation->reply = $request->reply;
+        }
         $reservation->save();
 
         if ($request->status == 'completed') {
@@ -93,6 +96,7 @@ class TransportationController extends Controller
                 'vat' =>  15,
                 'service_fee' => 23,
                 'user_id' => Auth::id(),
+                'type_invoice' => 'reservation',
                 'status' => 'pending',
                 'date_invoice' => now(),
             ]);

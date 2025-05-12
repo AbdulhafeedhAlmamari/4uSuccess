@@ -46,9 +46,8 @@ class FinanceController extends Controller
             'termsCheck' => 'accepted',
             'termsAgreement' => 'accepted',
             'financing_company_id' => 'required',
-            'iban' => 'required|numeric ',
+            'iban' => 'required|numeric',
         ]);
-
         $financeRequest =  FinanceRequest::create(array_merge($validatedData, [
             'finance_type' => $request->loanType,
             'amount' => $request->amountRequested,

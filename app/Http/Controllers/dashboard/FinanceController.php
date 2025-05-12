@@ -265,6 +265,7 @@ class FinanceController extends Controller
                 'amount_invoice' => $installmentAmount,
                 'vat' =>  15,
                 'service_fee' => 23,
+                'type_invoice' => 'installment',
                 'user_id' => Auth::id(),
                 'status' => 'pending',
                 'date_invoice' => now(),

@@ -191,7 +191,7 @@
             color: #333;
             background-color: #f5f3f4;
             /* padding: 16px 25px;
-                                                                                                                                                                                                                                                                                                                                                                                            margin: -20px -25px 10px; */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                margin: -20px -25px 10px; */
             border-radius: 3px 3px 0 0;
             direction: ltr;
             align-items: center;
@@ -216,7 +216,6 @@
                 <br> طلبات الاستشارة</a>
         </nav>
 
-        {{-- filepath: e:\myProjects\laravel\laravel_project\4uSuccess\resources\views\dashboards\students\orders.blade.php --}}
 
         <div id="housing" class="content-section active shadow">
             <div class="table-title d-flex justify-content-between align-items-center">
@@ -229,7 +228,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>أسم السكن</th>
-
                                 {{-- <th>الرقم الجامعــي</th> --}}
                                 <th>نوع السكن</th>
                                 <th>المبلغ</th>
@@ -238,8 +236,6 @@
                                 <th>الاجرائات</th>
                             </tr>
                         </thead>
-                        {{-- filepath: e:\myProjects\laravel\laravel_project\4uSuccess\resources\views\dashboards\students\orders.blade.php --}}
-
                         <tbody>
                             @forelse($housingRequests as $index => $order)
                                 <tr>
@@ -253,8 +249,9 @@
                                             {{ $order->housing->price ?? 'غير متوفر' }} ريال</div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $order->status == 'pending' ? 'warning' : 'success' }}">
-                                            {{ $order->status == 'pending' ? 'قيد الانتظار' : 'تمت الموافقة' }}
+                                        <span
+                                            class="badge bg-{{ $order->status == 'confirmed' ? 'success' : ($order->status == 'rejected' ? 'danger' : ($order->status == 'pending' ? 'warning' : 'info')) }}">
+                                            {{ $order->status == 'confirmed' ? 'تمت الموافقة' : ($order->status == 'rejected' ? 'مرفوضة' : ($order->status == 'pending' ? 'قيد الانتظار' : 'مكتملة')) }}
                                         </span>
                                     </td>
                                     <td>{{ $order->request_date }}</td>
@@ -264,7 +261,8 @@
                                                 data-bs-target="#orderModal{{ $order->id }}">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('payment', $order->id) }}">
+                                            <a
+                                                href="{{ route('payment', ['type' => 'reservation', 'orderId' => $order->id]) }}">
                                                 <i class="fa-brands fa-paypal"></i>
                                             </a>
                                         @elseif ($order->status == 'completed')
@@ -309,7 +307,6 @@
 
                                     </td>
                                 </tr>
-
                                 <!-- Modal for each order -->
                                 <div class="modal fade orders-section-modal" id="orderModal{{ $order->id }}"
                                     tabindex="-1" aria-hidden="true">
@@ -343,10 +340,15 @@
                                                         </p>
                                                         <p class="status-boxx">حالة الطلب:
                                                             <span
-                                                                class="badge bg-{{ $order->status == 'pending' ? 'warning' : 'success' }}">
-                                                                {{ $order->status == 'pending' ? 'قيد الانتظار' : 'تمت الموافقة' }}
+                                                                class="badge bg-{{ $order->status == 'confirmed' ? 'success' : ($order->status == 'rejected' ? 'danger' : ($order->status == 'pending' ? 'warning' : 'info')) }}">
+                                                                {{ $order->status == 'confirmed' ? 'تمت الموافقة' : ($order->status == 'rejected' ? 'مرفوضة' : ($order->status == 'pending' ? 'قيد الانتظار' : 'مكتملة')) }}
                                                             </span>
                                                         </p>
+                                                        @if ($order->status == 'rejected')
+                                                            <p class="status-boxx">سبب الرفض:
+                                                                {{ $order->reply ?? 'غير متوفر' }}
+                                                            </p>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="divider"></div>
@@ -455,7 +457,7 @@
                                                     <i class="fa-regular fa-eye"></i>
                                                 </a>
                                             @elseif ($transportationRequest->status == 'onRoad')
-                                                <a href="{{ route('payment', $transportationRequest->id) }}">
+                                                <a href="{{ route('payment', ['type' => 'reservation', 'orderId' => $transportationRequest->id]) }}">
                                                     <i class="fa-brands fa-paypal"></i>
                                                 </a>
                                             @else
@@ -509,7 +511,7 @@
                                                                 <span>{{ $transportationRequest->trip->transport_type == 'group' ? 'جماعي' : 'فردي' }}</span>
                                                             </p>
                                                         </div>
-                                                        <div>
+                                                        <div style="width: 50%">
                                                             <h5>رقم الطلب: <span>{{ $transportationRequest->id }}</span>
                                                             </h5>
                                                             <p class="text-muted">تاريخ الطلب:
@@ -521,6 +523,12 @@
                                                                     {{ $transportationRequest->status == 'completed' ? 'مكتملة' : ($transportationRequest->status == 'rejected' ? 'مرفوضة' : 'قيد الانتظار') }}
                                                                 </span>
                                                             </p>
+                                                            @if ($transportationRequest->status == 'rejected')
+                                                                <p class="text-muted">سبب الرفض:
+                                                                    {{ $transportationRequest->reply ?? 'لا يوجد' }}
+                                                                </p>
+                                                            @endif
+
                                                         </div>
                                                     </div>
                                                     <div class="divider"></div>
@@ -540,7 +548,8 @@
                                                         <div class="col-md-6">
                                                             <h6 class="text-muted">تفاصيل إضافية</h6>
                                                             <p><strong>نوع الرحلة:</strong>
-                                                                {{ $transportationRequest->trip->trip_type ?? '-' }}</p>
+                                                                {{ $transportationRequest->trip->trip_type === 'one_way' ? 'ذهاب' : 'ذهاب وعودة' ?? '-' }}
+                                                            </p>
                                                             <p><strong>السعر:</strong>
                                                                 {{ $transportationRequest->trip->price ?? '-' }} ريال</p>
                                                         </div>
@@ -650,6 +659,17 @@
                                                                 @else
                                                                     <span class="badge bg-warning">قيد الانتظار</span>
                                                                 @endif
+                                                            </p>
+                                                            <div>
+                                                                @if ($request->status == 'rejected')
+                                                                    <div class="col-md-4">
+                                                                        <h6 class="fw-bold">سبب الرفض :</h6>
+                                                                        <p>
+                                                                            {{ $request->reply }}
+                                                                        </p>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="divider my-4"></div>
@@ -771,7 +791,7 @@
                                             <div class=" d-flex gap-3">
                                                 @if ($request->status == 'accepted')
                                                     <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#orderModal{{ $request->id }}">
+                                                        data-bs-target="#consultOrderModal{{ $request->id }}">
                                                         <i class="fa-regular fa-eye"></i>
                                                     </a>
                                                     @if ($request->consultant->rate() > 0)
@@ -805,7 +825,7 @@
                                                     @endif
                                                 @else
                                                     <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#orderModal{{ $request->id }}">
+                                                        data-bs-target="#consultOrderModal{{ $request->id }}">
                                                         <i class="fa-regular fa-eye"></i>
                                                     </a>
                                                 @endif
@@ -816,8 +836,8 @@
 
 
                                     <!-- Modal for each request -->
-                                    <div class="modal fade orders-section-modal" id="orderModal{{ $request->id }}"
-                                        tabindex="-1" aria-hidden="true">
+                                    <div class="modal fade orders-section-modal"
+                                        id="consultOrderModal{{ $request->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-body">
@@ -866,13 +886,21 @@
                                                             <p><strong>نوع الاستشارة:</strong> {{ $request->type }}</p>
                                                             <p><strong>موضوع الاستشارة:</strong> {{ $request->subject }}
                                                             </p>
+                                                            <p><strong> نص الطلب:</strong> {{ $request->description }}</p>
+                                                            </p>
                                                             <p class="text-muted"> <strong>الجنس:</strong>
                                                                 {{ $request->gender ? 'ذكر' : 'أنثى' ?? 'لا يوجد' }}
                                                             </p>
                                                         </div>
-                                                        @if ($request->status == 'rejected')
+                                                        {{-- <div class="col-md-4">
+                                                            <h6 class="fw-bold"> الرد :</h6>
+                                                            <p>
+                                                                {{ $request->reply }}
+                                                            </p>
+                                                        </div> --}}
+                                                        @if ($request->status == 'rejected' || $request->status == 'accepted')
                                                             <div class="col-md-4">
-                                                                <h6 class="fw-bold">سبب الرفض</h6>
+                                                                <h6 class="fw-bold">الرد :</h6>
                                                                 <p>
                                                                     {{ $request->reply }}
                                                                 </p>

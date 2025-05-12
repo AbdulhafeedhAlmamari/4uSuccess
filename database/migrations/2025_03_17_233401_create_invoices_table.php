@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('reservation_request_id')->nullable()->constrained('reservation_requests')->onDelete('cascade');
             $table->foreignId('installment_id')->nullable()->constrained('installments')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('type_invoice');
             $table->decimal('amount_invoice', 10, 2);
             $table->string('status');
             $table->decimal('vat', 5, 2)->nullable();

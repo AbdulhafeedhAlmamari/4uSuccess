@@ -92,7 +92,7 @@
                                 @if ($installment->status == 'paid')
                                 @else
                                     @if ($installment->isStudent())
-                                        <a href="{{ route('payment', $installment->id) }}">
+                                        <a href="{{ route('payment',['type' => 'installment', 'orderId' => $installment->id]) }}">
                                             <i class="fa-brands fa-paypal"></i>
                                         </a>
                                     @else

@@ -19,14 +19,21 @@ class PaymentController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index(int $orderId = null)
+    public function index(string $type, int $orderId)
     {
         if (!$orderId) {
             return redirect()->route('home')->with('error', 'لا يوجد طلبات للدفع');
         }
-        $invoice = Invoice::where('reservation_request_id', $orderId)->first();
-        if (!$invoice) {
-            // $invoice = Installment::where('finance_request_id', $orderId)->first();
+
+        // $invoice = Invoice::where('reservation_request_id', $orderId)->first();
+        // // dd($orderId);
+        // if (!$invoice) {
+        //     // $invoice = Installment::where('finance_request_id', $orderId)->first();
+        //     $invoice = Invoice::where('installment_id', $orderId)->first();
+        // }
+        if ($type === 'reservation') {
+            $invoice = Invoice::where('reservation_request_id', $orderId)->first();
+        } else {
             $invoice = Invoice::where('installment_id', $orderId)->first();
         }
         $amount = $invoice->amount_invoice; // Default amount
@@ -187,7 +194,7 @@ class PaymentController extends Controller
     {
         try {
             $payment =    Payment::create([
-                'amount' => 100, // Convert from cents back to decimal
+                'amount' => $paymentIntent->amount, // Convert from cents back to decimal
                 'status' => $paymentIntent->status,
                 'payment_id' => $paymentIntent->id,
                 'payment_method' => 'card', // e.g., 'card'
@@ -207,7 +214,7 @@ class PaymentController extends Controller
                     if ($invoice->reservationRequest) {
                         $invoice->reservationRequest->update(['status' => 'completed']);
                     }
-                    if($invoice->installment){
+                    if ($invoice->installment) {
                         $invoice->installment->update(['status' => 'paid']);
                     }
                     // $invoice->financeRequest->update(['status' => 'paid']);
